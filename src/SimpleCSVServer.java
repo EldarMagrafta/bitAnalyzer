@@ -12,12 +12,12 @@ import java.util.*;
 
 public class SimpleCSVServer {
     // Define constants for the column indices, excluding the first column
-    private static final int STATUS_INDEX = 0;
-    private static final int DESCRIPTION_INDEX = 1;
-    private static final int AMOUNT_INDEX = 2;
-    private static final int DEBIT_CREDIT_INDEX = 3;
-    private static final int FROM_TO_INDEX = 4;
-    private static final int DATE_INDEX = 5;
+    private static final int STATUS_INDEX = 1;
+    private static final int DESCRIPTION_INDEX = 2;
+    private static final int AMOUNT_INDEX = 3;
+    private static final int DEBIT_CREDIT_INDEX = 4;
+    private static final int FROM_TO_INDEX = 5;
+    private static final int DATE_INDEX = 6;
 
     public static void main(String[] args) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
@@ -116,8 +116,6 @@ public class SimpleCSVServer {
                 responseJson.put("expenses", expensesArray);
                 String response = responseJson.toString();
 
-                System.out.println("Response JSON: " + response);
-
                 // Send JSON response
                 sendResponse(exchange, 200, response);
             } catch (Exception e) {
@@ -137,12 +135,12 @@ public class SimpleCSVServer {
                     if (row.length != columnTitles.length) continue;
 
                     try {
-                        String status = row[STATUS_INDEX + 1];
-                        String description = row[DESCRIPTION_INDEX + 1];
-                        double amount = Double.parseDouble(row[AMOUNT_INDEX + 1]);
-                        boolean credit = row[DEBIT_CREDIT_INDEX + 1].equalsIgnoreCase("זיכוי");
-                        String person = row[FROM_TO_INDEX + 1];
-                        String date = row[DATE_INDEX + 1];
+                        String status = row[STATUS_INDEX];
+                        String description = row[DESCRIPTION_INDEX];
+                        double amount = Double.parseDouble(row[AMOUNT_INDEX]);
+                        boolean credit = row[DEBIT_CREDIT_INDEX].equalsIgnoreCase("זיכוי");
+                        String person = row[FROM_TO_INDEX];
+                        String date = row[DATE_INDEX];
 
                         if (status.equalsIgnoreCase("ההעברה בוצעה")) {
                             Transaction transaction = new Transaction(status, description, amount, credit, person, date);
