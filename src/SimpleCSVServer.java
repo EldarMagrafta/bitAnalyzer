@@ -114,7 +114,7 @@ public class SimpleCSVServer {
                 }
 
                 responseJson.put("expenses", expensesArray);
-                String response = responseJson.toString();
+                String response = responseJson.toString(4);
 
                 // Send JSON response
                 sendResponse(exchange, 200, response);
