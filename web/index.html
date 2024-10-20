@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV File Upload and Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Ensure Chart.js is loaded -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Upload a CSV File</h1>
+    <form id="uploadForm">
+        <input type="file" id="csvFile" name="file" accept=".csv" required>
+        <button type="submit">Upload and Analyze</button>
+    </form>
+
+    <div id="result"></div> <!-- Display result here -->
+    <canvas id="expenseChart" width="800" height="800"></canvas> <!-- Pie chart canvas -->
+
+    <script src="script.js"></script> <!-- Make sure the JS file is linked -->
+</body>
+</html>
