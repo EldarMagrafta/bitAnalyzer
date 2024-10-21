@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import PieChart from "./PieChart";
 import TableComponent from "./TableComponent";
-import './App.css'; // Make sure to import your CSS file
+import "./App.css";
 
 const CsvReader = () => {
   const [data, setData] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [file, setFile] = useState(null);
-  const [showTable, setShowTable] = useState(true); // Start with the table shown
+  const [showTable, setShowTable] = useState(true);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -21,7 +21,9 @@ const CsvReader = () => {
         header: true,
         skipEmptyLines: true,
         complete: (result) => {
-          const headers = result.meta.fields.filter((header) => header.trim() !== "");
+          const headers = result.meta.fields.filter(
+            (header) => header.trim() !== ""
+          );
           const cleanedData = result.data
             .map((row) => {
               const cleanedRow = {};
@@ -31,11 +33,14 @@ const CsvReader = () => {
               return cleanedRow;
             })
             .filter((row) => {
-              return Object.values(row).some((value) => value && value.toString().trim() !== "");
+              return Object.values(row).some(
+                (value) => value && value.toString().trim() !== ""
+              );
             });
 
           setData(cleanedData);
-          const { aggregatedExpenses, aggregatedIncomes } = generateAggregatedData(cleanedData);
+          const { aggregatedExpenses, aggregatedIncomes } =
+            generateAggregatedData(cleanedData);
           setExpenses(aggregatedExpenses);
           setIncomes(aggregatedIncomes);
         },
@@ -91,7 +96,7 @@ const CsvReader = () => {
     };
   };
 
-  const getPieChartData = () => {
+  const getIncomeExpenseChart = () => {
     if (data.length === 0) return {};
 
     const totals = {};
@@ -113,8 +118,39 @@ const CsvReader = () => {
       datasets: [
         {
           data: Object.values(totals),
-          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+          backgroundColor: ["#00FF00", "#FF0000"], // Green for זיכוי, Red for חיוב
+          hoverBackgroundColor: ["#00FF00", "#FF0000"], // Same colors for hover effect
+        },
+      ],
+    };
+  };
+
+  const getExpensesChartData = () => {
+    if (expenses.length === 0) return {};
+
+    const totals = {};
+
+    for (let i = 0; i < expenses.length; i++) {
+      const expense = expenses[i];
+      const description = expense.description;
+      const amount = expense.amount;
+
+      totals[description] = (totals[description] || 0) + amount;
+    }
+
+    return {
+      labels: Object.keys(totals),
+      datasets: [
+        {
+          data: Object.values(totals),
+          backgroundColor: Object.keys(totals).map(
+            (_, index) =>
+              `hsl(${(360 * index) / Object.keys(totals).length}, 70%, 50%)`
+          ), // Generate distinct colors for each description
+          hoverBackgroundColor: Object.keys(totals).map(
+            (_, index) =>
+              `hsl(${(360 * index) / Object.keys(totals).length}, 80%, 60%)`
+          ), // Slightly brighter colors for hover
         },
       ],
     };
@@ -130,8 +166,13 @@ const CsvReader = () => {
         </button>
       </div>
       {data.length > 0 && (
-        <div className="pie-chart-container">
-          <PieChart data={getPieChartData()} />
+        <div className="charts-container">
+          <div className="pie-chart-container">
+            <PieChart data={getIncomeExpenseChart()} />
+          </div>
+          <div className="expense-chart-container">
+            <PieChart data={getExpensesChartData()} />
+          </div>
         </div>
       )}
       {showTable && <TableComponent data={data} />}
@@ -140,6 +181,7 @@ const CsvReader = () => {
       <pre>{JSON.stringify(incomes, null, 2)}</pre>
     </div>
   );
+  
 };
 
 export default CsvReader;

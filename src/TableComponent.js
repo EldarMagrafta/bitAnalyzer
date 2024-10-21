@@ -20,15 +20,28 @@ const TableComponent = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row, index) => (
-          <tr key={index}>
-            {headers.map((header, i) => (
-              <td key={i} style={{ border: "1px solid black", padding: "8px" }}>
-                {row[header]}
-              </td>
-            ))}
-          </tr>
-        ))}
+        {data.map((row, index) => {
+          const isStatusCompleted = row["סטטוס"] === "ההעברה בוצעה";
+          const type = row["זיכוי/חיוב"];
+
+          // Determine background color based on status and type
+          let backgroundColor = "transparent";
+          if (isStatusCompleted && type === "זיכוי") {
+            backgroundColor = "#d4fdd4"; // Green for זיכוי if status is "ההעברה בוצעה"
+          } else if (isStatusCompleted && type === "חיוב") {
+            backgroundColor = "#ffd4d4"; // Red for חיוב if status is "ההעברה בוצעה"
+          }
+
+          return (
+            <tr key={index} style={{ backgroundColor }}>
+              {headers.map((header, i) => (
+                <td key={i} style={{ border: "1px solid black", padding: "8px" }}>
+                  {row[header]}
+                </td>
+              ))}
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

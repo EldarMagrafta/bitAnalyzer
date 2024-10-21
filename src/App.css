@@ -1,22 +1,27 @@
+/* Center the content inside the App container */
 .App {
-  text-align: center; /* Center text inside the App container */
+  text-align: center;
 }
 
+/* Main container for the CSV reader section */
 .csv-reader-container {
   margin-top: 20px;
 }
 
+/* Styles for input and button elements in the CSV reader */
 .csv-reader-container input,
 .csv-reader-container button {
   margin: 10px;
 }
 
+/* Center the table and adjust its width */
 table {
   margin: 20px auto; /* Center the table horizontally */
   border-collapse: collapse;
   width: 80%; /* Adjust width as needed */
 }
 
+/* Styles for table headers and data cells */
 th,
 td {
   border: 1px solid #ddd;
@@ -28,21 +33,32 @@ th {
   text-align: center;
 }
 
+/* Styles for the general pie chart */
 .pie-chart-container {
-  width: 500px;
-  height: 500px;
-  margin: 0 auto;
+  width: 400px; /* Width of the general pie chart */
+  height: 400px; /* Height of the general pie chart */
+  margin: 0 auto; /* Center the chart */
 }
 
+/* Styles for the larger expense chart */
+.expense-chart-container {
+  width: 1400px; /* Triple the size of the general pie chart */
+  height: 700px;
+  margin: 0 auto; /* Center the chart */
+}
+
+/* Container for the charts to align them side by side */
+.charts-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Adds space between the charts */
+  margin-bottom: 20px; /* Adds some space below the charts */
+}
+
+/* Styles for the button container to keep buttons aligned */
 .button-container {
   display: flex;
   gap: 10px; /* Adds space between buttons */
   justify-content: center; /* Centers the buttons horizontally */
   margin-bottom: 20px; /* Adds space below the buttons */
-}
-
-.pie-chart-container {
-  width: 500px;
-  height: 500px;
-  margin: 0 auto;
 }
