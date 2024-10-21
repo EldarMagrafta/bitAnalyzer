@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bit Analyzer</title>
+    <title>CSV File Upload and Analysis</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Ensure Chart.js is loaded -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/logo.png" type="image/png"> <!-- Set the favicon -->
 </head>
 <body>
-    <h1>Upload a CSV File</h1>
-    <form id="uploadForm">
-        <input type="file" id="csvFile" name="file" accept=".csv" required>
-        <button type="submit">Upload and Analyze</button>
-    </form>
+<!-- Make the logo clickable and point to the home page -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <a href="index.html">
+        <img src="images/logo.png" alt="CSV Upload Logo" style="max-width: 100%; height: auto; width: 150px;">
+    </a>
+</div>
 
-    <div id="result"></div> <!-- Display result here -->
-    <canvas id="expenseChart" width="800" height="800"></canvas> <!-- Pie chart canvas -->
+<form id="uploadForm">
+    <input type="file" id="csvFile" name="file" accept=".csv" required>
+    <button type="submit">Upload and Analyze</button>
+</form>
 
-    <script src="script.js"></script> <!-- Make sure the JS file is linked -->
+<div id="result"></div> <!-- Display result here -->
+<canvas id="expenseChart" width="800" height="800"></canvas> <!-- Pie chart canvas -->
+
+<script src="script.js"></script> <!-- Make sure the JS file is linked -->
 </body>
 </html>
