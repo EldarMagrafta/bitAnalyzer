@@ -1,19 +1,21 @@
-import React from "react";
-import CsvReader from "./CsvReader";
-import Logo from "./Logo"; // Import the new Logo component
+import React from 'react';
+import CsvReader from './CsvReader';
+import FileInput from './FileInput';
+import './App.css';
+import Logo from './Logo';
 
 function App() {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column", // Stack items vertically
-        alignItems: "center", // Center items horizontally
-        justifyContent: "center", // Center items vertically within the container
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <Logo /> {/* Use the Logo component here */}
-      <CsvReader />
+      <Logo/>
+      <CsvReader/>
     </div>
   );
 }

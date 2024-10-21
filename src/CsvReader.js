@@ -3,6 +3,7 @@ import Papa from "papaparse";
 import PieChart from "./PieChart";
 import TableComponent from "./TableComponent";
 import FileInput from "./FileInput";
+import ToggleTableButton from "./ToggleTableButton"; // Import the new component
 import "./App.css";
 
 const CsvReader = () => {
@@ -118,8 +119,8 @@ const CsvReader = () => {
       datasets: [
         {
           data: Object.values(totals),
-          backgroundColor: ["#00FF00", "#FF0000"], // Green for זיכוי, Red for חיוב
-          hoverBackgroundColor: ["#00FF00", "#FF0000"], // Same colors for hover effect
+          backgroundColor: ["#00FF00", "#FF0000"],
+          hoverBackgroundColor: ["#00FF00", "#FF0000"],
         },
       ],
     };
@@ -146,11 +147,11 @@ const CsvReader = () => {
           backgroundColor: Object.keys(totals).map(
             (_, index) =>
               `hsl(${(360 * index) / Object.keys(totals).length}, 70%, 50%)`
-          ), // Generate distinct colors for each description
+          ),
           hoverBackgroundColor: Object.keys(totals).map(
             (_, index) =>
               `hsl(${(360 * index) / Object.keys(totals).length}, 80%, 60%)`
-          ), // Slightly brighter colors for hover
+          ),
         },
       ],
     };
@@ -175,14 +176,11 @@ const CsvReader = () => {
       {data.length > 0 && (
         <div className="table-wrapper">
           <div className="show-table-button">
-            <button onClick={() => setShowTable(!showTable)}>
-              {showTable ? "Hide Table" : "Show Table"}
-            </button>
+            <ToggleTableButton showTable={showTable}onToggle={() => setShowTable(!showTable)} />
           </div>
           {showTable && <TableComponent data={data} />}
         </div>
       )}
-      {/* Display the expenses and incomes objects for debugging */}
       <pre>{JSON.stringify(expenses, null, 2)}</pre>
       <pre>{JSON.stringify(incomes, null, 2)}</pre>
     </div>
