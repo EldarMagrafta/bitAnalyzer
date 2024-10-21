@@ -1,84 +1,94 @@
 /* Center the content inside the App container */
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 /* Main container for the CSV reader section */
 .csv-reader-container {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 /* Center the file input component */
 .file-input-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 /* Center the table and adjust its width */
 table {
-  margin: 20px auto; /* Center the table horizontally */
-  border-collapse: collapse;
-  width: 80%; /* Adjust width as needed */
+    margin: 20px auto; /* Center the table horizontally */
+    border-collapse: collapse;
+    table-layout: auto; /* Automatically adjust column widths based on content */
+    max-width: 90%; /* Ensure the table does not expand too much */
+    width: auto; /* Let the table adjust its width based on content */
 }
 
 /* Styles for table headers and data cells */
-th,
-td {
+th,td {
   border: 1px solid #ddd;
   padding: 8px;
+  text-align: center; /* Center the text horizontally in table cells */
+  vertical-align: middle; /* Center the text vertically if cells have different heights */
 }
 
+
 th {
-  background-color: #f4f4f4;
-  text-align: center;
+    background-color: #f4f4f4;
+    text-align: center;
 }
 
 /* Styles for the general pie chart */
 .pie-chart-container {
-  width: 400px; /* Width of the general pie chart */
-  height: 400px; /* Height of the general pie chart */
-  margin: 0 auto; /* Center the chart */
+    width: 400px; /* Width of the general pie chart */
+    height: 400px; /* Height of the general pie chart */
+    margin: 0 auto; /* Center the chart */
 }
 
 /* Styles for the larger expense chart */
 .expense-chart-container {
-  width: 1400px; /* Triple the size of the general pie chart */
-  height: 700px;
-  margin: 0 auto; /* Center the chart */
+    width: 1400px; /* Triple the size of the general pie chart */
+    height: 700px;
+    margin: 0 auto; /* Center the chart */
+    text-align: center; /* Center the title inside the container */
 }
 
 /* Container for the charts to align them side by side */
 .charts-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px; /* Adds space between the charts */
-  margin-bottom: 20px; /* Adds some space below the charts */
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Adds space between the charts */
+    margin-bottom: 20px; /* Adds some space below the charts */
 }
 
 /* Styles for the button container to keep buttons aligned */
 .button-container {
-  display: flex;
-  gap: 10px; /* Adds space between buttons */
-  justify-content: center; /* Centers the buttons horizontally */
-  margin-bottom: 20px; /* Adds space below the buttons */
+    display: flex;
+    gap: 10px; /* Adds space between buttons */
+    justify-content: center; /* Centers the buttons horizontally */
+    margin-bottom: 20px; /* Adds space below the buttons */
 }
 
+/* Style for the show/hide table button */
 .show-table-button {
   display: flex;
-  justify-content: flex-end; /* Aligns the button to the right */
-  margin: 10px 0;
+  justify-content: right; /* Center the button horizontally */
+  margin: 10px auto; /* Adjust margin to align with the table */
+  width: 80%; /* Match the width of the table for better alignment */
 }
 
+
+/* Style for the expense chart container */
 .expense-chart-container {
-  width: 1400px; /* Triple the size of the general pie chart */
-  height: 700px;
-  margin: 0 auto; /* Center the chart */
-  text-align: center; /* Center the title inside the container */
+    width: 1400px; /* Triple the size of the general pie chart */
+    height: 700px;
+    margin: 0 auto; /* Center the chart */
+    text-align: center; /* Center the title inside the container */
 }
 
+/* Style for the chart title */
 .chart-title {
-  margin-bottom: 10px; /* Space between the title and the chart */
-  font-size: 1.5em;
-  color: #333; /* Adjust as needed */
+    margin-bottom: 10px; /* Space between the title and the chart */
+    font-size: 1.5em;
+    color: #333; /* Adjust as needed */
 }

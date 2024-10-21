@@ -21,34 +21,38 @@ const CsvReader = () => {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        complete: (result) => {
-          const headers = result.meta.fields.filter(
-            (header) => header.trim() !== ""
-          );
-          const cleanedData = result.data
-            .map((row) => {
-              const cleanedRow = {};
-              headers.forEach((header) => {
-                cleanedRow[header] = row[header];
-              });
-              return cleanedRow;
-            })
-            .filter((row) => {
-              return Object.values(row).some(
-                (value) => value && value.toString().trim() !== ""
-              );
-            });
-
-          setData(cleanedData);
-          const { aggregatedExpenses, aggregatedIncomes } =
-            generateAggregatedData(cleanedData);
-          setExpenses(aggregatedExpenses);
-          setIncomes(aggregatedIncomes);
-        },
+        complete: processCsvData, // Use the refactored function here
       });
     } else {
       alert("Please select a file before analyzing.");
     }
+  };
+
+  // Function to process the parsed CSV data
+  const processCsvData = (result) => {
+    const headers = result.meta.fields.filter(
+      (header) => header.trim() !== ""
+    );
+
+    const cleanedData = result.data
+      .map((row) => {
+        const cleanedRow = {};
+        headers.forEach((header) => {
+          cleanedRow[header] = row[header];
+        });
+        return cleanedRow;
+      })
+      .filter((row) => {
+        return Object.values(row).some(
+          (value) => value && value.toString().trim() !== ""
+        );
+      });
+
+    setData(cleanedData);
+    const { aggregatedExpenses, aggregatedIncomes } =
+      generateAggregatedData(cleanedData);
+    setExpenses(aggregatedExpenses);
+    setIncomes(aggregatedIncomes);
   };
 
   const generateAggregatedData = (data) => {
