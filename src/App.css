@@ -20,8 +20,16 @@ table {
     margin: 20px auto; /* Center the table horizontally */
     border-collapse: collapse;
     table-layout: auto; /* Automatically adjust column widths based on content */
-    max-width: 90%; /* Ensure the table does not expand too much */
+    max-width: 70%; /* Ensure the table does not expand too much */
     width: auto; /* Let the table adjust its width based on content */
+}
+
+/* Center the table within its container */
+.table-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the table horizontally */
+    margin-top: 20px;
 }
 
 /* Styles for table headers and data cells */

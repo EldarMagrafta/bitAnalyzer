@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import PieChart from "./PieChart";
 import TableComponent from "./TableComponent";
-import FileInput from "./FileInput"; // Import the new FileInput component
+import FileInput from "./FileInput";
 import "./App.css";
 
 const CsvReader = () => {
@@ -21,19 +21,15 @@ const CsvReader = () => {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        complete: processCsvData, // Use the refactored function here
+        complete: processCsvData,
       });
     } else {
       alert("Please select a file before analyzing.");
     }
   };
 
-  // Function to process the parsed CSV data
   const processCsvData = (result) => {
-    const headers = result.meta.fields.filter(
-      (header) => header.trim() !== ""
-    );
-
+    const headers = result.meta.fields.filter((header) => header.trim() !== "");
     const cleanedData = result.data
       .map((row) => {
         const cleanedRow = {};
@@ -49,8 +45,7 @@ const CsvReader = () => {
       });
 
     setData(cleanedData);
-    const { aggregatedExpenses, aggregatedIncomes } =
-      generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, aggregatedIncomes } = generateAggregatedData(cleanedData);
     setExpenses(aggregatedExpenses);
     setIncomes(aggregatedIncomes);
   };
@@ -178,13 +173,15 @@ const CsvReader = () => {
         </div>
       )}
       {data.length > 0 && (
-        <div className="show-table-button">
-          <button onClick={() => setShowTable(!showTable)}>
-            {showTable ? "Hide Table" : "Show Table"}
-          </button>
+        <div className="table-wrapper">
+          <div className="show-table-button">
+            <button onClick={() => setShowTable(!showTable)}>
+              {showTable ? "Hide Table" : "Show Table"}
+            </button>
+          </div>
+          {showTable && <TableComponent data={data} />}
         </div>
       )}
-      {showTable && <TableComponent data={data} />}
       {/* Display the expenses and incomes objects for debugging */}
       <pre>{JSON.stringify(expenses, null, 2)}</pre>
       <pre>{JSON.stringify(incomes, null, 2)}</pre>

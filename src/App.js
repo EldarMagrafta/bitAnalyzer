@@ -1,5 +1,6 @@
 import React from "react";
 import CsvReader from "./CsvReader";
+import Logo from "./Logo"; // Import the new Logo component
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
         justifyContent: "center", // Center items vertically within the container
       }}
     >
-      <h1>CSV Analyzer</h1>
+      <Logo /> {/* Use the Logo component here */}
       <CsvReader />
     </div>
   );
