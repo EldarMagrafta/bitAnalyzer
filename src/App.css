@@ -8,10 +8,11 @@
   margin-top: 20px;
 }
 
-/* Styles for input and button elements in the CSV reader */
-.csv-reader-container input,
-.csv-reader-container button {
-  margin: 10px;
+/* Center the file input component */
+.file-input-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 /* Center the table and adjust its width */
@@ -61,4 +62,23 @@ th {
   gap: 10px; /* Adds space between buttons */
   justify-content: center; /* Centers the buttons horizontally */
   margin-bottom: 20px; /* Adds space below the buttons */
+}
+
+.show-table-button {
+  display: flex;
+  justify-content: flex-end; /* Aligns the button to the right */
+  margin: 10px 0;
+}
+
+.expense-chart-container {
+  width: 1400px; /* Triple the size of the general pie chart */
+  height: 700px;
+  margin: 0 auto; /* Center the chart */
+  text-align: center; /* Center the title inside the container */
+}
+
+.chart-title {
+  margin-bottom: 10px; /* Space between the title and the chart */
+  font-size: 1.5em;
+  color: #333; /* Adjust as needed */
 }

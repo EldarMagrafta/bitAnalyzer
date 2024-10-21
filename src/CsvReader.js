@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import PieChart from "./PieChart";
 import TableComponent from "./TableComponent";
+import FileInput from "./FileInput"; // Import the new FileInput component
 import "./App.css";
 
 const CsvReader = () => {
@@ -158,12 +159,8 @@ const CsvReader = () => {
 
   return (
     <div className="csv-reader-container">
-      <div className="button-container">
-        <input type="file" accept=".csv" onChange={handleFileChange} />
-        <button onClick={handleAnalyze}>Upload & Analyze</button>
-        <button onClick={() => setShowTable(!showTable)}>
-          {showTable ? "Hide Table" : "Show Table"}
-        </button>
+      <div className="file-input-wrapper">
+        <FileInput handleFileChange={handleFileChange} handleAnalyze={handleAnalyze} />
       </div>
       {data.length > 0 && (
         <div className="charts-container">
@@ -171,8 +168,16 @@ const CsvReader = () => {
             <PieChart data={getIncomeExpenseChart()} />
           </div>
           <div className="expense-chart-container">
+            <h2 className="chart-title">Expenses by Categories</h2>
             <PieChart data={getExpensesChartData()} />
           </div>
+        </div>
+      )}
+      {data.length > 0 && (
+        <div className="show-table-button">
+          <button onClick={() => setShowTable(!showTable)}>
+            {showTable ? "Hide Table" : "Show Table"}
+          </button>
         </div>
       )}
       {showTable && <TableComponent data={data} />}
@@ -181,7 +186,6 @@ const CsvReader = () => {
       <pre>{JSON.stringify(incomes, null, 2)}</pre>
     </div>
   );
-  
 };
 
 export default CsvReader;
