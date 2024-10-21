@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import CsvReader from "./CsvReader";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column", // Stack items vertically
+        alignItems: "center", // Center items horizontally
+        justifyContent: "center", // Center items vertically within the container
+      }}
+    >
+      <h1>CSV Analyzer</h1>
+      <CsvReader />
     </div>
   );
 }

@@ -1,0 +1,145 @@
+import React, { useState } from "react";
+import Papa from "papaparse";
+import PieChart from "./PieChart";
+import TableComponent from "./TableComponent";
+import './App.css'; // Make sure to import your CSS file
+
+const CsvReader = () => {
+  const [data, setData] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [incomes, setIncomes] = useState([]);
+  const [file, setFile] = useState(null);
+  const [showTable, setShowTable] = useState(true); // Start with the table shown
+
+  const handleFileChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
+  const handleAnalyze = () => {
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (result) => {
+          const headers = result.meta.fields.filter((header) => header.trim() !== "");
+          const cleanedData = result.data
+            .map((row) => {
+              const cleanedRow = {};
+              headers.forEach((header) => {
+                cleanedRow[header] = row[header];
+              });
+              return cleanedRow;
+            })
+            .filter((row) => {
+              return Object.values(row).some((value) => value && value.toString().trim() !== "");
+            });
+
+          setData(cleanedData);
+          const { aggregatedExpenses, aggregatedIncomes } = generateAggregatedData(cleanedData);
+          setExpenses(aggregatedExpenses);
+          setIncomes(aggregatedIncomes);
+        },
+      });
+    } else {
+      alert("Please select a file before analyzing.");
+    }
+  };
+
+  const generateAggregatedData = (data) => {
+    const expensesMap = {};
+    const incomesMap = {};
+
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      const description = row["תאור"];
+      const amount = parseFloat(row["סכום"]) || 0;
+      const type = row["זיכוי/חיוב"];
+      const status = row["סטטוס"] === "ההעברה בוצעה";
+      const person = row["מאת/ל"];
+      const date = row["תאריך"];
+
+      if (status) {
+        if (type === "חיוב") {
+          if (!expensesMap[description]) {
+            expensesMap[description] = {
+              amount: 0,
+              description: description,
+              transactions: [],
+            };
+          }
+          expensesMap[description].transactions.push({ date, amount, person });
+          expensesMap[description].amount += amount;
+        }
+
+        if (type === "זיכוי") {
+          if (!incomesMap[description]) {
+            incomesMap[description] = {
+              amount: 0,
+              description: description,
+              transactions: [],
+            };
+          }
+          incomesMap[description].transactions.push({ date, amount, person });
+          incomesMap[description].amount += amount;
+        }
+      }
+    }
+
+    return {
+      aggregatedExpenses: Object.values(expensesMap),
+      aggregatedIncomes: Object.values(incomesMap),
+    };
+  };
+
+  const getPieChartData = () => {
+    if (data.length === 0) return {};
+
+    const totals = {};
+
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      const type = row["זיכוי/חיוב"];
+      const amount = parseFloat(row["סכום"]) || 0;
+
+      if (totals[type]) {
+        totals[type] += amount;
+      } else {
+        totals[type] = amount;
+      }
+    }
+
+    return {
+      labels: Object.keys(totals),
+      datasets: [
+        {
+          data: Object.values(totals),
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        },
+      ],
+    };
+  };
+
+  return (
+    <div className="csv-reader-container">
+      <div className="button-container">
+        <input type="file" accept=".csv" onChange={handleFileChange} />
+        <button onClick={handleAnalyze}>Upload & Analyze</button>
+        <button onClick={() => setShowTable(!showTable)}>
+          {showTable ? "Hide Table" : "Show Table"}
+        </button>
+      </div>
+      {data.length > 0 && (
+        <div className="pie-chart-container">
+          <PieChart data={getPieChartData()} />
+        </div>
+      )}
+      {showTable && <TableComponent data={data} />}
+      {/* Display the expenses and incomes objects for debugging */}
+      <pre>{JSON.stringify(expenses, null, 2)}</pre>
+      <pre>{JSON.stringify(incomes, null, 2)}</pre>
+    </div>
+  );
+};
+
+export default CsvReader;
