@@ -70,10 +70,13 @@ public class SimpleCSVServer {
                 Map<String, List<Transaction>> transactionsByDescription = new HashMap<>();
 
                 for (Transaction transaction : transactions) {
+                    double amount = transaction.getAmount();
+
                     if (transaction.isCredit()) {
-                        totalIncome += transaction.getAmount();
-                    } else {
-                        totalExpense += transaction.getAmount();
+                        totalIncome += amount;
+                    }
+                    else {
+                        totalExpense += amount;
                         expenseByDescription.put(transaction.getDescription(),
                                 expenseByDescription.getOrDefault(transaction.getDescription(), 0.0) + transaction.getAmount());
                         transactionsByDescription
