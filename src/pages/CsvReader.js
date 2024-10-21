@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import Papa from "papaparse";
-import PieChart from "./PieChart";
-import TableComponent from "./TableComponent";
-import FileInput from "./FileInput";
-import ToggleTableButton from "./ToggleTableButton"; // Import the new component
-import "./App.css";
+import React, { useState } from 'react';
+import Papa from 'papaparse';
+import PieChart from '../components/PieChart';
+import TableComponent from '../components/TableComponent';
+import FileInput from '../components/FileInput';
+import ToggleTableButton from '../components/ToggleTableButton';
+import '../assets/styles/App.css';
 
 const CsvReader = () => {
   const [data, setData] = useState([]);

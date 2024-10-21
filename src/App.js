@@ -1,8 +1,7 @@
 import React from 'react';
-import CsvReader from './CsvReader';
-import FileInput from './FileInput';
-import './App.css';
-import Logo from './Logo';
+import CsvReader from './pages/CsvReader';
+import Logo from './components/Logo';
+import './assets/styles/App.css';
 
 function App() {
   return (

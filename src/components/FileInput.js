@@ -1,7 +1,8 @@
-// src/FileInput.js
+// src/components/FileInput/FileInput.js
 import React from 'react';
 import { Button } from '@mui/material';
 import { styled } from '@mui/system';
+import CloudUploadIcon from '@mui/icons-material/CloudUploadOutlined'; // Import the CloudUploadOutlined icon
 
 // Custom styled component to hide the actual file input
 const FileInputStyled = styled('input')({
@@ -26,6 +27,7 @@ const FileInput = ({ handleFileChange, handleAnalyze }) => {
       <Button
         variant="contained"
         component="span"
+        startIcon={<CloudUploadIcon />} // Add the cloud upload icon
         onClick={handleButtonClick}
         sx={{ marginRight: 2 }} // Adds space between the buttons
       >
