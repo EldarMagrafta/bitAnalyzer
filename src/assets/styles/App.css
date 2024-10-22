@@ -40,7 +40,6 @@ th,td {
   vertical-align: middle; /* Center the text vertically if cells have different heights */
 }
 
-
 th {
     background-color: #f4f4f4;
     text-align: center;
@@ -80,11 +79,10 @@ th {
 /* Style for the show/hide table button */
 .show-table-button {
   display: flex;
-  justify-content: right; /* Center the button horizontally */
+  justify-content: right; /* Align the button to the right */
   margin: 10px auto; /* Adjust margin to align with the table */
   width: 80%; /* Match the width of the table for better alignment */
 }
-
 
 /* Style for the expense chart container */
 .expense-chart-container {
@@ -99,4 +97,49 @@ th {
     margin-bottom: 10px; /* Space between the title and the chart */
     font-size: 1.5em;
     color: #333; /* Adjust as needed */
+}
+
+/* Styles for the Transaction component */
+.transaction-container {
+    display: flex;
+    justify-content: center; /* Center the transaction details */
+    align-items: center; /* Align items vertically in the center */
+    gap: 10px; /* Space between the items */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.transaction-item {
+    margin: 0 5px; /* Space between the text and separator */
+}
+
+.transaction-separator {
+    margin: 0 5px; /* Space between the text and separator */
+    color: #666; /* Slightly dimmed color for the separator */
+}
+
+/* Styles for the TransactionList component */
+.transaction-list-container {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f7f7f7;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.transaction-list-title {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }

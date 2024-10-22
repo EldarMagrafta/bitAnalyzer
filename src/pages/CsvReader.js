@@ -1,9 +1,11 @@
+// src/pages/CsvReader.js
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import PieChart from '../components/PieChart';
 import TableComponent from '../components/TableComponent';
 import FileInput from '../components/FileInput';
 import ToggleTableButton from '../components/ToggleTableButton';
+import TransactionList from '../components/TransactionList'; // Import the new TransactionList component
 import '../assets/styles/App.css';
 
 const CsvReader = () => {
@@ -174,9 +176,21 @@ const CsvReader = () => {
         </div>
       )}
       {data.length > 0 && (
+        <div className="expenses-list">
+          {expenses.map((expense, index) => (
+            <TransactionList
+              key={index}
+              description={expense.description}
+              amount={expense.amount}
+              transactions={expense.transactions}
+            />
+          ))}
+        </div>
+      )}
+      {data.length > 0 && (
         <div className="table-wrapper">
           <div className="show-table-button">
-            <ToggleTableButton showTable={showTable}onToggle={() => setShowTable(!showTable)} />
+            <ToggleTableButton showTable={showTable} onToggle={() => setShowTable(!showTable)} />
           </div>
           {showTable && <TableComponent data={data} />}
         </div>
