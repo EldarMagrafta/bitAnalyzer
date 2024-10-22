@@ -5,7 +5,7 @@ import PieChart from '../components/PieChart';
 import TableComponent from '../components/TableComponent';
 import FileInput from '../components/FileInput';
 import ToggleTableButton from '../components/ToggleTableButton';
-import TransactionList from '../components/TransactionList'; // Import the new TransactionList component
+import TransactionList from '../components/TransactionList';
 import '../assets/styles/App.css';
 
 const CsvReader = () => {
@@ -14,6 +14,7 @@ const CsvReader = () => {
   const [incomes, setIncomes] = useState([]);
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(true);
+  const [selectedDescription, setSelectedDescription] = useState(null); // Track selected description
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -159,6 +160,12 @@ const CsvReader = () => {
     };
   };
 
+  // Handle slice click to update selected description
+  const handleSliceClick = (description) => {
+    setSelectedDescription(description);
+    console.log(selectedDescription);
+  };
+
   return (
     <div className="csv-reader-container">
       <div className="file-input-wrapper">
@@ -171,13 +178,19 @@ const CsvReader = () => {
           </div>
           <div className="expense-chart-container">
             <h2 className="chart-title">Expenses by Categories</h2>
-            <PieChart data={getExpensesChartData()} />
+            <PieChart data={getExpensesChartData()} onSliceClick={handleSliceClick} />
           </div>
         </div>
       )}
-      {data.length > 0 && (
+      {selectedDescription && (
         <div className="expenses-list">
-          {expenses.map((expense, index) => (
+        {expenses
+          .filter((expense) => {
+            const isMatch = expense.description === selectedDescription;
+            console.log(`Filtering for description: ${selectedDescription}, Current description: ${expense.description}, Match: ${isMatch}`);
+            return isMatch;
+          })
+          .map((expense, index) => (
             <TransactionList
               key={index}
               description={expense.description}
@@ -185,7 +198,8 @@ const CsvReader = () => {
               transactions={expense.transactions}
             />
           ))}
-        </div>
+      </div>
+      
       )}
       {data.length > 0 && (
         <div className="table-wrapper">
