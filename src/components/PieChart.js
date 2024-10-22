@@ -8,20 +8,22 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const PieChart = ({ data, onSliceClick }) => {
   const handleClick = (event, elements) => {
     if (elements && elements.length > 0) {
-      const index = elements[0].index; // Get the index of the clicked slice
-      const label = data.labels[index]; // Get the label (description) of the clicked slice
+      const index = elements[0].index;
+      const label = data.labels[index];
       if (onSliceClick) {
-        onSliceClick(label); // Call the function passed as a prop with the label
+        onSliceClick(label);
       }
     }
   };
 
   return (
-    <div style={{ width: '50%', margin: '0 auto' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <Pie
         data={data}
         options={{
-          onClick: handleClick, // Use the onClick option instead of a custom prop
+          responsive: true, // Make sure it responds to the container size
+          maintainAspectRatio: false, // Allows the chart to stretch to the container size
+          onClick: handleClick,
         }}
       />
     </div>

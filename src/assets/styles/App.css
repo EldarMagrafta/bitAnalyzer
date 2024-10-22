@@ -143,3 +143,23 @@ th {
     flex-direction: column;
     gap: 5px;
 }
+
+.chart-transaction-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px; /* Space between the chart and the transaction list */
+    margin-top: 20px;
+}
+
+/* Style the transaction list container to take up 40% width */
+.transaction-list-wrapper {
+    flex: 0 0 40%; /* Fixed 40% width */
+}
+
+/* Ensure the pie chart has the desired size */
+.pie-chart-wrapper {
+    flex: 0 0 60%; /* Fixed 60% width */
+    width: 1400px; /* Set the width to 1400px */
+    height: 700px; /* Set the height to 700px */
+}

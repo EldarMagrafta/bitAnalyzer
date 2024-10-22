@@ -14,7 +14,7 @@ const CsvReader = () => {
   const [incomes, setIncomes] = useState([]);
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(true);
-  const [selectedDescription, setSelectedDescription] = useState(null); // Track selected description
+  const [selectedDescription, setSelectedDescription] = useState(null);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -100,35 +100,6 @@ const CsvReader = () => {
     };
   };
 
-  const getIncomeExpenseChart = () => {
-    if (data.length === 0) return {};
-
-    const totals = {};
-
-    for (let i = 0; i < data.length; i++) {
-      const row = data[i];
-      const type = row["זיכוי/חיוב"];
-      const amount = parseFloat(row["סכום"]) || 0;
-
-      if (totals[type]) {
-        totals[type] += amount;
-      } else {
-        totals[type] = amount;
-      }
-    }
-
-    return {
-      labels: Object.keys(totals),
-      datasets: [
-        {
-          data: Object.values(totals),
-          backgroundColor: ["#00FF00", "#FF0000"],
-          hoverBackgroundColor: ["#00FF00", "#FF0000"],
-        },
-      ],
-    };
-  };
-
   const getExpensesChartData = () => {
     if (expenses.length === 0) return {};
 
@@ -160,10 +131,8 @@ const CsvReader = () => {
     };
   };
 
-  // Handle slice click to update selected description
   const handleSliceClick = (description) => {
     setSelectedDescription(description);
-    console.log(selectedDescription);
   };
 
   return (
@@ -172,34 +141,25 @@ const CsvReader = () => {
         <FileInput handleFileChange={handleFileChange} handleAnalyze={handleAnalyze} />
       </div>
       {data.length > 0 && (
-        <div className="charts-container">
-          <div className="pie-chart-container">
-            <PieChart data={getIncomeExpenseChart()} />
-          </div>
-          <div className="expense-chart-container">
-            <h2 className="chart-title">Expenses by Categories</h2>
+        <div className="chart-transaction-container">
+          {selectedDescription && (
+            <div className="transaction-list-wrapper">
+              {expenses
+                .filter((expense) => expense.description === selectedDescription)
+                .map((expense, index) => (
+                  <TransactionList
+                    key={index}
+                    description={expense.description}
+                    amount={expense.amount}
+                    transactions={expense.transactions}
+                  />
+                ))}
+            </div>
+          )}
+          <div className="pie-chart-wrapper">
             <PieChart data={getExpensesChartData()} onSliceClick={handleSliceClick} />
           </div>
         </div>
-      )}
-      {selectedDescription && (
-        <div className="expenses-list">
-        {expenses
-          .filter((expense) => {
-            const isMatch = expense.description === selectedDescription;
-            console.log(`Filtering for description: ${selectedDescription}, Current description: ${expense.description}, Match: ${isMatch}`);
-            return isMatch;
-          })
-          .map((expense, index) => (
-            <TransactionList
-              key={index}
-              description={expense.description}
-              amount={expense.amount}
-              transactions={expense.transactions}
-            />
-          ))}
-      </div>
-      
       )}
       {data.length > 0 && (
         <div className="table-wrapper">
@@ -209,8 +169,6 @@ const CsvReader = () => {
           {showTable && <TableComponent data={data} />}
         </div>
       )}
-      <pre>{JSON.stringify(expenses, null, 2)}</pre>
-      <pre>{JSON.stringify(incomes, null, 2)}</pre>
     </div>
   );
 };
