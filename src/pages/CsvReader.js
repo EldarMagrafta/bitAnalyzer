@@ -170,7 +170,7 @@ const CsvReader = () => {
       {data.length > 0 && (
         <div className="chart-transaction-container">
           <div className="transaction-list-wrapper">
-            {selectedDescription ? (
+            {selectedDescription &&
               expenses
                 .filter((expense) => expense.description === selectedDescription)
                 .map((expense, index) => (
@@ -180,10 +180,7 @@ const CsvReader = () => {
                     amount={expense.amount}
                     transactions={expense.transactions}
                   />
-                ))
-            ) : (
-              <div>לחץ על התרשים כדי לקבל מידע.</div>
-            )}
+                ))}
           </div>
           <div className="pie-chart-wrapper">
             <PieChart data={getExpensesChartData()} onSliceClick={handleSliceClick} />
