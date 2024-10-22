@@ -9,7 +9,7 @@ const ToggleTableButton = ({ showTable, onToggle }) => {
       onClick={onToggle}
       sx={{ marginTop: 2 }} // Styling can also be done here or via classes
     >
-      {showTable ? "Hide Transactions History" : "Show Transactions History"}
+      {showTable ? "הסתר היסטוריית העברות" : "הצג היסטוריית העברות"}
     </Button>
   );
 };
