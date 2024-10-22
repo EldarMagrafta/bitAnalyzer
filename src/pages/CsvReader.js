@@ -28,12 +28,12 @@ const CsvReader = () => {
         complete: processCsvData,
       });
     } else {
-      alert("Please select a file before analyzing.");
+      alert('Please select a file before analyzing.');
     }
   };
 
   const processCsvData = (result) => {
-    const headers = result.meta.fields.filter((header) => header.trim() !== "");
+    const headers = result.meta.fields.filter((header) => header.trim() !== '');
     const cleanedData = result.data
       .map((row) => {
         const cleanedRow = {};
@@ -42,11 +42,9 @@ const CsvReader = () => {
         });
         return cleanedRow;
       })
-      .filter((row) => {
-        return Object.values(row).some(
-          (value) => value && value.toString().trim() !== ""
-        );
-      });
+      .filter((row) =>
+        Object.values(row).some((value) => value && value.toString().trim() !== '')
+      );
 
     setData(cleanedData);
     const { aggregatedExpenses, aggregatedIncomes } = generateAggregatedData(cleanedData);
@@ -60,15 +58,15 @@ const CsvReader = () => {
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
-      const description = row["תאור"];
-      const amount = parseFloat(row["סכום"]) || 0;
-      const type = row["זיכוי/חיוב"];
-      const status = row["סטטוס"] === "ההעברה בוצעה";
-      const person = row["מאת/ל"];
-      const date = row["תאריך"];
+      const description = row['תאור'];
+      const amount = parseFloat(row['סכום']) || 0;
+      const type = row['זיכוי/חיוב'];
+      const status = row['סטטוס'] === 'ההעברה בוצעה';
+      const person = row['מאת/ל'];
+      const date = row['תאריך'];
 
       if (status) {
-        if (type === "חיוב") {
+        if (type === 'חיוב') {
           if (!expensesMap[description]) {
             expensesMap[description] = {
               amount: 0,
@@ -80,7 +78,7 @@ const CsvReader = () => {
           expensesMap[description].amount += amount;
         }
 
-        if (type === "זיכוי") {
+        if (type === 'זיכוי') {
           if (!incomesMap[description]) {
             incomesMap[description] = {
               amount: 0,
@@ -97,6 +95,35 @@ const CsvReader = () => {
     return {
       aggregatedExpenses: Object.values(expensesMap),
       aggregatedIncomes: Object.values(incomesMap),
+    };
+  };
+
+  const getIncomeExpenseChart = () => {
+    if (data.length === 0) return {};
+
+    const totals = {};
+
+    for (let i = 0; i < data.length; i++) {
+      const row = data[i];
+      const type = row['זיכוי/חיוב'];
+      const amount = parseFloat(row['סכום']) || 0;
+
+      if (totals[type]) {
+        totals[type] += amount;
+      } else {
+        totals[type] = amount;
+      }
+    }
+
+    return {
+      labels: Object.keys(totals),
+      datasets: [
+        {
+          data: Object.values(totals),
+          backgroundColor: ['#00FF00', '#FF0000'],
+          hoverBackgroundColor: ['#00FF00', '#FF0000'],
+        },
+      ],
     };
   };
 
@@ -142,9 +169,9 @@ const CsvReader = () => {
       </div>
       {data.length > 0 && (
         <div className="chart-transaction-container">
-          {selectedDescription && (
-            <div className="transaction-list-wrapper">
-              {expenses
+          <div className="transaction-list-wrapper">
+            {selectedDescription ? (
+              expenses
                 .filter((expense) => expense.description === selectedDescription)
                 .map((expense, index) => (
                   <TransactionList
@@ -153,9 +180,11 @@ const CsvReader = () => {
                     amount={expense.amount}
                     transactions={expense.transactions}
                   />
-                ))}
-            </div>
-          )}
+                ))
+            ) : (
+              <div>Please select a slice to view transactions.</div>
+            )}
+          </div>
           <div className="pie-chart-wrapper">
             <PieChart data={getExpensesChartData()} onSliceClick={handleSliceClick} />
           </div>
