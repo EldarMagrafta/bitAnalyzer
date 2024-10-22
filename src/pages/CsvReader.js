@@ -143,34 +143,41 @@ const CsvReader = ({ setDateRange }) => {
 
   const getExpensesChartData = () => {
     if (expenses.length === 0) return {};
-
+  
     const totals = {};
-
+  
     for (let i = 0; i < expenses.length; i++) {
       const expense = expenses[i];
       const description = expense.description;
       const amount = expense.amount;
-
+  
       totals[description] = (totals[description] || 0) + amount;
     }
-
+  
+    const labels = Object.keys(totals);
+    const dataValues = Object.values(totals);
+  
+    const backgroundColors = [];
+    const hoverBackgroundColors = [];
+  
+    labels.forEach((_, index) => {
+      const hue = (360 * index) / labels.length;
+      backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
+      hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
+    });
+  
     return {
-      labels: Object.keys(totals),
+      labels,
       datasets: [
         {
-          data: Object.values(totals),
-          backgroundColor: Object.keys(totals).map(
-            (_, index) =>
-              `hsl(${(360 * index) / Object.keys(totals).length}, 70%, 50%)`
-          ),
-          hoverBackgroundColor: Object.keys(totals).map(
-            (_, index) =>
-              `hsl(${(360 * index) / Object.keys(totals).length}, 80%, 60%)`
-          ),
+          data: dataValues,
+          backgroundColor: backgroundColors,
+          hoverBackgroundColor: hoverBackgroundColors,
         },
       ],
     };
   };
+  
 
   const handleSliceClick = (description) => {
     setSelectedDescription(description);

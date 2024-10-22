@@ -9,7 +9,7 @@ const Transaction = ({ transaction }) => {
     <div className="transaction-container">
       <span className="transaction-item">{date}</span>
       <span className="transaction-separator">|</span>
-      <span className="transaction-item">{amount}</span>
+      <span className="transaction-item">{amount+"₪"}</span>
       <span className="transaction-separator">|</span>
       <span className="transaction-item">{person}</span>
     </div>
