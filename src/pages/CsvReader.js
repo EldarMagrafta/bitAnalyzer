@@ -1,5 +1,4 @@
-// src/pages/CsvReader.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import PieChart from '../components/PieChart';
 import TableComponent from '../components/TableComponent';
@@ -8,13 +7,28 @@ import ToggleTableButton from '../components/ToggleTableButton';
 import TransactionList from '../components/TransactionList';
 import '../assets/styles/App.css';
 
-const CsvReader = () => {
+const CsvReader = ({ setDateRange }) => {
   const [data, setData] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(true);
   const [selectedDescription, setSelectedDescription] = useState(null);
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const dates = data
+        .map(row => {
+          const [day, month, year] = row['תאריך'].split('.').map(Number);
+          return new Date(year + 2000, month - 1, day); // Adjust year to four digits
+        })
+        .sort((a, b) => a - b); // Sort dates in ascending order
+
+      const date1 = dates[0]?.toLocaleDateString('en-GB'); // Earliest date
+      const date2 = dates[dates.length - 1]?.toLocaleDateString('en-GB'); // Latest date
+      setDateRange(`${date1} to ${date2}`);
+    }
+  }, [data, setDateRange]);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
