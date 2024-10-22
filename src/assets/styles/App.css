@@ -166,4 +166,7 @@ th {
     margin-bottom: 10px;
     font-size: 1.5em;
     color: #333;
+    text-align: right; /* Aligns the text to the right */
+    direction: rtl; /* Ensures the text direction is right-to-left */
 }
+

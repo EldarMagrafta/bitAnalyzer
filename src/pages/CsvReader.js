@@ -256,6 +256,7 @@ const CsvReader = ({setDateRange}) => {
                                 ))}
                     </div>
                     <div className="pie-chart-wrapper">
+                        <h2 className="chart-title">כל ההוצאות</h2>
                         <PieChart data={getExpensesChartData()} onSliceClick={handleSliceClick}/>
                     </div>
                 </div>
