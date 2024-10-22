@@ -62,11 +62,7 @@ const CsvReader = ({setDateRange}) => {
             );
 
         setData(cleanedData);
-        const {
-            aggregatedExpenses,
-            expensesByPerson,
-            expensesByMonth
-        } = generateAggregatedData(cleanedData);
+        const {aggregatedExpenses, expensesByPerson, expensesByMonth} = generateAggregatedData(cleanedData);
         setExpenses(aggregatedExpenses);
         setExpensesByPerson(expensesByPerson);
         setExpensesByMonth(expensesByMonth);
