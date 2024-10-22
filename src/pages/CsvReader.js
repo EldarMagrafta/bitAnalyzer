@@ -10,22 +10,23 @@ import '../assets/styles/App.css';
 const CsvReader = ({ setDateRange }) => {
   const [data, setData] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const [incomes, setIncomes] = useState([]);
+  const [expensesByPerson, setExpensesByPerson] = useState([]); // State for expenses by person
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(true);
   const [selectedDescription, setSelectedDescription] = useState(null);
+  const [selectedPerson, setSelectedPerson] = useState(null); // State for selected person
 
   useEffect(() => {
     if (data.length > 0) {
       const dates = data
         .map(row => {
           const [day, month, year] = row['תאריך'].split('.').map(Number);
-          return new Date(year + 2000, month - 1, day); // Adjust year to four digits
+          return new Date(year + 2000, month - 1, day);
         })
-        .sort((a, b) => a - b); // Sort dates in ascending order
+        .sort((a, b) => a - b);
 
-      const date1 = dates[0]?.toLocaleDateString('en-GB'); // Earliest date
-      const date2 = dates[dates.length - 1]?.toLocaleDateString('en-GB'); // Latest date
+      const date1 = dates[0]?.toLocaleDateString('en-GB');
+      const date2 = dates[dates.length - 1]?.toLocaleDateString('en-GB');
       setDateRange(`${date1} to ${date2}`);
     }
   }, [data, setDateRange]);
@@ -61,14 +62,14 @@ const CsvReader = ({ setDateRange }) => {
       );
 
     setData(cleanedData);
-    const { aggregatedExpenses, aggregatedIncomes } = generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson } = generateAggregatedData(cleanedData);
     setExpenses(aggregatedExpenses);
-    setIncomes(aggregatedIncomes);
+    setExpensesByPerson(expensesByPerson);
   };
 
   const generateAggregatedData = (data) => {
     const expensesMap = {};
-    const incomesMap = {};
+    const expensesByPersonMap = {};
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
@@ -79,93 +80,50 @@ const CsvReader = ({ setDateRange }) => {
       const person = row['מאת/ל'];
       const date = row['תאריך'];
 
-      if (status) {
-        if (type === 'חיוב') {
-          if (!expensesMap[description]) {
-            expensesMap[description] = {
-              amount: 0,
-              description: description,
-              transactions: [],
-            };
-          }
-          expensesMap[description].transactions.push({ date, amount, person });
-          expensesMap[description].amount += amount;
+      if (status && type === 'חיוב') {
+        if (!expensesMap[description]) {
+          expensesMap[description] = {
+            amount: 0,
+            description: description,
+            transactions: [],
+          };
         }
+        expensesMap[description].transactions.push({ date, amount, person });
+        expensesMap[description].amount += amount;
 
-        if (type === 'זיכוי') {
-          if (!incomesMap[description]) {
-            incomesMap[description] = {
-              amount: 0,
-              description: description,
-              transactions: [],
-            };
-          }
-          incomesMap[description].transactions.push({ date, amount, person });
-          incomesMap[description].amount += amount;
+        if (!expensesByPersonMap[person]) {
+          expensesByPersonMap[person] = {
+            amount: 0,
+            person: person,
+            transactions: [],
+          };
         }
+        expensesByPersonMap[person].transactions.push({ date, amount, person });
+        expensesByPersonMap[person].amount += amount;
       }
     }
 
     return {
       aggregatedExpenses: Object.values(expensesMap),
-      aggregatedIncomes: Object.values(incomesMap),
-    };
-  };
-
-  const getIncomeExpenseChart = () => {
-    if (data.length === 0) return {};
-
-    const totals = {};
-
-    for (let i = 0; i < data.length; i++) {
-      const row = data[i];
-      const type = row['זיכוי/חיוב'];
-      const amount = parseFloat(row['סכום']) || 0;
-
-      if (totals[type]) {
-        totals[type] += amount;
-      } else {
-        totals[type] = amount;
-      }
-    }
-
-    return {
-      labels: Object.keys(totals),
-      datasets: [
-        {
-          data: Object.values(totals),
-          backgroundColor: ['#00FF00', '#FF0000'],
-          hoverBackgroundColor: ['#00FF00', '#FF0000'],
-        },
-      ],
+      expensesByPerson: Object.values(expensesByPersonMap),
     };
   };
 
   const getExpensesChartData = () => {
     if (expenses.length === 0) return {};
-  
-    const totals = {};
-  
-    for (let i = 0; i < expenses.length; i++) {
-      const expense = expenses[i];
-      const description = expense.description;
-      const amount = expense.amount;
-  
-      totals[description] = (totals[description] || 0) + amount;
-    }
-  
-    const labels = Object.keys(totals);
-    const dataValues = Object.values(totals);
-  
+
+    const labels = expenses.map(expense => expense.description);
+    const dataValues = expenses.map(expense => expense.amount);
+
     const backgroundColors = [];
     const hoverBackgroundColors = [];
-  
+
     labels.forEach((_, index) => {
       const hue = (360 * index) / labels.length;
       backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
       hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
     });
-  
+
     return {
       labels,
       datasets: [
@@ -177,10 +135,40 @@ const CsvReader = ({ setDateRange }) => {
       ],
     };
   };
-  
+
+  const getExpensesByPersonChartData = () => {
+    if (expensesByPerson.length === 0) return {};
+
+    const labels = expensesByPerson.map(personData => personData.person);
+    const dataValues = expensesByPerson.map(personData => personData.amount);
+
+    const backgroundColors = [];
+    const hoverBackgroundColors = [];
+
+    labels.forEach((_, index) => {
+      const hue = (360 * index) / labels.length;
+      backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
+      hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
+    });
+
+    return {
+      labels,
+      datasets: [
+        {
+          data: dataValues,
+          backgroundColor: backgroundColors,
+          hoverBackgroundColor: hoverBackgroundColors,
+        },
+      ],
+    };
+  };
 
   const handleSliceClick = (description) => {
     setSelectedDescription(description);
+  };
+
+  const handlePersonSliceClick = (person) => {
+    setSelectedPerson(person);
   };
 
   return (
@@ -214,6 +202,26 @@ const CsvReader = ({ setDateRange }) => {
             <ToggleTableButton showTable={showTable} onToggle={() => setShowTable(!showTable)} />
           </div>
           {showTable && <TableComponent data={data} />}
+        </div>
+      )}
+      {data.length > 0 && (
+        <div className="chart-transaction-container">
+          <div className="transaction-list-wrapper">
+            {selectedPerson &&
+              expensesByPerson
+                .filter((expense) => expense.person === selectedPerson)
+                .map((expense, index) => (
+                  <TransactionList
+                    key={index}
+                    description={`Transactions with ${expense.person}`}
+                    amount={expense.amount}
+                    transactions={expense.transactions}
+                  />
+                ))}
+          </div>
+          <div className="pie-chart-wrapper">
+            <PieChart data={getExpensesByPersonChartData()} onSliceClick={handlePersonSliceClick} />
+          </div>
         </div>
       )}
     </div>
