@@ -3,6 +3,19 @@
     text-align: center;
 }
 
+/* Main container for the App component */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main container for the CSV reader section */
+.csv-reader-container {
+    margin-top: 20px;
+}
+
 /* Main container for the CSV reader section */
 .csv-reader-container {
     margin-top: 20px;
@@ -130,7 +143,10 @@ th {
     background-color: #f7f7f7;
     max-width: 600px;
     margin: 0 auto;
+    max-height: 700px; /* Limit the max height to 700px to match the pie chart */
+    overflow-y: auto; /* Enable scrolling if the content is too long */
 }
+
 
 .transaction-list-title {
     font-size: 1.2em;

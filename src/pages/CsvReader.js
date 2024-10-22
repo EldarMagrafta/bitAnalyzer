@@ -182,7 +182,7 @@ const CsvReader = () => {
                   />
                 ))
             ) : (
-              <div>Please select a slice to view transactions.</div>
+              <div>לחץ על התרשים כדי לקבל מידע.</div>
             )}
           </div>
           <div className="pie-chart-wrapper">
