@@ -9,8 +9,8 @@ import TransactionList from '../components/TransactionList';
 import '../assets/styles/App.css';
 
 const CsvReader = ({ setDateRange }) => {
-  const [data, setData] = useState([]);
-  const [expenses, setExpenses] = useState([]);
+  const [parsedData, setParsedData] = useState([]);
+  const [expensesByDescription, setExpensesByDescription] = useState([]);
   const [expensesByPerson, setExpensesByPerson] = useState([]);
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(true);
@@ -18,8 +18,8 @@ const CsvReader = ({ setDateRange }) => {
   const [selectedPerson, setSelectedPerson] = useState(null);
 
   useEffect(() => {
-    if (data.length > 0) {
-      const dates = data
+    if (parsedData.length > 0) {
+      const dates = parsedData
         .map(row => {
           const [day, month, year] = row['תאריך'].split('.').map(Number);
           return new Date(year + 2000, month - 1, day);
@@ -30,7 +30,7 @@ const CsvReader = ({ setDateRange }) => {
       const date2 = dates[dates.length - 1]?.toLocaleDateString('en-GB');
       setDateRange([date1, date2]);
     }
-  }, [data, setDateRange]);
+  }, [parsedData, setDateRange]);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -62,9 +62,9 @@ const CsvReader = ({ setDateRange }) => {
         Object.values(row).some((value) => value && value.toString().trim() !== '')
       );
 
-    setData(cleanedData);
+    setParsedData(cleanedData);
     const { aggregatedExpenses, expensesByPerson } = generateAggregatedData(cleanedData);
-    setExpenses(aggregatedExpenses);
+    setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
   };
 
@@ -110,11 +110,11 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
-  const getExpensesChartData = () => {
-    if (expenses.length === 0) return {};
+  const generateExpensesChartData = () => {
+    if (expensesByDescription.length === 0) return {};
 
-    const labels = expenses.map(expense => expense.description);
-    const dataValues = expenses.map(expense => expense.amount);
+    const labels = expensesByDescription.map(expense => expense.description);
+    const dataValues = expensesByDescription.map(expense => expense.amount);
 
     const backgroundColors = [];
     const hoverBackgroundColors = [];
@@ -137,7 +137,7 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
-  const getExpensesByPersonChartData = () => {
+  const generatePersonExpenseChartData = () => {
     if (expensesByPerson.length === 0) return {};
 
     const labels = expensesByPerson.map(personData => personData.person);
@@ -164,26 +164,28 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
-  const handleSliceClick = (description) => {
+  const handleDescriptionClick = (description) => {
     setSelectedDescription(description);
   };
 
-  const handleSliceClick2 = (person) => {
+  const handlePersonClick = (person) => {
     setSelectedPerson(person);
   };
   
 
   return (
     <div className="csv-reader-container">
+
       <div className="file-input-wrapper">
         <FileInput handleFileChange={handleFileChange} handleAnalyze={handleAnalyze} />
       </div>
-        {data.length > 0 && (
+
+        {parsedData.length > 0 && (
             <div className="chart-transaction-container">
 
                 <div className="transaction-list-wrapper">
                     {selectedDescription &&
-                    expenses.filter((expense) => expense.description === selectedDescription)
+                    expensesByDescription.filter((expense) => expense.description === selectedDescription)
                         .map((expense, index) => (
                         <TransactionList
                             key={index}
@@ -197,22 +199,14 @@ const CsvReader = ({ setDateRange }) => {
 
                 <div className="pie-chart-wrapper">
                     <h2 className="chart-title">כל ההוצאות</h2>
-                    <PieChart data={getExpensesChartData()} onSliceClick={handleSliceClick} />
+                    <PieChart data={generateExpensesChartData()} onSliceClick={handleDescriptionClick} />
                 </div>
             </div>
         )}
 
-        {data.length > 0 && (
-                <div className="table-wrapper">
-                    <div className="show-table-button">
-                        <ToggleTableButton showTable={showTable}
-                                           onToggle={() => setShowTable(!showTable)}/>
-                    </div>
-                    {showTable && <TableComponent data={data}/>}
-                </div>
-        )}
+        
 
-        {data.length > 0 && (
+        {parsedData.length > 0 && (
             <div className="chart-transaction-container">
                 <div className="transaction-list-wrapper">
                     {selectedPerson &&
@@ -229,15 +223,26 @@ const CsvReader = ({ setDateRange }) => {
                 </div>
                 <div className="pie-chart-wrapper">
                     <h2 className="chart-title">הוצאות לפי חבר</h2>
-                    <PieChart data={getExpensesByPersonChartData()} onSliceClick={handleSliceClick2} />
+                    <PieChart data={generatePersonExpenseChartData()} onSliceClick={handlePersonClick} />
                 </div>
             </div>
         )}
 
+        {parsedData.length > 0 && (
+                <div className="table-wrapper">
+                    <div className="show-table-button">
+                        <ToggleTableButton showTable={showTable}
+                                           onToggle={() => setShowTable(!showTable)}/>
+                    </div>
+                    {showTable && <TableComponent data={parsedData}/>}
+                </div>
+        )}
 
+        {/* Display the expenses and incomes objects for debugging */}
+        <pre>{JSON.stringify(expensesByDescription, null, 2)}</pre>
+        ########################################
+        <pre>{JSON.stringify(expensesByPerson, null, 2)}</pre>
 
-
-        
 
     </div>
   );
