@@ -1,4 +1,3 @@
-// src/components/TransactionList.js
 import React from 'react';
 import Transaction from './Transaction';
 import '../assets/styles/App.css';
