@@ -2,18 +2,19 @@
 import React from 'react';
 import '../assets/styles/App.css'; // Ensure the correct path to the CSS file
 
-const Transaction = ({ transaction }) => {
-  const { date, amount, person } = transaction;
-
-  return (
-    <div className="transaction-container">
-      <span className="transaction-item">{date}</span>
-      <span className="transaction-separator">|</span>
-      <span className="transaction-item">{amount+"₪"}</span>
-      <span className="transaction-separator">|</span>
-      <span className="transaction-item">{person}</span>
-    </div>
-  );
+const Transaction = ({transaction, fields}) => {
+    return (
+        <div className="transaction-container">
+            {fields.map((field, index) => (
+                <React.Fragment key={index}>
+                    <span className="transaction-item">{transaction[field]}</span>
+                    {index < fields.length - 1 && (
+                        <span className="transaction-separator">|</span>
+                    )}
+                </React.Fragment>
+            ))}
+        </div>
+    );
 };
 
 export default Transaction;
