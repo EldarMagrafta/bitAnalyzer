@@ -278,6 +278,7 @@ const CsvReader = ({ setDateRange }) => {
         </div>
       )}
 
+      {/* "כל ההוצאות" Section */}
       {parsedData.length > 0 && (
         <div className="chart-transaction-container">
           <div className="transaction-list-wrapper">
@@ -305,10 +306,11 @@ const CsvReader = ({ setDateRange }) => {
         </div>
       )}
 
-
+      {/* Updated "הוצאות לפי חבר" Section */}
       {parsedData.length > 0 && (
-        <div className="chart-transaction-container">
-          <div className="transaction-list-wrapper">
+        <div className="multiple-pie-chart-wrapper">
+          {/* TransactionList Wrapper */}
+          <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
             {selectedPerson &&
               expensesByPerson
                 .filter((personData) => personData.person === selectedPerson)
@@ -322,7 +324,9 @@ const CsvReader = ({ setDateRange }) => {
                   />
                 ))}
           </div>
-          <div className="pie-chart-wrapper">
+
+          {/* PieChart */}
+          <div className="medium-pie-chart">
             <h2 className="chart-title">הוצאות לפי חבר</h2>
             <PieChart
               data={generatePersonExpenseChartData()}
@@ -332,7 +336,7 @@ const CsvReader = ({ setDateRange }) => {
         </div>
       )}
 
-
+      {/* "הוצאות לפי חודש" Section */}
       {parsedData.length > 0 && (
         <div className="multiple-pie-chart-wrapper">
           {/* TransactionList Wrapper */}
