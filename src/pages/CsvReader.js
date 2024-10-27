@@ -12,6 +12,7 @@ const CsvReader = ({ setDateRange }) => {
   const [parsedData, setParsedData] = useState([]);
   const [expensesByDescription, setExpensesByDescription] = useState([]);
   const [expensesByPerson, setExpensesByPerson] = useState([]);
+  const [expensesByMonth, setExpensesByMonth] = useState([]);
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(true);
   const [selectedDescription, setSelectedDescription] = useState(null);
@@ -48,6 +49,14 @@ const CsvReader = ({ setDateRange }) => {
     }
   };
 
+  const getHebrewMonthName = (monthNumber) => {
+    const monthNames = [
+      'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+      'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+    ];
+    return monthNames[monthNumber - 1]; // monthNumber is 1-indexed
+  };
+
   const processCsvData = (result) => {
     const headers = result.meta.fields.filter((header) => header.trim() !== '');
     const cleanedData = result.data
@@ -63,15 +72,17 @@ const CsvReader = ({ setDateRange }) => {
       );
 
     setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson } = generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
+    setExpensesByMonth(expensesByMonth);
   };
 
   const generateAggregatedData = (data) => {
     const expensesMap = {};
     const expensesByPersonMap = {};
-
+    const expensesByMonthMap = {};
+  
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
       const description = row['תאור'];
@@ -80,7 +91,9 @@ const CsvReader = ({ setDateRange }) => {
       const status = row['סטטוס'] === 'ההעברה בוצעה';
       const person = row['מאת/ל'];
       const date = row['תאריך'];
-
+      const [day, month, year] = date.split('.').map(Number);
+      const monthName = getHebrewMonthName(month); // Use Hebrew month name only
+  
       if (status && type === 'חיוב') {
         if (!expensesMap[description]) {
           expensesMap[description] = {
@@ -91,7 +104,7 @@ const CsvReader = ({ setDateRange }) => {
         }
         expensesMap[description].transactions.push({ date, person, type, amount, description, status });
         expensesMap[description].amount += amount;
-
+  
         if (!expensesByPersonMap[person]) {
           expensesByPersonMap[person] = {
             amount: 0,
@@ -101,12 +114,51 @@ const CsvReader = ({ setDateRange }) => {
         }
         expensesByPersonMap[person].transactions.push({ date, person, type, amount, description, status });
         expensesByPersonMap[person].amount += amount;
+  
+        if (!expensesByMonthMap[monthName]) {
+          expensesByMonthMap[monthName] = {
+            amount: 0,
+            month: monthName,
+            transactions: [],
+          };
+        }
+        expensesByMonthMap[monthName].transactions.push({ date, person, type, amount, description, status });
+        expensesByMonthMap[monthName].amount += amount;
       }
     }
-
+  
     return {
       aggregatedExpenses: Object.values(expensesMap),
       expensesByPerson: Object.values(expensesByPersonMap),
+      expensesByMonth: Object.values(expensesByMonthMap),
+    };
+  };
+
+
+  const generateMonthlyExpenseChartData = () => {
+    if (expensesByMonth.length === 0) return {};
+
+    const labels = expensesByMonth.map(monthData => monthData.month)
+    const dataValues = expensesByMonth.map(monthData => monthData.amount);
+
+    const backgroundColors = [];
+    const hoverBackgroundColors = [];
+
+    labels.forEach((_, index) => {
+      const hue = (360 * index) / labels.length;
+      backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
+      hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
+    });
+
+    return {
+      labels,
+      datasets: [
+        {
+          data: dataValues,
+          backgroundColor: backgroundColors,
+          hoverBackgroundColor: hoverBackgroundColors,
+        },
+      ],
     };
   };
 
@@ -204,6 +256,8 @@ const CsvReader = ({ setDateRange }) => {
             </div>
         )}
 
+        <hr/>
+
         
 
         {parsedData.length > 0 && (
@@ -228,6 +282,8 @@ const CsvReader = ({ setDateRange }) => {
             </div>
         )}
 
+        <hr/>
+
         {parsedData.length > 0 && (
                 <div className="table-wrapper">
                     <div className="show-table-button">
@@ -237,6 +293,20 @@ const CsvReader = ({ setDateRange }) => {
                     {showTable && <TableComponent data={parsedData}/>}
                 </div>
         )}
+
+
+
+        {parsedData.length > 0 && (
+                <div className="multiple-pie-chart-wrapper">
+                    <div className="medium-pie-chart">
+                      <h2 className="chart-title">הוצאות לפי חודש</h2>
+                      <PieChart data={generateMonthlyExpenseChartData()}/>
+                    </div>
+                </div>
+        )}
+
+
+
 
         {/* Display the expenses and incomes objects for debugging */}
         <pre>{JSON.stringify(expensesByDescription, null, 2)}</pre>
