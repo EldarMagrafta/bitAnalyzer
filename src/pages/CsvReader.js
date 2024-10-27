@@ -81,14 +81,10 @@ const CsvReader = ({ setDateRange }) => {
 
   expenses.forEach((row) => {
     const [dayStr, monthStr, yearStr] = row['תאריך']
-      .split('.')
-      .map((s) => s.trim());
+      .split('.').map((s) => s.trim());
     const day = parseInt(dayStr, 10);
     const month = parseInt(monthStr, 10);
     const year = parseInt(yearStr, 10) + 2000; // Adjust for two-digit year
-
-    // Use Date.UTC to create a date in UTC
-    const date = new Date(Date.UTC(year, month - 1, day));
 
     const amount = parseFloat(row['סכום']) || 0;
 
@@ -129,24 +125,16 @@ const CsvReader = ({ setDateRange }) => {
 
   while (currentDate <= lastTransactionDate) {
     // 1st of the month
-    const firstOfMonth = new Date(
-      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1)
-    );
-    if (
-      firstOfMonth.getTime() > firstTransactionDate.getTime() &&
-      firstOfMonth.getTime() < lastTransactionDate.getTime()
-    ) {
+    const firstOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1));
+
+    if (firstOfMonth.getTime() > firstTransactionDate.getTime() && firstOfMonth.getTime() < lastTransactionDate.getTime()) {
       targetDatesSet.add(firstOfMonth.getTime());
     }
 
     // 15th of the month
-    const fifteenthOfMonth = new Date(
-      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15)
-    );
-    if (
-      fifteenthOfMonth.getTime() > firstTransactionDate.getTime() &&
-      fifteenthOfMonth.getTime() < lastTransactionDate.getTime()
-    ) {
+    const fifteenthOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15));
+
+    if (fifteenthOfMonth.getTime() > firstTransactionDate.getTime() && fifteenthOfMonth.getTime() < lastTransactionDate.getTime()) {
       targetDatesSet.add(fifteenthOfMonth.getTime());
     }
 
@@ -173,19 +161,13 @@ const CsvReader = ({ setDateRange }) => {
 
   targetDates.forEach((targetDate) => {
     // Add expenses up to the target date
-    while (
-      expenseIndex < allDates.length &&
-      new Date(allDates[expenseIndex]) <= targetDate
-    ) {
+    while (expenseIndex < allDates.length && new Date(allDates[expenseIndex]) <= targetDate) {
       cumulativeAmount += dateAmountMap[allDates[expenseIndex]];
       expenseIndex++;
     }
 
     // Format label as DD-MM
-    const dateLabel =
-      ('0' + targetDate.getUTCDate()).slice(-2) +
-      '-' +
-      ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
+    const dateLabel = ('0' + targetDate.getUTCDate()).slice(-2) + '-' + ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
 
     labels.push(dateLabel);
     dataValues.push(cumulativeAmount);
@@ -205,9 +187,6 @@ const CsvReader = ({ setDateRange }) => {
     ],
   };
 };
-
-  
-  
 
   
 
