@@ -29,6 +29,13 @@ const LineChart = ({ data }) => {
       legend: {
         display: false, // Hide legend if not needed
       },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return `₪ ${context.parsed.y.toLocaleString()}`; // Format tooltip values
+          },
+        },
+      },
     },
     scales: {
       x: {
@@ -37,12 +44,25 @@ const LineChart = ({ data }) => {
           display: true,
           text: 'תאריך',
         },
+        ticks: {
+          maxRotation: 90,
+          minRotation: 90,
+          autoSkip: true,
+          maxTicksLimit: 10, // Adjust as needed
+        },
       },
       y: {
         display: true,
         title: {
           display: true,
           text: 'הוצאות מצטברות',
+        },
+        ticks: {
+          stepSize: 500,
+          beginAtZero: true,
+          callback: function (value) {
+            return `₪ ${value.toLocaleString()}`; // Format y-axis tick values
+          },
         },
       },
     },
