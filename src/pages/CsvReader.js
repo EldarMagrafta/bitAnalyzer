@@ -52,148 +52,160 @@ const CsvReader = ({ setDateRange }) => {
   };
 
   const getHebrewMonthName = (monthNumber) => {
-    const monthNames = [
-      'ינואר',
-      'פברואר',
-      'מרץ',
-      'אפריל',
-      'מאי',
-      'יוני',
-      'יולי',
-      'אוגוסט',
-      'ספטמבר',
-      'אוקטובר',
-      'נובמבר',
-      'דצמבר',
-    ];
+    const monthNames = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
     return monthNames[monthNumber - 1]; // monthNumber is 1-indexed
   };
 
   const generateExpensesOverTimeData = () => {
-  if (parsedData.length === 0) return {};
+    if (parsedData.length === 0) return {};
 
-  const expenses = parsedData.filter(
-    (row) => row['סטטוס'] === 'ההעברה בוצעה' && row['זיכוי/חיוב'] === 'חיוב'
-  );
+    const expenses = filterExpenses(parsedData);
+    const dateAmountMap = createDateAmountMap(expenses);
+    const allDates = getSortedDates(dateAmountMap);
 
-  // Map to store cumulative expenses by date
-  const dateAmountMap = {};
+    if (allDates.length === 0) return {};
 
-  expenses.forEach((row) => {
-    const [dayStr, monthStr, yearStr] = row['תאריך']
-      .split('.').map((s) => s.trim());
-    const day = parseInt(dayStr, 10);
-    const month = parseInt(monthStr, 10);
-    const year = parseInt(yearStr, 10) + 2000; // Adjust for two-digit year
+    const { firstTransactionDate, lastTransactionDate } = getFirstAndLastTransactionDates(allDates);
 
-    const amount = parseFloat(row['סכום']) || 0;
+    const targetDates = generateTargetDates(firstTransactionDate, lastTransactionDate);
+    const { labels, dataValues } = calculateCumulativeExpenses(dateAmountMap, allDates, targetDates);
 
-    // Format date string as YYYY-MM-DD manually
-    const dateString = `${year}-${('0' + month).slice(-2)}-${('0' + day).slice(-2)}`;
-
-    dateAmountMap[dateString] = (dateAmountMap[dateString] || 0) + amount;
-  });
-
-  // Get all dates sorted
-  const allDates = Object.keys(dateAmountMap).sort(
-    (a, b) => new Date(a) - new Date(b)
-  );
-
-  if (allDates.length === 0) return {};
-
-  // Get the first and last transaction dates
-  const firstTransactionDateStr = allDates[0];
-  const lastTransactionDateStr = allDates[allDates.length - 1];
-
-  const firstTransactionDate = new Date(firstTransactionDateStr);
-  const lastTransactionDate = new Date(lastTransactionDateStr);
-
-  // Generate target dates
-  const targetDatesSet = new Set();
-
-  // Add the first transaction date
-  targetDatesSet.add(firstTransactionDate.getTime());
-
-  // For each month between first and last transaction dates
-  let currentDate = new Date(
-    Date.UTC(
-      firstTransactionDate.getUTCFullYear(),
-      firstTransactionDate.getUTCMonth(),
-      1
-    )
-  );
-
-  while (currentDate <= lastTransactionDate) {
-    // 1st of the month
-    const firstOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1));
-
-    if (firstOfMonth.getTime() > firstTransactionDate.getTime() && firstOfMonth.getTime() < lastTransactionDate.getTime()) {
-      targetDatesSet.add(firstOfMonth.getTime());
-    }
-
-    // 15th of the month
-    const fifteenthOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15));
-
-    if (fifteenthOfMonth.getTime() > firstTransactionDate.getTime() && fifteenthOfMonth.getTime() < lastTransactionDate.getTime()) {
-      targetDatesSet.add(fifteenthOfMonth.getTime());
-    }
-
-    // Move to next month
-    currentDate.setUTCMonth(currentDate.getUTCMonth() + 1);
-  }
-
-  // Add the last transaction date if it's different from the first
-  if (lastTransactionDate.getTime() !== firstTransactionDate.getTime()) {
-    targetDatesSet.add(lastTransactionDate.getTime());
-  }
-
-  // Convert set to array and sort the target dates
-  const targetDates = Array.from(targetDatesSet)
-    .map((ts) => new Date(ts))
-    .sort((a, b) => a - b);
-
-  // Calculate cumulative expenses up to each target date
-  let cumulativeAmount = 0;
-  const labels = [];
-  const dataValues = [];
-
-  let expenseIndex = 0;
-
-  targetDates.forEach((targetDate) => {
-    // Add expenses up to the target date
-    while (expenseIndex < allDates.length && new Date(allDates[expenseIndex]) <= targetDate) {
-      cumulativeAmount += dateAmountMap[allDates[expenseIndex]];
-      expenseIndex++;
-    }
-
-    // Format label as DD-MM
-    const dateLabel = ('0' + targetDate.getUTCDate()).slice(-2) + '-' + ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
-
-    labels.push(dateLabel);
-    dataValues.push(cumulativeAmount);
-  });
-
-  return {
-    labels,
-    datasets: [
-      {
-        label: 'הוצאות מצטברות',
-        data: dataValues,
-        fill: false,
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(75,192,192,1)',
-        tension: 0.1,
-      },
-    ],
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'הוצאות מצטברות',
+          data: dataValues,
+          fill: false,
+          backgroundColor: 'rgba(75,192,192,1)',
+          borderColor: 'rgba(75,192,192,1)',
+          tension: 0.1,
+        },
+      ],
+    };
   };
-};
+
+  // Helper functions
+
+  // Filters the parsed data to include only successful debit transactions
+  const filterExpenses = (data) => {
+    return data.filter((row) => row['סטטוס'] === 'ההעברה בוצעה' && row['זיכוי/חיוב'] === 'חיוב');
+  };
+
+  // Creates a map of dates to total amounts for that date
+  const createDateAmountMap = (expenses) => {
+    const dateAmountMap = {};
+
+    expenses.forEach((row) => {
+      const [dayStr, monthStr, yearStr] = row['תאריך']
+        .split('.')
+        .map((s) => s.trim());
+      const day = parseInt(dayStr, 10);
+      const month = parseInt(monthStr, 10);
+      const year = parseInt(yearStr, 10) + 2000; // Adjust for two-digit year
+
+      const amount = parseFloat(row['סכום']) || 0;
+
+      // Format date string as YYYY-MM-DD manually
+      const dateString = `${year}-${('0' + month).slice(-2)}-${('0' + day).slice(-2)}`;
+
+      dateAmountMap[dateString] = (dateAmountMap[dateString] || 0) + amount;
+    });
+
+    return dateAmountMap;
+  };
+
+  // Returns an array of sorted date strings
+  const getSortedDates = (dateAmountMap) => {
+    return Object.keys(dateAmountMap).sort((a, b) => new Date(a) - new Date(b));
+  };
+
+  // Retrieves the first and last transaction dates from the sorted dates
+  const getFirstAndLastTransactionDates = (allDates) => {
+    const firstTransactionDateStr = allDates[0];
+    const lastTransactionDateStr = allDates[allDates.length - 1];
+
+    const firstTransactionDate = new Date(firstTransactionDateStr);
+    const lastTransactionDate = new Date(lastTransactionDateStr);
+
+    return { firstTransactionDate, lastTransactionDate };
+  };
+
+  // Generates the target dates (1st and 15th of each month between first and last transaction dates)
+  const generateTargetDates = (firstTransactionDate, lastTransactionDate) => {
+    const targetDatesSet = new Set();
+
+    // Add the first transaction date
+    targetDatesSet.add(firstTransactionDate.getTime());
+
+    // For each month between first and last transaction dates
+    let currentDate = new Date(
+      Date.UTC(
+        firstTransactionDate.getUTCFullYear(),
+        firstTransactionDate.getUTCMonth(),
+        1
+      )
+    );
+
+    while (currentDate <= lastTransactionDate) {
+      // 1st of the month
+      const firstOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1));
+      if (firstOfMonth.getTime() > firstTransactionDate.getTime() && firstOfMonth.getTime() < lastTransactionDate.getTime()) {
+        targetDatesSet.add(firstOfMonth.getTime());
+      }
+
+      // 15th of the month
+      const fifteenthOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15));
+      if (fifteenthOfMonth.getTime() > firstTransactionDate.getTime() && fifteenthOfMonth.getTime() < lastTransactionDate.getTime()) {
+        targetDatesSet.add(fifteenthOfMonth.getTime());
+      }
+
+      // Move to next month
+      currentDate.setUTCMonth(currentDate.getUTCMonth() + 1);
+    }
+
+    // Add the last transaction date if it's different from the first
+    if (lastTransactionDate.getTime() !== firstTransactionDate.getTime()) {
+      targetDatesSet.add(lastTransactionDate.getTime());
+    }
+
+    // Convert set to array and sort the target dates
+    const targetDates = Array.from(targetDatesSet)
+      .map((ts) => new Date(ts))
+      .sort((a, b) => a - b);
+
+    return targetDates;
+  };
+
+  // Calculates cumulative expenses up to each target date
+  const calculateCumulativeExpenses = (dateAmountMap, allDates, targetDates) => {
+    let cumulativeAmount = 0;
+    const labels = [];
+    const dataValues = [];
+
+    let expenseIndex = 0;
+
+    targetDates.forEach((targetDate) => {
+      // Add expenses up to the target date
+      while (expenseIndex < allDates.length && new Date(allDates[expenseIndex]) <= targetDate) {
+        cumulativeAmount += dateAmountMap[allDates[expenseIndex]];
+        expenseIndex++;
+      }
+
+      // Format label as DD-MM
+      const dateLabel = ('0' + targetDate.getUTCDate()).slice(-2) + '-' + ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
+      labels.push(dateLabel);
+      dataValues.push(cumulativeAmount);
+    });
+
+    return { labels, dataValues };
+  };
 
   
 
   const processCsvData = (result) => {
     const headers = result.meta.fields.filter((header) => header.trim() !== '');
-    const cleanedData = result.data
-      .map((row) => {
+    const cleanedData = result.data.map((row) => {
         const cleanedRow = {};
         headers.forEach((header) => {
           cleanedRow[header] = row[header];
@@ -205,8 +217,7 @@ const CsvReader = ({ setDateRange }) => {
       );
 
     setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
-      generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
     setExpensesByMonth(expensesByMonth);
