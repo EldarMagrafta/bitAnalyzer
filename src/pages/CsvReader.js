@@ -80,55 +80,94 @@ const CsvReader = ({ setDateRange }) => {
     const dateAmountMap = {};
   
     expenses.forEach((row) => {
-      const [dayStr, monthStr, yearStr] = row['תאריך'].split('.').map((s) => s.trim());
+      const [dayStr, monthStr, yearStr] = row['תאריך']
+        .split('.')
+        .map((s) => s.trim());
       const day = parseInt(dayStr, 10);
       const month = parseInt(monthStr, 10);
       const year = parseInt(yearStr, 10) + 2000; // Adjust for two-digit year
   
-      const date = new Date(year, month - 1, day);
+      // Use Date.UTC to create a date in UTC
+      const date = new Date(Date.UTC(year, month - 1, day));
   
       const amount = parseFloat(row['סכום']) || 0;
   
-      const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+      // Format date string as YYYY-MM-DD manually
+      const dateString = `${year}-${('0' + month).slice(-2)}-${('0' + day).slice(-2)}`;
   
       dateAmountMap[dateString] = (dateAmountMap[dateString] || 0) + amount;
     });
   
-    // Get all unique months in the data
-    const monthsSet = new Set(
-      Object.keys(dateAmountMap).map((dateStr) => dateStr.substring(0, 7)) // YYYY-MM
+    // Get all dates sorted
+    const allDates = Object.keys(dateAmountMap).sort(
+      (a, b) => new Date(a) - new Date(b)
     );
-    const months = Array.from(monthsSet).sort();
   
-    // Generate target dates: 1st, 15th, and last day of each month
-    const targetDates = [];
+    if (allDates.length === 0) return {};
   
-    months.forEach((monthStr) => {
-      const [year, month] = monthStr.split('-').map(Number);
+    // Get the first and last transaction dates
+    const firstTransactionDateStr = allDates[0];
+    const lastTransactionDateStr = allDates[allDates.length - 1];
   
+    const firstTransactionDate = new Date(firstTransactionDateStr);
+    const lastTransactionDate = new Date(lastTransactionDateStr);
+  
+    // Generate target dates
+    const targetDatesSet = new Set();
+  
+    // Add the first transaction date
+    targetDatesSet.add(firstTransactionDate.getTime());
+  
+    // For each month between first and last transaction dates
+    let currentDate = new Date(
+      Date.UTC(
+        firstTransactionDate.getUTCFullYear(),
+        firstTransactionDate.getUTCMonth(),
+        1
+      )
+    );
+  
+    while (currentDate <= lastTransactionDate) {
       // 1st of the month
-      const firstDay = new Date(year, month - 1, 1);
-      targetDates.push(firstDay);
+      const firstOfMonth = new Date(
+        Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1)
+      );
+      if (
+        firstOfMonth.getTime() > firstTransactionDate.getTime() &&
+        firstOfMonth.getTime() < lastTransactionDate.getTime()
+      ) {
+        targetDatesSet.add(firstOfMonth.getTime());
+      }
   
       // 15th of the month
-      const fifteenthDay = new Date(year, month - 1, 15);
-      targetDates.push(fifteenthDay);
+      const fifteenthOfMonth = new Date(
+        Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15)
+      );
+      if (
+        fifteenthOfMonth.getTime() > firstTransactionDate.getTime() &&
+        fifteenthOfMonth.getTime() < lastTransactionDate.getTime()
+      ) {
+        targetDatesSet.add(fifteenthOfMonth.getTime());
+      }
   
-      // Last day of the month
-      const lastDay = new Date(year, month, 0); // Day 0 of next month is last day of current month
-      targetDates.push(lastDay);
-    });
+      // Move to next month
+      currentDate.setUTCMonth(currentDate.getUTCMonth() + 1);
+    }
   
-    // Sort target dates
-    targetDates.sort((a, b) => a - b);
+    // Add the last transaction date if it's different from the first
+    if (lastTransactionDate.getTime() !== firstTransactionDate.getTime()) {
+      targetDatesSet.add(lastTransactionDate.getTime());
+    }
+  
+    // Convert set to array and sort the target dates
+    const targetDates = Array.from(targetDatesSet)
+      .map((ts) => new Date(ts))
+      .sort((a, b) => a - b);
   
     // Calculate cumulative expenses up to each target date
     let cumulativeAmount = 0;
     const labels = [];
     const dataValues = [];
-  
-    // Get all dates sorted
-    const allDates = Object.keys(dateAmountMap).sort((a, b) => new Date(a) - new Date(b));
   
     let expenseIndex = 0;
   
@@ -144,9 +183,9 @@ const CsvReader = ({ setDateRange }) => {
   
       // Format label as DD-MM
       const dateLabel =
-        ('0' + targetDate.getDate()).slice(-2) +
+        ('0' + targetDate.getUTCDate()).slice(-2) +
         '-' +
-        ('0' + (targetDate.getMonth() + 1)).slice(-2);
+        ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
   
       labels.push(dateLabel);
       dataValues.push(cumulativeAmount);
@@ -167,6 +206,9 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
   
+  
+  
+
   
 
   const processCsvData = (result) => {
