@@ -6,6 +6,7 @@ import TableComponent from '../components/TableComponent';
 import FileInput from '../components/FileInput';
 import ToggleTableButton from '../components/ToggleTableButton';
 import TransactionList from '../components/TransactionList';
+import LineChart from '../components/LineChart';
 import '../assets/styles/App.css';
 
 const CsvReader = ({ setDateRange }) => {
@@ -67,6 +68,106 @@ const CsvReader = ({ setDateRange }) => {
     ];
     return monthNames[monthNumber - 1]; // monthNumber is 1-indexed
   };
+
+  const generateExpensesOverTimeData = () => {
+    if (parsedData.length === 0) return {};
+  
+    const expenses = parsedData.filter(
+      (row) => row['סטטוס'] === 'ההעברה בוצעה' && row['זיכוי/חיוב'] === 'חיוב'
+    );
+  
+    // Map to store cumulative expenses by date
+    const dateAmountMap = {};
+  
+    expenses.forEach((row) => {
+      const [dayStr, monthStr, yearStr] = row['תאריך'].split('.').map((s) => s.trim());
+      const day = parseInt(dayStr, 10);
+      const month = parseInt(monthStr, 10);
+      const year = parseInt(yearStr, 10) + 2000; // Adjust for two-digit year
+  
+      const date = new Date(year, month - 1, day);
+  
+      const amount = parseFloat(row['סכום']) || 0;
+  
+      const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  
+      dateAmountMap[dateString] = (dateAmountMap[dateString] || 0) + amount;
+    });
+  
+    // Get all unique months in the data
+    const monthsSet = new Set(
+      Object.keys(dateAmountMap).map((dateStr) => dateStr.substring(0, 7)) // YYYY-MM
+    );
+    const months = Array.from(monthsSet).sort();
+  
+    // Generate target dates: 1st, 15th, and last day of each month
+    const targetDates = [];
+  
+    months.forEach((monthStr) => {
+      const [year, month] = monthStr.split('-').map(Number);
+  
+      // 1st of the month
+      const firstDay = new Date(year, month - 1, 1);
+      targetDates.push(firstDay);
+  
+      // 15th of the month
+      const fifteenthDay = new Date(year, month - 1, 15);
+      targetDates.push(fifteenthDay);
+  
+      // Last day of the month
+      const lastDay = new Date(year, month, 0); // Day 0 of next month is last day of current month
+      targetDates.push(lastDay);
+    });
+  
+    // Sort target dates
+    targetDates.sort((a, b) => a - b);
+  
+    // Calculate cumulative expenses up to each target date
+    let cumulativeAmount = 0;
+    const labels = [];
+    const dataValues = [];
+  
+    // Get all dates sorted
+    const allDates = Object.keys(dateAmountMap).sort((a, b) => new Date(a) - new Date(b));
+  
+    let expenseIndex = 0;
+  
+    targetDates.forEach((targetDate) => {
+      // Add expenses up to the target date
+      while (
+        expenseIndex < allDates.length &&
+        new Date(allDates[expenseIndex]) <= targetDate
+      ) {
+        cumulativeAmount += dateAmountMap[allDates[expenseIndex]];
+        expenseIndex++;
+      }
+  
+      // Format label as DD-MM
+      const dateLabel =
+        ('0' + targetDate.getDate()).slice(-2) +
+        '-' +
+        ('0' + (targetDate.getMonth() + 1)).slice(-2);
+  
+      labels.push(dateLabel);
+      dataValues.push(cumulativeAmount);
+    });
+  
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'הוצאות מצטברות',
+          data: dataValues,
+          fill: false,
+          backgroundColor: 'rgba(75,192,192,1)',
+          borderColor: 'rgba(75,192,192,1)',
+          tension: 0.1,
+        },
+      ],
+    };
+  };
+  
+  
 
   const processCsvData = (result) => {
     const headers = result.meta.fields.filter((header) => header.trim() !== '');
@@ -262,6 +363,18 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
+
+{parsedData.length > 0 && (
+        <div className="line-chart-wrapper">
+          <h2 className="chart-title">הוצאות מצטברות לאורך זמן</h2>
+          <LineChart data={generateExpensesOverTimeData()} />
+        </div>
+      )}
+
+
+
+
+      
       <div className="file-input-wrapper">
         <FileInput handleFileChange={handleFileChange} handleAnalyze={handleAnalyze} />
       </div>
