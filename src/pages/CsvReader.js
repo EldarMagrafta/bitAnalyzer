@@ -14,14 +14,15 @@ const CsvReader = ({ setDateRange }) => {
   const [expensesByPerson, setExpensesByPerson] = useState([]);
   const [expensesByMonth, setExpensesByMonth] = useState([]);
   const [file, setFile] = useState(null);
-  const [showTable, setShowTable] = useState(true);
+  const [showTable, setShowTable] = useState(false);
   const [selectedDescription, setSelectedDescription] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
 
   useEffect(() => {
     if (parsedData.length > 0) {
       const dates = parsedData
-        .map(row => {
+        .map((row) => {
           const [day, month, year] = row['תאריך'].split('.').map(Number);
           return new Date(year + 2000, month - 1, day);
         })
@@ -51,8 +52,18 @@ const CsvReader = ({ setDateRange }) => {
 
   const getHebrewMonthName = (monthNumber) => {
     const monthNames = [
-      'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
-      'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+      'ינואר',
+      'פברואר',
+      'מרץ',
+      'אפריל',
+      'מאי',
+      'יוני',
+      'יולי',
+      'אוגוסט',
+      'ספטמבר',
+      'אוקטובר',
+      'נובמבר',
+      'דצמבר',
     ];
     return monthNames[monthNumber - 1]; // monthNumber is 1-indexed
   };
@@ -72,7 +83,8 @@ const CsvReader = ({ setDateRange }) => {
       );
 
     setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
+      generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
     setExpensesByMonth(expensesByMonth);
@@ -82,7 +94,7 @@ const CsvReader = ({ setDateRange }) => {
     const expensesMap = {};
     const expensesByPersonMap = {};
     const expensesByMonthMap = {};
-  
+
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
       const description = row['תאור'];
@@ -93,7 +105,7 @@ const CsvReader = ({ setDateRange }) => {
       const date = row['תאריך'];
       const [day, month, year] = date.split('.').map(Number);
       const monthName = getHebrewMonthName(month); // Use Hebrew month name only
-  
+
       if (status && type === 'חיוב') {
         if (!expensesMap[description]) {
           expensesMap[description] = {
@@ -102,9 +114,16 @@ const CsvReader = ({ setDateRange }) => {
             transactions: [],
           };
         }
-        expensesMap[description].transactions.push({ date, person, type, amount, description, status });
+        expensesMap[description].transactions.push({
+          date,
+          person,
+          type,
+          amount,
+          description,
+          status,
+        });
         expensesMap[description].amount += amount;
-  
+
         if (!expensesByPersonMap[person]) {
           expensesByPersonMap[person] = {
             amount: 0,
@@ -112,9 +131,16 @@ const CsvReader = ({ setDateRange }) => {
             transactions: [],
           };
         }
-        expensesByPersonMap[person].transactions.push({ date, person, type, amount, description, status });
+        expensesByPersonMap[person].transactions.push({
+          date,
+          person,
+          type,
+          amount,
+          description,
+          status,
+        });
         expensesByPersonMap[person].amount += amount;
-  
+
         if (!expensesByMonthMap[monthName]) {
           expensesByMonthMap[monthName] = {
             amount: 0,
@@ -122,11 +148,18 @@ const CsvReader = ({ setDateRange }) => {
             transactions: [],
           };
         }
-        expensesByMonthMap[monthName].transactions.push({ date, person, type, amount, description, status });
+        expensesByMonthMap[monthName].transactions.push({
+          date,
+          person,
+          type,
+          amount,
+          description,
+          status,
+        });
         expensesByMonthMap[monthName].amount += amount;
       }
     }
-  
+
     return {
       aggregatedExpenses: Object.values(expensesMap),
       expensesByPerson: Object.values(expensesByPersonMap),
@@ -134,12 +167,11 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
-
   const generateMonthlyExpenseChartData = () => {
     if (expensesByMonth.length === 0) return {};
 
-    const labels = expensesByMonth.map(monthData => monthData.month)
-    const dataValues = expensesByMonth.map(monthData => monthData.amount);
+    const labels = expensesByMonth.map((monthData) => monthData.month);
+    const dataValues = expensesByMonth.map((monthData) => monthData.amount);
 
     const backgroundColors = [];
     const hoverBackgroundColors = [];
@@ -165,8 +197,8 @@ const CsvReader = ({ setDateRange }) => {
   const generateExpensesChartData = () => {
     if (expensesByDescription.length === 0) return {};
 
-    const labels = expensesByDescription.map(expense => expense.description);
-    const dataValues = expensesByDescription.map(expense => expense.amount);
+    const labels = expensesByDescription.map((expense) => expense.description);
+    const dataValues = expensesByDescription.map((expense) => expense.amount);
 
     const backgroundColors = [];
     const hoverBackgroundColors = [];
@@ -192,8 +224,8 @@ const CsvReader = ({ setDateRange }) => {
   const generatePersonExpenseChartData = () => {
     if (expensesByPerson.length === 0) return {};
 
-    const labels = expensesByPerson.map(personData => personData.person);
-    const dataValues = expensesByPerson.map(personData => personData.amount);
+    const labels = expensesByPerson.map((personData) => personData.person);
+    const dataValues = expensesByPerson.map((personData) => personData.amount);
 
     const backgroundColors = [];
     const hoverBackgroundColors = [];
@@ -223,97 +255,112 @@ const CsvReader = ({ setDateRange }) => {
   const handlePersonClick = (person) => {
     setSelectedPerson(person);
   };
-  
+
+  const handleMonthClick = (monthName) => {
+    setSelectedMonth(monthName);
+  };
 
   return (
     <div className="csv-reader-container">
-
       <div className="file-input-wrapper">
         <FileInput handleFileChange={handleFileChange} handleAnalyze={handleAnalyze} />
       </div>
 
-        {parsedData.length > 0 && (
-            <div className="chart-transaction-container">
+      {parsedData.length > 0 && (
+        <div className="table-wrapper">
+          <div className="show-table-button">
+            <ToggleTableButton
+              showTable={showTable}
+              onToggle={() => setShowTable(!showTable)}
+            />
+          </div>
+          {showTable && <TableComponent data={parsedData} />}
+        </div>
+      )}
 
-                <div className="transaction-list-wrapper">
-                    {selectedDescription &&
-                    expensesByDescription.filter((expense) => expense.description === selectedDescription)
-                        .map((expense, index) => (
-                        <TransactionList
-                            key={index}
-                            description={expense.description}
-                            amount={expense.amount}
-                            transactions={expense.transactions}
-                            fields={['date', 'amount', 'person']}
-                        />
-                        ))}
-                </div>
+      {parsedData.length > 0 && (
+        <div className="chart-transaction-container">
+          <div className="transaction-list-wrapper">
+            {selectedDescription &&
+              expensesByDescription
+                .filter((expense) => expense.description === selectedDescription)
+                .map((expense, index) => (
+                  <TransactionList
+                    key={index}
+                    description={expense.description}
+                    amount={expense.amount}
+                    transactions={expense.transactions}
+                    fields={['date', 'amount', 'person']}
+                  />
+                ))}
+          </div>
 
-                <div className="pie-chart-wrapper">
-                    <h2 className="chart-title">כל ההוצאות</h2>
-                    <PieChart data={generateExpensesChartData()} onSliceClick={handleDescriptionClick} />
-                </div>
-            </div>
-        )}
-
-        <hr/>
-
-        
-
-        {parsedData.length > 0 && (
-            <div className="chart-transaction-container">
-                <div className="transaction-list-wrapper">
-                    {selectedPerson &&
-                    expensesByPerson.filter((personData) =>  personData.person === selectedPerson)
-                        .map((personData, index) => (
-                            <TransactionList
-                            key={index}
-                            description={personData.person}
-                            amount={personData.amount}
-                            transactions={personData.transactions}
-                            fields={['date', 'amount', 'description']}
-                        />
-                        ))}
-                </div>
-                <div className="pie-chart-wrapper">
-                    <h2 className="chart-title">הוצאות לפי חבר</h2>
-                    <PieChart data={generatePersonExpenseChartData()} onSliceClick={handlePersonClick} />
-                </div>
-            </div>
-        )}
-
-        <hr/>
-
-        {parsedData.length > 0 && (
-                <div className="table-wrapper">
-                    <div className="show-table-button">
-                        <ToggleTableButton showTable={showTable}
-                                           onToggle={() => setShowTable(!showTable)}/>
-                    </div>
-                    {showTable && <TableComponent data={parsedData}/>}
-                </div>
-        )}
+          <div className="pie-chart-wrapper">
+            <h2 className="chart-title">כל ההוצאות</h2>
+            <PieChart
+              data={generateExpensesChartData()}
+              onSliceClick={handleDescriptionClick}
+            />
+          </div>
+        </div>
+      )}
 
 
+      {parsedData.length > 0 && (
+        <div className="chart-transaction-container">
+          <div className="transaction-list-wrapper">
+            {selectedPerson &&
+              expensesByPerson
+                .filter((personData) => personData.person === selectedPerson)
+                .map((personData, index) => (
+                  <TransactionList
+                    key={index}
+                    description={personData.person}
+                    amount={personData.amount}
+                    transactions={personData.transactions}
+                    fields={['date', 'amount', 'description']}
+                  />
+                ))}
+          </div>
+          <div className="pie-chart-wrapper">
+            <h2 className="chart-title">הוצאות לפי חבר</h2>
+            <PieChart
+              data={generatePersonExpenseChartData()}
+              onSliceClick={handlePersonClick}
+            />
+          </div>
+        </div>
+      )}
 
-        {parsedData.length > 0 && (
-                <div className="multiple-pie-chart-wrapper">
-                    <div className="medium-pie-chart">
-                      <h2 className="chart-title">הוצאות לפי חודש</h2>
-                      <PieChart data={generateMonthlyExpenseChartData()}/>
-                    </div>
-                </div>
-        )}
 
+      {parsedData.length > 0 && (
+        <div className="multiple-pie-chart-wrapper">
+          {/* TransactionList Wrapper */}
+          <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
+            {selectedMonth &&
+              expensesByMonth
+                .filter((monthData) => monthData.month === selectedMonth)
+                .map((monthData, index) => (
+                  <TransactionList
+                    key={index}
+                    description={monthData.month}
+                    amount={monthData.amount}
+                    transactions={monthData.transactions}
+                    fields={['date', 'amount', 'description', 'person']}
+                  />
+                ))}
+          </div>
 
-
-
-        {/* Display the expenses and incomes objects for debugging */}
-        <pre>{JSON.stringify(expensesByDescription, null, 2)}</pre>
-        ########################################
-        <pre>{JSON.stringify(expensesByPerson, null, 2)}</pre>
-
-
+          {/* PieChart */}
+          <div className="medium-pie-chart">
+            <h2 className="chart-title">הוצאות לפי חודש</h2>
+            <PieChart
+              data={generateMonthlyExpenseChartData()}
+              onSliceClick={handleMonthClick}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

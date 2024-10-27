@@ -81,8 +81,6 @@ th {
 /* Ensure the pie chart has the desired size */
 .pie-chart-wrapper {
     flex: 0 0 60%;
-    width: 1400px;
-    height: 700px;
 }
 
 /* Styles for the Transaction component */
@@ -169,3 +167,34 @@ th {
     text-align: right; /* Aligns the text to the right */
     direction: rtl; /* Ensures the text direction is right-to-left */
 }
+
+
+.multiple-pie-chart-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .transaction-list-wrapper,
+  .medium-pie-chart {
+    flex: 1;
+  }
+  
+  
+  /* General Transaction List Styles */
+  .transaction-list-wrapper {
+    margin: 10px;
+    /* Remove max-height and overflow-y to prevent affecting other lists */
+  }
+  
+  /* Specific Scrollable Transaction List Styles */
+  .scrollable-transaction-list-wrapper {
+    max-height: 400px; /* Adjust as needed */
+    overflow-y: auto;
+  }
+  
+  /* Pie Chart Styles */
+  .medium-pie-chart {
+    flex: 1;
+    margin: 10px;
+  }
+  
