@@ -1,14 +1,13 @@
 // src/pages/CsvReader.js
-import React, { useState, useEffect } from 'react';
+import '../assets/styles/App.css';
 import Papa from 'papaparse';
-import PieChart from '../components/PieChart';
+import React, { useState, useEffect } from 'react';
 import TableComponent from '../components/TableComponent';
 import FileInput from '../components/FileInput';
 import ToggleTableButton from '../components/ToggleTableButton';
-import TransactionList from '../components/TransactionList';
 import LineChart from '../components/LineChart';
-import ExpensesSection from '../components/ExpensesSection'; // Import the new component
-import '../assets/styles/App.css';
+import ChartTransactionSection from '../components/ChartTransactionSection';
+
 
 const CsvReader = ({ setDateRange }) => {
   const [parsedData, setParsedData] = useState([]);
@@ -433,29 +432,16 @@ const CsvReader = ({ setDateRange }) => {
         </div>
       )}
 
-      {/* "כל ההוצאות" Section */}
-      {parsedData.length > 0 && (
-        <div className="chart-transaction-container">
-          <div className="transaction-list-wrapper">
-            {selectedDescription &&
-              expensesByDescription
-                .filter((expense) => expense.identifier === selectedDescription)
-                .map((expense, index) => (
-                  <TransactionList
-                    key={index}
-                    description={expense.description}
-                    amount={expense.amount}
-                    transactions={expense.transactions}
-                    fields={['date', 'amount', 'person']}
-                  />
-                ))}
-          </div>
-
-          <div className="pie-chart-wrapper">
-            <h2 className="chart-title">כל ההוצאות</h2>
-            <PieChart data={generateExpensesChartData()} onSliceClick={handleDescriptionClick} />
-          </div>
-        </div>
+     {/* "כל ההוצאות" Section */}
+     {parsedData.length > 0 && (
+        <ChartTransactionSection
+          title="כל ההוצאות"
+          data={expensesByDescription}
+          selectedItem={selectedDescription}
+          onSliceClick={handleDescriptionClick}
+          generateChartData={generateExpensesChartData}
+          transactionFields={['date', 'amount', 'person']}
+        />
       )}
 
       {parsedData.length > 0 && (
@@ -467,7 +453,7 @@ const CsvReader = ({ setDateRange }) => {
 
       {/* "הוצאות לפי חבר" Section */}
       {parsedData.length > 0 && (
-        <ExpensesSection
+        <ChartTransactionSection
           title="הוצאות לפי חבר"
           data={expensesByPerson}
           selectedItem={selectedPerson}
@@ -479,7 +465,7 @@ const CsvReader = ({ setDateRange }) => {
 
       {/* "הוצאות לפי חודש" Section */}
       {parsedData.length > 0 && (
-        <ExpensesSection
+        <ChartTransactionSection
           title="הוצאות לפי חודש"
           data={expensesByMonth}
           selectedItem={selectedMonth}
