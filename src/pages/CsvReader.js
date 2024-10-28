@@ -7,7 +7,6 @@ import FileInput from '../components/FileInput';
 import ToggleTableButton from '../components/ToggleTableButton';
 import TransactionList from '../components/TransactionList';
 import LineChart from '../components/LineChart';
-import ChartTransactionSection from '../components/ChartTransactionSection';
 import '../assets/styles/App.css';
 
 const CsvReader = ({ setDateRange }) => {
@@ -415,15 +414,32 @@ const CsvReader = ({ setDateRange }) => {
 
 
       {/* "כל ההוצאות" Section */}
-      {parsedData.length > 0 && (<ChartTransactionSection
-        title="כל ההוצאות"
-        data={expensesByDescription}
-        selectedItem={selectedDescription}
-        onSliceClick={handleDescriptionClick}
-        generateChartData={generateExpensesChartData}
-        transactionFields={['date', 'amount', 'person']}
-    />
-)}
+      {parsedData.length > 0 && (
+        <div className="chart-transaction-container">
+          <div className="transaction-list-wrapper">
+            {selectedDescription &&
+              expensesByDescription
+                .filter((expense) => expense.description === selectedDescription)
+                .map((expense, index) => (
+                  <TransactionList
+                    key={index}
+                    description={expense.description}
+                    amount={expense.amount}
+                    transactions={expense.transactions}
+                    fields={['date', 'amount', 'person']}
+                  />
+                ))}
+          </div>
+
+          <div className="pie-chart-wrapper">
+            <h2 className="chart-title">כל ההוצאות</h2>
+            <PieChart
+              data={generateExpensesChartData()}
+              onSliceClick={handleDescriptionClick}
+            />
+          </div>
+        </div>
+      )}
 
       {parsedData.length > 0 && (
         <div className="line-chart-wrapper">
@@ -493,6 +509,7 @@ const CsvReader = ({ setDateRange }) => {
         </div>
       )}
     </div>
+    
   );
 };
 
