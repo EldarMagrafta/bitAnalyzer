@@ -1,8 +1,3 @@
-// src/components/ChartTransactionSection.js
-import React from 'react';
-import TransactionList from './TransactionList';
-import PieChart from './PieChart';
-import '../assets/styles/App.css';
 
 const ChartTransactionSection = ({
   title,
