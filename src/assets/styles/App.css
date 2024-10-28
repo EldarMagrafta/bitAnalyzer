@@ -3,30 +3,13 @@
     text-align: center;
 }
 
-/* App Container */
+/* Main container for the App component */
 .app-container {
     display: flex;
     flex-direction: column;
-    /* Remove min-height: 100vh; */
-}
-
-  
-  /* Content Area */
-  .content {
-    width: 100%;
-  }
-  
-  /* Logo Container Styles */
-  .logo-container {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-  }
-  
-  .logo-container h1 {
-    margin: 10px 0 0 0;
-  }
+    justify-content: center;
+}
 
 /* Main container for the CSV reader section */
 .csv-reader-container {
@@ -39,7 +22,6 @@
     justify-content: center;
     margin-bottom: 20px;
 }
-
 
 /* Center the table and adjust its width */
 .table-wrapper {
@@ -237,16 +219,3 @@ th {
     color: #333;
     direction: rtl; /* For right-to-left alignment */
   }
-
-/* Footer styles */
-.app-footer {
-    background-color: rgb(50, 50, 97);
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    width: 100%;
-}
-
-.app-footer p {
-    margin: 0;
-}

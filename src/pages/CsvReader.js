@@ -1,13 +1,13 @@
 // src/pages/CsvReader.js
-import '../assets/styles/App.css';
-import Papa from 'papaparse';
 import React, { useState, useEffect } from 'react';
+import Papa from 'papaparse';
+import PieChart from '../components/PieChart';
 import TableComponent from '../components/TableComponent';
 import FileInput from '../components/FileInput';
 import ToggleTableButton from '../components/ToggleTableButton';
+import TransactionList from '../components/TransactionList';
 import LineChart from '../components/LineChart';
-import ChartTransactionSection from '../components/ChartTransactionSection';
-
+import '../assets/styles/App.css';
 
 const CsvReader = ({ setDateRange }) => {
   const [parsedData, setParsedData] = useState([]);
@@ -52,20 +52,7 @@ const CsvReader = ({ setDateRange }) => {
   };
 
   const getHebrewMonthName = (monthNumber) => {
-    const monthNames = [
-      'ינואר',
-      'פברואר',
-      'מרץ',
-      'אפריל',
-      'מאי',
-      'יוני',
-      'יולי',
-      'אוגוסט',
-      'ספטמבר',
-      'אוקטובר',
-      'נובמבר',
-      'דצמבר',
-    ];
+    const monthNames = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
     return monthNames[monthNumber - 1]; // monthNumber is 1-indexed
   };
 
@@ -110,7 +97,9 @@ const CsvReader = ({ setDateRange }) => {
     const dateAmountMap = {};
 
     expenses.forEach((row) => {
-      const [dayStr, monthStr, yearStr] = row['תאריך'].split('.').map((s) => s.trim());
+      const [dayStr, monthStr, yearStr] = row['תאריך']
+        .split('.')
+        .map((s) => s.trim());
       const day = parseInt(dayStr, 10);
       const month = parseInt(monthStr, 10);
       const year = parseInt(yearStr, 10) + 2000; // Adjust for two-digit year
@@ -151,29 +140,23 @@ const CsvReader = ({ setDateRange }) => {
 
     // For each month between first and last transaction dates
     let currentDate = new Date(
-      Date.UTC(firstTransactionDate.getUTCFullYear(), firstTransactionDate.getUTCMonth(), 1)
+      Date.UTC(
+        firstTransactionDate.getUTCFullYear(),
+        firstTransactionDate.getUTCMonth(),
+        1
+      )
     );
 
     while (currentDate <= lastTransactionDate) {
       // 1st of the month
-      const firstOfMonth = new Date(
-        Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1)
-      );
-      if (
-        firstOfMonth.getTime() > firstTransactionDate.getTime() &&
-        firstOfMonth.getTime() < lastTransactionDate.getTime()
-      ) {
+      const firstOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1));
+      if (firstOfMonth.getTime() > firstTransactionDate.getTime() && firstOfMonth.getTime() < lastTransactionDate.getTime()) {
         targetDatesSet.add(firstOfMonth.getTime());
       }
 
       // 15th of the month
-      const fifteenthOfMonth = new Date(
-        Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15)
-      );
-      if (
-        fifteenthOfMonth.getTime() > firstTransactionDate.getTime() &&
-        fifteenthOfMonth.getTime() < lastTransactionDate.getTime()
-      ) {
+      const fifteenthOfMonth = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 15));
+      if (fifteenthOfMonth.getTime() > firstTransactionDate.getTime() && fifteenthOfMonth.getTime() < lastTransactionDate.getTime()) {
         targetDatesSet.add(fifteenthOfMonth.getTime());
       }
 
@@ -210,10 +193,7 @@ const CsvReader = ({ setDateRange }) => {
       }
 
       // Format label as DD-MM
-      const dateLabel =
-        ('0' + targetDate.getUTCDate()).slice(-2) +
-        '-' +
-        ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
+      const dateLabel = ('0' + targetDate.getUTCDate()).slice(-2) + '-' + ('0' + (targetDate.getUTCMonth() + 1)).slice(-2);
       labels.push(dateLabel);
       dataValues.push(cumulativeAmount);
     });
@@ -221,10 +201,11 @@ const CsvReader = ({ setDateRange }) => {
     return { labels, dataValues };
   };
 
+  
+
   const processCsvData = (result) => {
     const headers = result.meta.fields.filter((header) => header.trim() !== '');
-    const cleanedData = result.data
-      .map((row) => {
+    const cleanedData = result.data.map((row) => {
         const cleanedRow = {};
         headers.forEach((header) => {
           cleanedRow[header] = row[header];
@@ -236,9 +217,7 @@ const CsvReader = ({ setDateRange }) => {
       );
 
     setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(
-      cleanedData
-    );
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
     setExpensesByMonth(expensesByMonth);
@@ -263,7 +242,6 @@ const CsvReader = ({ setDateRange }) => {
       if (status && type === 'חיוב') {
         if (!expensesMap[description]) {
           expensesMap[description] = {
-            identifier: description, // Add identifier
             amount: 0,
             description: description,
             transactions: [],
@@ -281,7 +259,6 @@ const CsvReader = ({ setDateRange }) => {
 
         if (!expensesByPersonMap[person]) {
           expensesByPersonMap[person] = {
-            identifier: person, // Add identifier
             amount: 0,
             person: person,
             transactions: [],
@@ -299,7 +276,6 @@ const CsvReader = ({ setDateRange }) => {
 
         if (!expensesByMonthMap[monthName]) {
           expensesByMonthMap[monthName] = {
-            identifier: monthName, // Add identifier
             amount: 0,
             month: monthName,
             transactions: [],
@@ -327,7 +303,7 @@ const CsvReader = ({ setDateRange }) => {
   const generateMonthlyExpenseChartData = () => {
     if (expensesByMonth.length === 0) return {};
 
-    const labels = expensesByMonth.map((monthData) => monthData.identifier);
+    const labels = expensesByMonth.map((monthData) => monthData.month);
     const dataValues = expensesByMonth.map((monthData) => monthData.amount);
 
     const backgroundColors = [];
@@ -354,7 +330,7 @@ const CsvReader = ({ setDateRange }) => {
   const generateExpensesChartData = () => {
     if (expensesByDescription.length === 0) return {};
 
-    const labels = expensesByDescription.map((expense) => expense.identifier);
+    const labels = expensesByDescription.map((expense) => expense.description);
     const dataValues = expensesByDescription.map((expense) => expense.amount);
 
     const backgroundColors = [];
@@ -381,7 +357,7 @@ const CsvReader = ({ setDateRange }) => {
   const generatePersonExpenseChartData = () => {
     if (expensesByPerson.length === 0) return {};
 
-    const labels = expensesByPerson.map((personData) => personData.identifier);
+    const labels = expensesByPerson.map((personData) => personData.person);
     const dataValues = expensesByPerson.map((personData) => personData.amount);
 
     const backgroundColors = [];
@@ -419,6 +395,7 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
+
       <div className="file-input-wrapper">
         <FileInput handleFileChange={handleFileChange} handleAnalyze={handleAnalyze} />
       </div>
@@ -426,22 +403,42 @@ const CsvReader = ({ setDateRange }) => {
       {parsedData.length > 0 && (
         <div className="table-wrapper">
           <div className="show-table-button">
-            <ToggleTableButton showTable={showTable} onToggle={() => setShowTable(!showTable)} />
+            <ToggleTableButton
+              showTable={showTable}
+              onToggle={() => setShowTable(!showTable)}
+            />
           </div>
           {showTable && <TableComponent data={parsedData} />}
         </div>
       )}
 
-     {/* "כל ההוצאות" Section */}
-     {parsedData.length > 0 && (
-        <ChartTransactionSection
-          title="כל ההוצאות"
-          data={expensesByDescription}
-          selectedItem={selectedDescription}
-          onSliceClick={handleDescriptionClick}
-          generateChartData={generateExpensesChartData}
-          transactionFields={['date', 'amount', 'person']}
-        />
+
+      {/* "כל ההוצאות" Section */}
+      {parsedData.length > 0 && (
+        <div className="chart-transaction-container">
+          <div className="transaction-list-wrapper">
+            {selectedDescription &&
+              expensesByDescription
+                .filter((expense) => expense.description === selectedDescription)
+                .map((expense, index) => (
+                  <TransactionList
+                    key={index}
+                    description={expense.description}
+                    amount={expense.amount}
+                    transactions={expense.transactions}
+                    fields={['date', 'amount', 'person']}
+                  />
+                ))}
+          </div>
+
+          <div className="pie-chart-wrapper">
+            <h2 className="chart-title">כל ההוצאות</h2>
+            <PieChart
+              data={generateExpensesChartData()}
+              onSliceClick={handleDescriptionClick}
+            />
+          </div>
+        </div>
       )}
 
       {parsedData.length > 0 && (
@@ -451,28 +448,65 @@ const CsvReader = ({ setDateRange }) => {
         </div>
       )}
 
-      {/* "הוצאות לפי חבר" Section */}
+
+      {/* Updated "הוצאות לפי חבר" Section */}
       {parsedData.length > 0 && (
-        <ChartTransactionSection
-          title="הוצאות לפי חבר"
-          data={expensesByPerson}
-          selectedItem={selectedPerson}
-          onSliceClick={handlePersonClick}
-          generateChartData={generatePersonExpenseChartData}
-          transactionFields={['date', 'amount', 'description']}
-        />
+        <div className="multiple-pie-chart-wrapper">
+          {/* TransactionList Wrapper */}
+          <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
+            {selectedPerson &&
+              expensesByPerson
+                .filter((personData) => personData.person === selectedPerson)
+                .map((personData, index) => (
+                  <TransactionList
+                    key={index}
+                    description={personData.person}
+                    amount={personData.amount}
+                    transactions={personData.transactions}
+                    fields={['date', 'amount', 'description']}
+                  />
+                ))}
+          </div>
+
+          {/* PieChart */}
+          <div className="medium-pie-chart">
+            <h2 className="chart-title">הוצאות לפי חבר</h2>
+            <PieChart
+              data={generatePersonExpenseChartData()}
+              onSliceClick={handlePersonClick}
+            />
+          </div>
+        </div>
       )}
 
       {/* "הוצאות לפי חודש" Section */}
       {parsedData.length > 0 && (
-        <ChartTransactionSection
-          title="הוצאות לפי חודש"
-          data={expensesByMonth}
-          selectedItem={selectedMonth}
-          onSliceClick={handleMonthClick}
-          generateChartData={generateMonthlyExpenseChartData}
-          transactionFields={['date', 'amount', 'description', 'person']}
-        />
+        <div className="multiple-pie-chart-wrapper">
+          {/* TransactionList Wrapper */}
+          <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
+            {selectedMonth &&
+              expensesByMonth
+                .filter((monthData) => monthData.month === selectedMonth)
+                .map((monthData, index) => (
+                  <TransactionList
+                    key={index}
+                    description={monthData.month}
+                    amount={monthData.amount}
+                    transactions={monthData.transactions}
+                    fields={['date', 'amount', 'description', 'person']}
+                  />
+                ))}
+          </div>
+
+          {/* PieChart */}
+          <div className="medium-pie-chart">
+            <h2 className="chart-title">הוצאות לפי חודש</h2>
+            <PieChart
+              data={generateMonthlyExpenseChartData()}
+              onSliceClick={handleMonthClick}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
