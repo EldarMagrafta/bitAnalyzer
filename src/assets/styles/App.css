@@ -1,6 +1,6 @@
 /* Center the content inside the App container */
 .App {
-    text-align: center;
+  text-align: center;
 }
 
 /* Main container for the App component */
@@ -9,213 +9,213 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
+    width: 100%; /* Ensure it spans the full width */
+    padding: 20px; /* Optional: Add padding for spacing */
+  }
 
 /* Main container for the CSV reader section */
 .csv-reader-container {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 /* Center the file input component */
 .file-input-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 /* Center the table and adjust its width */
 .table-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
 }
 
 table {
-    margin: 20px auto;
-    border-collapse: collapse;
-    max-width: 70%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  max-width: 70%;
 }
 
 /* Styles for table headers and data cells */
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    vertical-align: middle;
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 th {
-    background-color: #f4f4f4;
+  background-color: #f4f4f4;
 }
 
 /* Styles for the pie charts */
 .pie-chart-container {
-    width: 400px;
-    height: 400px;
-    margin: 0 auto;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
 }
 
-.expense-chart-container, .pie-chart-wrapper {
-    width: 1400px;
-    height: 700px;
-    margin: 0 auto;
-    text-align: center;
+.expense-chart-container,
+.pie-chart-wrapper {
+  width: 1400px;
+  height: 700px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 /* Container for the charts to align them side by side */
-.charts-container, .chart-transaction-container {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
+.charts-container,
+.chart-transaction-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 /* Style the transaction list container to take up 40% width */
 .transaction-list-wrapper {
-    flex: 0 0 40%;
-    max-height: 700px;
-    overflow-y: auto; /* Enable scrolling */
+  flex: 0 0 40%;
+  max-height: 700px;
+  overflow-y: auto; /* Enable scrolling */
 }
 
 /* Ensure the pie chart has the desired size */
 .pie-chart-wrapper {
-    flex: 0 0 60%;
+  flex: 0 0 60%;
 }
 
 /* Styles for the Transaction component */
 .transaction-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
 }
 
-.transaction-item, .transaction-separator {
-    margin: 0 5px;
+.transaction-item,
+.transaction-separator {
+  margin: 0 5px;
 }
 
 .transaction-separator {
-    color: #666;
+  color: #666;
 }
 
 /* Styles for the TransactionList component */
 .transaction-list-container {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    background-color: #f7f7f7;
-    max-width: 600px;
-    margin: 0 auto;
-    max-height: 700px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f7f7f7;
+  max-width: 600px;
+  margin: 0 auto;
+  max-height: 700px;
 }
 
 .transaction-list-title {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-    color: #333;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .transaction-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 /* Chart container for displaying multiple charts */
 .multiple-pie-chart-wrapper {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .medium-pie-chart {
-    width: 700px;
-    height: 350px;
+  width: 700px;
+  height: 350px;
 }
 
 /* Style for the show/hide table button */
 .show-table-button {
-    display: flex;
-    justify-content: right;
-    /* Adjusted margin to move the button down */
-    width: 80%; /* Match the width of the table for better alignment */
-    /* Add more space above the button to prevent overlap */
-    margin: 40px auto 20px;
+  display: flex;
+  justify-content: right;
+  /* Adjusted margin to move the button down */
+  width: 80%; /* Match the width of the table for better alignment */
+  /* Add more space above the button to prevent overlap */
+  margin: 40px auto 20px;
 }
 
-
 .button-container {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 /* Style for the chart title */
 .chart-title {
-    margin-bottom: 10px;
-    font-size: 1.5em;
-    color: #333;
-    text-align: right; /* Aligns the text to the right */
-    direction: rtl; /* Ensures the text direction is right-to-left */
+  margin-bottom: 10px;
+  font-size: 1.5em;
+  color: #333;
+  text-align: right; /* Aligns the text to the right */
+  direction: rtl; /* Ensures the text direction is right-to-left */
 }
 
-
 .multiple-pie-chart-wrapper {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .transaction-list-wrapper,
-  .medium-pie-chart {
-    flex: 1;
-  }
-  
-  
-  /* General Transaction List Styles */
-  .transaction-list-wrapper {
-    margin: 10px;
-    /* Remove max-height and overflow-y to prevent affecting other lists */
-  }
-  
-  /* Specific Scrollable Transaction List Styles */
-  .scrollable-transaction-list-wrapper {
-    max-height: 400px; /* Adjust as needed */
-    overflow-y: auto;
-  }
-  
-  /* Pie Chart Styles */
-  .medium-pie-chart {
-    flex: 1;
-    margin: 10px;
-  }
-  
-  /* Line Chart Wrapper */
+  display: flex;
+  flex-direction: row;
+}
+
+/* General Transaction List Styles */
+.transaction-list-wrapper {
+  margin: 10px;
+  /* Remove max-height and overflow-y to prevent affecting other lists */
+}
+
+/* Specific Scrollable Transaction List Styles */
+.scrollable-transaction-list-wrapper {
+  max-height: 400px; /* Adjust as needed */
+  overflow-y: auto;
+}
+
+/* Line Chart Wrapper */
 .line-chart-wrapper {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    margin-top: 40px;
-  }
-  
-  .line-chart-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-  }
-  
-  .chart-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    color: #333;
-    direction: rtl; /* For right-to-left alignment */
-  }
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+.line-chart-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+.chart-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #333;
+  direction: rtl; /* For right-to-left alignment */
+}
+
+.all-expenses-section {
+  /* Apply the original styles for "כל ההוצאות" */
+  width: 1400px;
+  height: 700px;
+  margin: 0 auto;
+  text-align: center;
+}

@@ -1,8 +1,8 @@
 // src/components/ExpensesCategorySection.js
-import React from "react";
-import TransactionList from "./TransactionList";
-import PieChart from "./PieChart";
-import "../assets/styles/App.css"; // Adjust the path if necessary
+import React from 'react';
+import TransactionList from './TransactionList';
+import PieChart from './PieChart';
+import '../assets/styles/App.css';
 
 const ExpensesCategorySection = ({
   title,
@@ -11,10 +11,11 @@ const ExpensesCategorySection = ({
   onSliceClick,
   generateChartData,
   transactionFields,
-  identifierKey, // The key used to identify each item (e.g., 'description', 'person', 'month')
+  identifierKey,
+  className = "" // Default to an empty string if no className is provided
 }) => {
   return (
-    <div className="multiple-pie-chart-wrapper">
+    <div className={`multiple-pie-chart-wrapper ${className}`}>
       {/* TransactionList Wrapper */}
       <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
         {selectedItem &&

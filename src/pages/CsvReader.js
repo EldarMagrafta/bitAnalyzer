@@ -472,15 +472,9 @@ const CsvReader = ({ setDateRange }) => {
           onSliceClick={handleDescriptionClick}
           generateChartData={generateExpensesChartData}
           transactionFields={["date", "amount", "person"]}
-          identifierKey="description" // Matches the key used in each data object
+          identifierKey="description"
+          className="all-expenses-section"
         />
-      )}
-
-      {parsedData.length > 0 && (
-        <div className="line-chart-wrapper">
-          <h2 className="chart-title">הוצאות מצטברות לאורך זמן</h2>
-          <LineChart data={generateExpensesOverTimeData()} />
-        </div>
       )}
 
       {/* Updated "הוצאות לפי חבר" Section */}
@@ -492,7 +486,8 @@ const CsvReader = ({ setDateRange }) => {
           onSliceClick={handlePersonClick}
           generateChartData={generatePersonExpenseChartData}
           transactionFields={["date", "amount", "description"]}
-          identifierKey="person" // Matches the key used in each data object
+          identifierKey="person"
+          className="all-expenses-section"
         />
       )}
 
@@ -505,8 +500,17 @@ const CsvReader = ({ setDateRange }) => {
           onSliceClick={handleMonthClick}
           generateChartData={generateMonthlyExpenseChartData}
           transactionFields={["date", "amount", "description", "person"]}
-          identifierKey="month" // Matches the key used in each data object
+          identifierKey="month"
+          className="all-expenses-section" // Now this will work as expected
         />
+      )}
+
+      {/* הוצאות מצטברות לאורך זמן Section */}
+      {parsedData.length > 0 && (
+        <div className="line-chart-wrapper">
+          <h2 className="chart-title">הוצאות מצטברות לאורך זמן</h2>
+          <LineChart data={generateExpensesOverTimeData()} />
+        </div>
       )}
     </div>
   );
