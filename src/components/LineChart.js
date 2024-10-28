@@ -55,7 +55,7 @@ const LineChart = ({ data }) => {
         display: true,
         title: {
           display: true,
-          text: 'הוצאות מצטברות',
+          text: 'הוצאה מצטברת',
         },
         ticks: {
           stepSize: 500,
