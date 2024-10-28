@@ -1,5 +1,10 @@
+// src/components/ExpensesSection.js
+import React from 'react';
+import TransactionList from './TransactionList';
+import PieChart from './PieChart';
+import '../assets/styles/App.css'; // Adjust the path if necessary
 
-const ChartTransactionSection = ({
+const ExpensesSection = ({
   title,
   data,
   selectedItem,
@@ -8,8 +13,9 @@ const ChartTransactionSection = ({
   transactionFields,
 }) => {
   return (
-    <div className="chart-transaction-container">
-      <div className="transaction-list-wrapper">
+    <div className="multiple-pie-chart-wrapper">
+      {/* TransactionList Wrapper */}
+      <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
         {selectedItem &&
           data
             .filter((item) => item.identifier === selectedItem)
@@ -24,7 +30,8 @@ const ChartTransactionSection = ({
             ))}
       </div>
 
-      <div className="pie-chart-wrapper">
+      {/* PieChart */}
+      <div className="medium-pie-chart">
         <h2 className="chart-title">{title}</h2>
         <PieChart data={generateChartData()} onSliceClick={onSliceClick} />
       </div>
@@ -32,4 +39,4 @@ const ChartTransactionSection = ({
   );
 };
 
-export default ChartTransactionSection;
+export default ExpensesSection;
