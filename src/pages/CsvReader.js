@@ -77,38 +77,74 @@ const CsvReader = ({ setDateRange }) => {
     }
   };
 
-  const processCsvData99 = (result) => {
-    // Extract headers, filtering out any empty or unnecessary header fields
-    const headers = result.meta.fields.filter((header) => header.trim() !== "");
-    console.log(headers)
-  
-    // Clean up each row based on filtered headers and map the data to our needs
-    /* const cleanedData = result.data
+  const processCsvData = (result) => {
+    console.log(result);
+
+    const headers = result.meta.fields.map(header => header.trim())
+    .filter((header) => header !== "");
+    
+    const cleanedData = result.data
       .map((row) => {
         const cleanedRow = {};
-  
-        // Clean each column value for extra spaces or irregular characters
         headers.forEach((header) => {
-          cleanedRow[header.trim()] = row[header] ? row[header].trim() : ""; 
+          cleanedRow[header] = row[header];
         });
-  
         return cleanedRow;
       })
       .filter((row) =>
-        // Only keep rows where at least one field is not empty (ignores empty rows)
-        Object.values(row).some((value) => value && value.trim() !== "")
+        Object.values(row).every(
+          (value) => value && value.toString().trim() !== ""
+        )
       );
-  
-    // Update the state with parsed data
+
+      console.log(cleanedData)
+
     setParsedData(cleanedData);
-  
-    // Further data aggregation for charts and summaries
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
-      generateAggregatedData(cleanedData);
-  
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
-    setExpensesByMonth(expensesByMonth); */
+    setExpensesByMonth(expensesByMonth);
+  };
+
+  const processCsvData99 = (result) => {
+    // Extract headers, filtering out any empty or unnecessary header fields
+    const headers = result.meta.fields.map(header => header.trim())
+    .filter((header) => header !== "");
+
+    const idx = headers.indexOf("תיאור");
+    headers[idx] = "תאור"
+
+    console.log(idx)
+    console.log(headers)
+  
+    const cleanedData = result.data
+      .map((row) => {
+        Object.keys(row).forEach(oldKey =>{
+          const val = row[oldKey];
+          row[oldKey.trim()] = val;
+          row["תאור"] = row["תיאור"];
+        })
+
+        const cleanedRow = {};
+        headers.forEach((header) => {
+          cleanedRow[header] = row[header];
+        });
+        return cleanedRow;
+      })
+
+      .filter((row) =>
+        Object.values(row).some(
+          (value) => value && value.toString().trim() !== ""
+        )
+      );
+      
+    console.log(cleanedData)
+
+    setParsedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
+    setExpensesByDescription(aggregatedExpenses);
+    setExpensesByPerson(expensesByPerson);
+    setExpensesByMonth(expensesByMonth);
   };
   
 
@@ -312,36 +348,11 @@ const CsvReader = ({ setDateRange }) => {
     return { labels, dataValues };
   };
 
-  const processCsvData = (result) => {
-    const headers = result.meta.fields.filter((header) => header.trim() !== "");
-
-    console.log(headers);
-
-
-
-    const cleanedData = result.data
-      .map((row) => {
-        const cleanedRow = {};
-        headers.forEach((header) => {
-          cleanedRow[header] = row[header];
-        });
-        return cleanedRow;
-      })
-      .filter((row) =>
-        Object.values(row).some(
-          (value) => value && value.toString().trim() !== ""
-        )
-      );
-
-    setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
-      generateAggregatedData(cleanedData);
-    setExpensesByDescription(aggregatedExpenses);
-    setExpensesByPerson(expensesByPerson);
-    setExpensesByMonth(expensesByMonth);
-  };
+  
 
   const generateAggregatedData = (data) => {
+    console.log(data);
+
     const expensesMap = {};
     const expensesByPersonMap = {};
     const expensesByMonthMap = {};
@@ -356,6 +367,11 @@ const CsvReader = ({ setDateRange }) => {
       const date = row["תאריך"];
       const [day, month, year] = date.split(".").map(Number);
       const monthName = getHebrewMonthName(month); // Use Hebrew month name only
+
+      console.log(description)
+      console.log(day);
+      console.log(status);
+
 
       if (status && type === "חיוב") {
         if (!expensesMap[description]) {
