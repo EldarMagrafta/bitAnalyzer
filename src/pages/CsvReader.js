@@ -52,7 +52,6 @@ const CsvReader = ({ setDateRange }) => {
   }
 
 
-
   const handleAnalyzeIphone = () => {
     if (file) {
       Papa.parse(file, {
@@ -66,8 +65,52 @@ const CsvReader = ({ setDateRange }) => {
   };
 
   const handleAnalyzeAndroid = () => {
-    console.log("Hello world"); // Just logs for Android selection
+    console.log("entered handleAnalyzeAndroid func")
+    if (file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: processCsvData99,
+      });
+    } else {
+      alert("Please select a file before analyzing.");
+    }
   };
+
+  const processCsvData99 = (result) => {
+    // Extract headers, filtering out any empty or unnecessary header fields
+    const headers = result.meta.fields.filter((header) => header.trim() !== "");
+    console.log(headers)
+  
+    // Clean up each row based on filtered headers and map the data to our needs
+    /* const cleanedData = result.data
+      .map((row) => {
+        const cleanedRow = {};
+  
+        // Clean each column value for extra spaces or irregular characters
+        headers.forEach((header) => {
+          cleanedRow[header.trim()] = row[header] ? row[header].trim() : ""; 
+        });
+  
+        return cleanedRow;
+      })
+      .filter((row) =>
+        // Only keep rows where at least one field is not empty (ignores empty rows)
+        Object.values(row).some((value) => value && value.trim() !== "")
+      );
+  
+    // Update the state with parsed data
+    setParsedData(cleanedData);
+  
+    // Further data aggregation for charts and summaries
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
+      generateAggregatedData(cleanedData);
+  
+    setExpensesByDescription(aggregatedExpenses);
+    setExpensesByPerson(expensesByPerson);
+    setExpensesByMonth(expensesByMonth); */
+  };
+  
 
   const handleDeviceSelection = (event) => {
     const device = event.target.value;
@@ -271,6 +314,11 @@ const CsvReader = ({ setDateRange }) => {
 
   const processCsvData = (result) => {
     const headers = result.meta.fields.filter((header) => header.trim() !== "");
+
+    console.log(headers);
+
+
+
     const cleanedData = result.data
       .map((row) => {
         const cleanedRow = {};
