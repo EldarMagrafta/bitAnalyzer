@@ -9,7 +9,7 @@ const FileInputStyled = styled('input')({
   display: 'none', // Hide the file input
 });
 
-const FileInput = ({ handleFileChange, handleAnalyze }) => {
+const FileInput = ({ handleFileChange, handleAnalyzeGeneric }) => {
   const fileInputRef = React.useRef(null);
 
   const handleButtonClick = () => {
@@ -36,7 +36,7 @@ const FileInput = ({ handleFileChange, handleAnalyze }) => {
       <Button
         variant="contained"
         color="secondary"
-        onClick={handleAnalyze}
+        onClick={handleAnalyzeGeneric}
         disabled={!fileInputRef.current?.files.length} // Disable until a file is selected
       >
         Analyze

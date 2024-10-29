@@ -21,6 +21,7 @@ const CsvReader = ({ setDateRange }) => {
   const [selectedDescription, setSelectedDescription] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedDevice, setSelectedDevice] = useState("iPhone"); // new state for device selection
 
   useEffect(() => {
     if (parsedData.length > 0) {
@@ -41,7 +42,18 @@ const CsvReader = ({ setDateRange }) => {
     setFile(event.target.files[0]);
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyzeGeneric = () => {
+    if(selectedDevice === "iPhone"){
+      handleAnalyzeIphone();
+    }
+    else{
+      handleAnalyzeAndroid();
+    }
+  }
+
+
+
+  const handleAnalyzeIphone = () => {
     if (file) {
       Papa.parse(file, {
         header: true,
@@ -51,6 +63,15 @@ const CsvReader = ({ setDateRange }) => {
     } else {
       alert("Please select a file before analyzing.");
     }
+  };
+
+  const handleAnalyzeAndroid = () => {
+    console.log("Hello world"); // Just logs for Android selection
+  };
+
+  const handleDeviceSelection = (event) => {
+    const device = event.target.value;
+    setSelectedDevice(device);
   };
 
   const getHebrewMonthName = (monthNumber) => {
@@ -444,10 +465,32 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
+      {/* Device Selection Radio Buttons */}
+      <div className="device-selection">
+        <label>
+          <input
+            type="radio"
+            value="iPhone"
+            checked={selectedDevice === "iPhone"}
+            onChange={handleDeviceSelection}
+          />
+          iPhone
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Android"
+            checked={selectedDevice === "Android"}
+            onChange={handleDeviceSelection}
+          />
+          Android
+        </label>
+      </div>
+
       <div className="file-input-wrapper">
         <FileInput
           handleFileChange={handleFileChange}
-          handleAnalyze={handleAnalyze}
+          handleAnalyzeGeneric={handleAnalyzeGeneric}
         />
       </div>
 
