@@ -48,39 +48,41 @@ const CsvReader = ({ setDateRange }) => {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        complete: (result) => {
-          // Check the first row's headers to determine device type
-          let headers = result.meta.fields || [];
-          headers = headers.map((header) => header.trim());
-          console.log(headers);
-          const isIphone = headers.includes("תאור");
-          const isAndroid = headers.includes("תיאור");
-
-          // Set selectedDevice based on column headers
-          if (isIphone) {
-            processCsvData(result); // Call the function for iPhone data
-          } else if (isAndroid) {
-            processCsvData99(result); // Call the function for Android data
-          } else {
-            alert("Unknown device type. Please check the file format.");
-          }
-        },
+        complete: selectProcessingFunction,
       });
     } else {
       alert("Please select a file before analyzing.");
     }
   };
 
+  const selectProcessingFunction = (result) => {
+    // Check the first row's headers to determine device type
+    let headers = result.meta.fields || [];
+    headers = headers.map((header) => header.trim());
+    console.log(headers);
+    const isIphone = headers.includes("תאור");
+    const isAndroid = headers.includes("תיאור");
+
+    // Set selectedDevice based on column headers
+    if (isIphone) {
+      processIphoneCsv(result);
+    } else if (isAndroid) {
+      processAndroidCsv(result);
+    } else {
+      alert("Unknown device type. Please check the file format and content.");
+    }
+  };
+
   // Generate chart data for top 5 expenses
   const generateTop5ExpensesChartData = (transactions) => {
-    const expenses = transactions
+    const top5expenses = transactions
       .filter((transaction) => transaction["זיכוי/חיוב"] === "חיוב")
       .sort((a, b) => parseFloat(b["סכום"]) - parseFloat(a["סכום"]))
-      .slice(0, 5); // Get top 5 expenses
+      .slice(0, 5);
 
-    const labels = expenses.map((expense) => expense["תאור"]);
-    const dataValues = expenses.map((expense) => parseFloat(expense["סכום"]));
-    const transactionInfo = expenses.map((expense) => ({
+    const labels = top5expenses.map((expense) => expense["תאור"]);
+    const dataValues = top5expenses.map((expense) => parseFloat(expense["סכום"]));
+    const transactionInfo = top5expenses.map((expense) => ({
       label: expense["תאור"],
       amount: parseFloat(expense["סכום"]),
       date: expense["תאריך"],
@@ -110,7 +112,7 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
-  const processCsvData = (result) => {
+  const processIphoneCsv = (result) => {
     const headers = result.meta.fields
       .map((header) => header.trim())
       .filter((header) => header !== "");
@@ -139,7 +141,7 @@ const CsvReader = ({ setDateRange }) => {
     setExpensesByMonth(expensesByMonth);
   };
 
-  const processCsvData99 = (result) => {
+  const processAndroidCsv = (result) => {
     const headers = result.meta.fields
       .map((header) => header.trim())
       .filter((header) => header !== "");
