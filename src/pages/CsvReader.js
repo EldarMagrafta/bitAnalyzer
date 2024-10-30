@@ -24,6 +24,9 @@ const CsvReader = ({ setDateRange }) => {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
 
+  // Add this state variable at the top of your CsvReader component
+  const [showInstructions, setShowInstructions] = useState(false);
+
   useEffect(() => {
     if (parsedData.length > 0) {
       const dates = parsedData
@@ -81,7 +84,9 @@ const CsvReader = ({ setDateRange }) => {
       .slice(0, 5);
 
     const labels = top5expenses.map((expense) => expense["תאור"]);
-    const dataValues = top5expenses.map((expense) => parseFloat(expense["סכום"]));
+    const dataValues = top5expenses.map((expense) =>
+      parseFloat(expense["סכום"])
+    );
     const transactionInfo = top5expenses.map((expense) => ({
       label: expense["תאור"],
       amount: parseFloat(expense["סכום"]),
@@ -523,6 +528,10 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
+  const handleInstructionsOverlayClick = () => {
+    setShowInstructions(false);
+  }
+
   const generatePersonExpenseChartData = () => {
     if (expensesByPerson.length === 0) return {};
 
@@ -588,6 +597,37 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
+      <div className="instructions-button-wrapper">
+        <button onClick={() => setShowInstructions(true)}>Instructions</button>
+      </div>
+      {showInstructions && (
+        <div
+          className="instructions-overlay"
+          onClick={handleInstructionsOverlayClick}
+        >
+          <div
+            className="instructions-frame"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Instructions content here */}
+            <h2>Instructions</h2>
+            <p>
+              Welcome to the CSV Analyzer! Follow these steps to get started:
+            </p>
+            <ol>
+              <li>
+                Click on the "Choose File" button to select your CSV file.
+              </li>
+              <li>
+                Once selected, click on the "Analyze" button to process the
+                data.
+              </li>
+              <li>Use the charts and tables to explore your data.</li>
+            </ol>
+            <p>Click outside this frame to close the instructions.</p>
+          </div>
+        </div>
+      )}
       <div className="file-input-wrapper">
         <FileInput
           handleFileChange={handleFileChange}

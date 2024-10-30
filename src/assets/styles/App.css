@@ -5,13 +5,13 @@
 
 /* Main container for the App component */
 .app-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%; /* Ensure it spans the full width */
-    padding: 20px; /* Optional: Add padding for spacing */
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Ensure it spans the full width */
+  padding: 20px; /* Optional: Add padding for spacing */
+}
 
 /* Main container for the CSV reader section */
 .csv-reader-container {
@@ -218,4 +218,42 @@ th {
   height: 700px;
   margin: 0 auto;
   text-align: center;
+}
+
+/* App.css */
+.instructions-button-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1001; /* Ensure it appears above other elements */
+}
+
+.instructions-button-wrapper button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.instructions-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instructions-frame {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 80%;
+  max-height: 80%;
+  overflow-y: auto;
+  position: relative;
 }
