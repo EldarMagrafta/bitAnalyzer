@@ -8,6 +8,7 @@ import ToggleTableButton from "../components/ToggleTableButton";
 import LineChart from "../components/LineChart";
 import ExpensesCategorySection from "../components/ExpensesCategorySection";
 import BarChart from "../components/BarChart";
+import InstructionsOverlay from "../components/InstructionsOverlay";
 
 import "../assets/styles/App.css";
 
@@ -530,7 +531,7 @@ const CsvReader = ({ setDateRange }) => {
 
   const handleInstructionsOverlayClick = () => {
     setShowInstructions(false);
-  }
+  };
 
   const generatePersonExpenseChartData = () => {
     if (expensesByPerson.length === 0) return {};
@@ -601,33 +602,9 @@ const CsvReader = ({ setDateRange }) => {
         <button onClick={() => setShowInstructions(true)}>Instructions</button>
       </div>
       {showInstructions && (
-        <div
-          className="instructions-overlay"
-          onClick={handleInstructionsOverlayClick}
-        >
-          <div
-            className="instructions-frame"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Instructions content here */}
-            <h2>Instructions</h2>
-            <p>
-              Welcome to the CSV Analyzer! Follow these steps to get started:
-            </p>
-            <ol>
-              <li>
-                Click on the "Choose File" button to select your CSV file.
-              </li>
-              <li>
-                Once selected, click on the "Analyze" button to process the
-                data.
-              </li>
-              <li>Use the charts and tables to explore your data.</li>
-            </ol>
-            <p>Click outside this frame to close the instructions.</p>
-          </div>
-        </div>
+        <InstructionsOverlay onClose={handleInstructionsOverlayClick} />
       )}
+
       <div className="file-input-wrapper">
         <FileInput
           handleFileChange={handleFileChange}
