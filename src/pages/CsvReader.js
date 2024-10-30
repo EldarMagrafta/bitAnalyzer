@@ -23,7 +23,6 @@ const CsvReader = ({ setDateRange }) => {
   const [selectedDescription, setSelectedDescription] = useState(null);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState(null);
-  const [selectedDevice, setSelectedDevice] = useState("iPhone"); // new state for device selection
 
   useEffect(() => {
     if (parsedData.length > 0) {
@@ -49,14 +48,28 @@ const CsvReader = ({ setDateRange }) => {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        // Dynamically select the processing function based on selectedDevice
-        complete: selectedDevice === "iPhone" ? processCsvData : processCsvData99,
+        complete: (result) => {
+          // Check the first row's headers to determine device type
+          let headers = result.meta.fields || [];
+          headers = headers.map((header) => header.trim());
+          console.log(headers);
+          const isIphone = headers.includes("תאור");
+          const isAndroid = headers.includes("תיאור");
+
+          // Set selectedDevice based on column headers
+          if (isIphone) {
+            processCsvData(result); // Call the function for iPhone data
+          } else if (isAndroid) {
+            processCsvData99(result); // Call the function for Android data
+          } else {
+            alert("Unknown device type. Please check the file format.");
+          }
+        },
       });
     } else {
       alert("Please select a file before analyzing.");
     }
   };
-  
 
   // Generate chart data for top 5 expenses
   const generateTop5ExpensesChartData = (transactions) => {
@@ -138,7 +151,8 @@ const CsvReader = ({ setDateRange }) => {
       .map((row) => {
         Object.keys(row).forEach((oldKey) => {
           const val = row[oldKey];
-          row[oldKey.trim()] = val && typeof val === "string" ? val.trim() : val;
+          row[oldKey.trim()] =
+            val && typeof val === "string" ? val.trim() : val;
           row["תאור"] = row["תיאור"];
         });
 
@@ -169,11 +183,6 @@ const CsvReader = ({ setDateRange }) => {
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
     setExpensesByMonth(expensesByMonth);
-  };
-
-  const handleDeviceSelection = (event) => {
-    const device = event.target.value;
-    setSelectedDevice(device);
   };
 
   const getHebrewMonthName = (monthNumber) => {
@@ -577,28 +586,6 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
-      {/* Device Selection Radio Buttons */}
-      <div className="device-selection">
-        <label>
-          <input
-            type="radio"
-            value="iPhone"
-            checked={selectedDevice === "iPhone"}
-            onChange={handleDeviceSelection}
-          />
-          iPhone
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="Android"
-            checked={selectedDevice === "Android"}
-            onChange={handleDeviceSelection}
-          />
-          Android
-        </label>
-      </div>
-
       <div className="file-input-wrapper">
         <FileInput
           handleFileChange={handleFileChange}
