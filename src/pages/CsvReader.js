@@ -7,6 +7,7 @@ import FileInput from "../components/FileInput";
 import ToggleTableButton from "../components/ToggleTableButton";
 import LineChart from "../components/LineChart";
 import ExpensesCategorySection from "../components/ExpensesCategorySection";
+import BarChart from "../components/BarChart";
 
 import "../assets/styles/App.css";
 
@@ -77,6 +78,40 @@ const CsvReader = ({ setDateRange }) => {
       alert("Please select a file before analyzing.");
     }
   };
+
+  // Generate chart data for top 5 expenses
+const generateTop5ExpensesChartData = (transactions) => {
+  const expenses = transactions
+    .filter(transaction => transaction["זיכוי/חיוב"] === "חיוב")
+    .sort((a, b) => parseFloat(b["סכום"]) - parseFloat(a["סכום"]));
+
+  const topExpenses = expenses.slice(0, 5);
+
+  const labels = topExpenses.map(expense => expense["תאור"]);
+  const dataValues = topExpenses.map(expense => parseFloat(expense["סכום"]));
+  const transactionInfo = expenses.map(expense => ({
+    label: expense["תאור"],
+    amount: parseFloat(expense["סכום"]),
+    date: expense["תאריך"],
+    person: expense["מאת/ל"],
+    type: expense["זיכוי/חיוב"],
+  }));
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: "Top 5 Expenses",
+        data: dataValues,
+        transactionInfo: transactionInfo,
+        backgroundColor: "#FF0000",
+        hoverBackgroundColor: "#CC0000",
+      },
+    ],
+  };
+};
+  
+  
 
   const processCsvData = (result) => {
     console.log(result);
@@ -590,6 +625,17 @@ const CsvReader = ({ setDateRange }) => {
           handleAnalyzeGeneric={handleAnalyzeGeneric}
         />
       </div>
+
+       {/* Top 5 Expenses Bar Chart */}
+    {parsedData.length > 0 && (
+      <div>
+        <h2>Top 5 Biggest Expenses</h2>
+        <BarChart
+          data={generateTop5ExpensesChartData(parsedData)}
+          title="Top 5 Expenses"
+        />
+      </div>
+    )}
 
 
       {/* Income vs Expense Pie Chart */}

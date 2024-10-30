@@ -4,23 +4,16 @@ import TransactionList from './TransactionList';
 import PieChart from './PieChart';
 import '../assets/styles/App.css';
 
-const ExpensesCategorySection = ({
-  title,
-  data,
-  selectedItem,
-  onSliceClick,
-  generateChartData,
-  transactionFields,
-  identifierKey,
-  className = "" // Default to an empty string if no className is provided
+const ExpensesCategorySection = ({title, data, selectedItem, onSliceClick, generateChartData,
+                                  transactionFields, identifierKey, className = "" // Default to an empty string if no className is provided
 }) => {
+
   return (
     <div className={`multiple-pie-chart-wrapper ${className}`}>
       {/* TransactionList Wrapper */}
       <div className="transaction-list-wrapper scrollable-transaction-list-wrapper">
         {selectedItem &&
-          data
-            .filter((item) => item[identifierKey] === selectedItem)
+          data.filter((item) => item[identifierKey] === selectedItem)
             .map((itemData, index) => (
               <TransactionList
                 key={index}
