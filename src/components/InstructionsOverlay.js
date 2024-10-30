@@ -50,7 +50,7 @@ const InstructionsOverlay = ({ onClose }) => {
             />
           </li>
           <li>
-            <strong>בחר בשנה הרצויה והורד את הקובץ</strong>
+            <strong>בחרו בשנה הרצויה והורידו את הקובץ</strong>
 
             <img
               src={Step3Image}

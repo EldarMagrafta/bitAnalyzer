@@ -268,7 +268,7 @@ th {
   width: 90%;
   max-width: 800px;
   max-height: 90%;
-  overflow-y: auto; 
+  overflow-y: auto;
   position: relative;
 }
 
@@ -278,7 +278,7 @@ th {
   font-size: 1.8em; /* Increased font size */
 }
 
-.instructions-frame p, 
+.instructions-frame p,
 .instructions-frame ol {
   font-size: 1.1em; /* Slightly larger text */
 }
@@ -288,12 +288,12 @@ th {
 }
 
 .instruction-image {
-  width: auto;          /* Allow the image to maintain its natural width */
-  max-width: 40%;      /* Prevent the image from exceeding the container's width */
+  width: auto; /* Allow the image to maintain its natural width */
+  max-width: 40%; /* Prevent the image from exceeding the container's width */
   margin: 10px 0 20px 0;
   border: 1px solid #000000;
   border-radius: 20px;
-  display: block;       /* Ensure images behave as block-level elements */
-  margin-left: auto;    /* Center the image horizontally */
-  margin-right: auto;   /* Center the image horizontally */
+  display: block; /* Ensure images behave as block-level elements */
+  margin-left: auto; /* Center the image horizontally */
+  margin-right: auto; /* Center the image horizontally */
 }

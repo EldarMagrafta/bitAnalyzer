@@ -1,12 +1,12 @@
 // src/components/FileInput/FileInput.js
-import React from 'react';
-import { Button } from '@mui/material';
-import { styled } from '@mui/system';
-import CloudUploadIcon from '@mui/icons-material/CloudUploadOutlined'; // Import the CloudUploadOutlined icon
+import React from "react";
+import { Button } from "@mui/material";
+import { styled } from "@mui/system";
+import CloudUploadIcon from "@mui/icons-material/CloudUploadOutlined"; // Import the CloudUploadOutlined icon
 
 // Custom styled component to hide the actual file input
-const FileInputStyled = styled('input')({
-  display: 'none', // Hide the file input
+const FileInputStyled = styled("input")({
+  display: "none", // Hide the file input
 });
 
 const FileInput = ({ handleFileChange, handleAnalyze }) => {
@@ -17,7 +17,7 @@ const FileInput = ({ handleFileChange, handleAnalyze }) => {
   };
 
   return (
-    <div className="file-input-container" style={{ textAlign: 'center' }}>
+    <div className="file-input-container" style={{ textAlign: "center" }}>
       <FileInputStyled
         type="file"
         accept=".csv"
@@ -31,7 +31,7 @@ const FileInput = ({ handleFileChange, handleAnalyze }) => {
         onClick={handleButtonClick}
         sx={{ marginRight: 2 }} // Adds space between the buttons
       >
-        Upload CSV
+        העלאת קובץ
       </Button>
       <Button
         variant="contained"
@@ -39,7 +39,7 @@ const FileInput = ({ handleFileChange, handleAnalyze }) => {
         onClick={handleAnalyze}
         disabled={!fileInputRef.current?.files.length} // Disable until a file is selected
       >
-        Analyze
+        bit it!
       </Button>
     </div>
   );
