@@ -11,50 +11,54 @@ const InstructionsOverlay = ({ onClose }) => {
   };
 
   return (
-    <div className="instructions-overlay" onClick={handleOverlayClick}>
-      <div className="instructions-frame" onClick={(e) => e.stopPropagation()}>
-        {/* Instructions content here */}
-        <h2>?איך משתמשים</h2>
-        <p>Welcome to the CSV Analyzer! Follow these steps to get started:</p>
+    <div
+      className="instructions-overlay"
+      onClick={handleOverlayClick}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="instructions-title"
+    >
+      <div
+        className="instructions-frame"
+        onClick={(e) => e.stopPropagation()}
+        dir="rtl" // Set direction to right-to-left
+      >
+        {/* Instructions content */}
+        <h2 id="instructions-title">איך משתמשים?</h2>
+        <p>
+          ברוכים הבאים ל-bit Analyzer! כאן תוכלו לקבל מידע על כל העברות הכספים
+          שביצעתם באמצעות אפליקציית ביט. עקבו אחרי השלבים הבאים כדי להתחיל:
+        </p>
         <ol>
           <li>
-            <strong>Choose Your CSV File:</strong>
-            <p>
-              Click on the <strong>"Choose File"</strong> button to select your
-              CSV file.
-            </p>
+            <strong>לחצו על תפריט ההמבורגר בעמוד הראשי באפליקציית ביט:</strong>
             <img
               src={Step1Image}
-              alt="Choose File Button"
+              alt="כפתור בחירת קובץ"
               className="instruction-image"
             />
           </li>
           <li>
-            <strong>Analyze the Data:</strong>
-            <p>
-              Once selected, click on the <strong>"Analyze"</strong> button to
-              process the data.
-            </p>
+            <strong>
+              לחצו על "ייצוא הפעולות כקובץ" על מנת לייצר קובץ csv עם היסטוריית
+              ההעברות
+            </strong>
             <img
               src={Step2Image}
-              alt="Analyze Button"
+              alt="כפתור ניתוח"
               className="instruction-image"
             />
           </li>
           <li>
-            <strong>Explore Your Data:</strong>
-            <p>
-              Use the charts and tables below to explore and interact with your
-              data.
-            </p>
+            <strong>בחר בשנה הרצויה והורד את הקובץ</strong>
+
             <img
               src={Step3Image}
-              alt="Data Visualization"
+              alt="ויזואליזציית נתונים"
               className="instruction-image"
             />
           </li>
         </ol>
-        <p>Click outside this frame to close the instructions.</p>
       </div>
     </div>
   );

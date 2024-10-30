@@ -599,7 +599,9 @@ const CsvReader = ({ setDateRange }) => {
   return (
     <div className="csv-reader-container">
       <div className="instructions-button-wrapper">
-        <button onClick={() => setShowInstructions(true)}>Instructions</button>
+        <button onClick={() => setShowInstructions(!showInstructions)}>
+          Instructions
+        </button>
       </div>
       {showInstructions && (
         <InstructionsOverlay onClose={handleInstructionsOverlayClick} />
