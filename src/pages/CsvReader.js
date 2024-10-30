@@ -98,7 +98,7 @@ const CsvReader = ({ setDateRange }) => {
   
     // Array of unique colors for each bar
     const backgroundColors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"];
-  
+
     return {
       labels,
       datasets: [
@@ -630,7 +630,7 @@ const CsvReader = ({ setDateRange }) => {
        {/* Top 5 Expenses Bar Chart */}
     {parsedData.length > 0 && (
       <div>
-        <h2>Top 5 Biggest Expenses</h2>
+        <h2>ההעברות הגדולות</h2>
         <BarChart
           data={generateTop5ExpensesChartData(parsedData)}
           title="Top 5 Expenses"

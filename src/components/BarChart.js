@@ -10,7 +10,7 @@ const BarChart = ({ data, title }) => {
     responsive: true,
     plugins: {
       title: {
-        display: false,
+        display: Boolean(title),
         text: title,
       },
       legend: {
@@ -32,7 +32,7 @@ const BarChart = ({ data, title }) => {
     scales: {
       y: {
         beginAtZero: true,
-        suggestedMax: 800, // Suggests an upper limit for the Y-axis, adjust as needed
+        suggestedMax: 800,
         ticks: {
           stepSize: 25,
         },
@@ -40,7 +40,17 @@ const BarChart = ({ data, title }) => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  // Update the dataset to apply bar thickness
+  const updatedData = {
+    ...data,
+    datasets: data.datasets.map((dataset) => ({
+      ...dataset,
+      barThickness: 50, // Set bar thickness to make bars narrower
+      maxBarThickness: 50, // Optional, limit the maximum width if bars get too wide
+    })),
+  };
+
+  return <Bar data={updatedData} options={options} />;
 };
 
 export default BarChart;
