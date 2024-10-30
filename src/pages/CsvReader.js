@@ -80,38 +80,39 @@ const CsvReader = ({ setDateRange }) => {
   };
 
   // Generate chart data for top 5 expenses
-const generateTop5ExpensesChartData = (transactions) => {
-  const expenses = transactions
-    .filter(transaction => transaction["זיכוי/חיוב"] === "חיוב")
-    .sort((a, b) => parseFloat(b["סכום"]) - parseFloat(a["סכום"]));
-
-  const topExpenses = expenses.slice(0, 5);
-
-  const labels = topExpenses.map(expense => expense["תאור"]);
-  const dataValues = topExpenses.map(expense => parseFloat(expense["סכום"]));
-  const transactionInfo = expenses.map(expense => ({
-    label: expense["תאור"],
-    amount: parseFloat(expense["סכום"]),
-    date: expense["תאריך"],
-    person: expense["מאת/ל"],
-    type: expense["זיכוי/חיוב"],
-  }));
-
-  return {
-    labels,
-    datasets: [
-      {
-        label: "Top 5 Expenses",
-        data: dataValues,
-        transactionInfo: transactionInfo,
-        backgroundColor: "#FF0000",
-        hoverBackgroundColor: "#CC0000",
-      },
-    ],
+  const generateTop5ExpensesChartData = (transactions) => {
+    const expenses = transactions
+      .filter(transaction => transaction["זיכוי/חיוב"] === "חיוב")
+      .sort((a, b) => parseFloat(b["סכום"]) - parseFloat(a["סכום"]))
+      .slice(0, 5); // Get top 5 expenses
+  
+    const labels = expenses.map(expense => expense["תאור"]);
+    const dataValues = expenses.map(expense => parseFloat(expense["סכום"]));
+    const transactionInfo = expenses.map(expense => ({
+      label: expense["תאור"],
+      amount: parseFloat(expense["סכום"]),
+      date: expense["תאריך"],
+      person: expense["מאת/ל"],
+      type: expense["זיכוי/חיוב"],
+    }));
+  
+    // Array of unique colors for each bar
+    const backgroundColors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"];
+  
+    return {
+      labels,
+      datasets: [
+        {
+          label: "Top 5 Expenses",
+          data: dataValues,
+          transactionInfo: transactionInfo,
+          backgroundColor: backgroundColors, // Assign an array of colors
+        },
+      ],
+    };
   };
-};
   
-  
+
 
   const processCsvData = (result) => {
     console.log(result);

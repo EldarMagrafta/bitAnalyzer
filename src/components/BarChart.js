@@ -10,22 +10,31 @@ const BarChart = ({ data, title }) => {
     responsive: true,
     plugins: {
       title: {
-        display: Boolean(title),
+        display: false,
         text: title,
+      },
+      legend: {
+        display: false, // Disable legend interaction to prevent toggling
       },
       tooltip: {
         callbacks: {
           label: function (context) {
-            // Retrieve the transaction info for the specific data point
             const transactionDetails = data.datasets[0].transactionInfo[context.dataIndex];
-
-            // Format the tooltip to show transaction details
             return [
-              `Amount: ${transactionDetails.amount}`,
-              `Date: ${transactionDetails.date}`,
-              `Person: ${transactionDetails.person}`,
+              `סכום: ${transactionDetails.amount}`,
+              `אל: ${transactionDetails.person}`,
+              `תאריך: ${transactionDetails.date}`,
             ];
           },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        suggestedMax: 800, // Suggests an upper limit for the Y-axis, adjust as needed
+        ticks: {
+          stepSize: 25,
         },
       },
     },
