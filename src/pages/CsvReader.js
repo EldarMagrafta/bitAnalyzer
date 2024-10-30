@@ -44,38 +44,19 @@ const CsvReader = ({ setDateRange }) => {
     setFile(event.target.files[0]);
   };
 
-  const handleAnalyzeGeneric = () => {
-    if (selectedDevice === "iPhone") {
-      handleAnalyzeIphone();
-    } else {
-      handleAnalyzeAndroid();
-    }
-  };
-
-  const handleAnalyzeIphone = () => {
+  const handleAnalyze = () => {
     if (file) {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
-        complete: processCsvData,
+        // Dynamically select the processing function based on selectedDevice
+        complete: selectedDevice === "iPhone" ? processCsvData : processCsvData99,
       });
     } else {
       alert("Please select a file before analyzing.");
     }
   };
-
-  const handleAnalyzeAndroid = () => {
-    console.log("entered handleAnalyzeAndroid func");
-    if (file) {
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        complete: processCsvData99,
-      });
-    } else {
-      alert("Please select a file before analyzing.");
-    }
-  };
+  
 
   // Generate chart data for top 5 expenses
   const generateTop5ExpensesChartData = (transactions) => {
@@ -621,7 +602,7 @@ const CsvReader = ({ setDateRange }) => {
       <div className="file-input-wrapper">
         <FileInput
           handleFileChange={handleFileChange}
-          handleAnalyzeGeneric={handleAnalyzeGeneric}
+          handleAnalyze={handleAnalyze}
         />
       </div>
 
