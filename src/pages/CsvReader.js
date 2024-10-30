@@ -5,7 +5,6 @@ import PieChart from "../components/PieChart";
 import TableComponent from "../components/TableComponent";
 import FileInput from "../components/FileInput";
 import ToggleTableButton from "../components/ToggleTableButton";
-import TransactionList from "../components/TransactionList";
 import LineChart from "../components/LineChart";
 import ExpensesCategorySection from "../components/ExpensesCategorySection";
 
@@ -16,6 +15,8 @@ const CsvReader = ({ setDateRange }) => {
   const [expensesByDescription, setExpensesByDescription] = useState([]);
   const [expensesByPerson, setExpensesByPerson] = useState([]);
   const [expensesByMonth, setExpensesByMonth] = useState([]);
+  const [totalIncomes, setTotalIncomes] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
   const [file, setFile] = useState(null);
   const [showTable, setShowTable] = useState(false);
   const [selectedDescription, setSelectedDescription] = useState(null);
@@ -356,6 +357,8 @@ const CsvReader = ({ setDateRange }) => {
     const expensesMap = {};
     const expensesByPersonMap = {};
     const expensesByMonthMap = {};
+    let totalIncome = 0;
+    let totalExpense = 0; 
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
@@ -368,12 +371,9 @@ const CsvReader = ({ setDateRange }) => {
       const [day, month, year] = date.split(".").map(Number);
       const monthName = getHebrewMonthName(month); // Use Hebrew month name only
 
-      console.log(description)
-      console.log(day);
-      console.log(status);
-
-
       if (status && type === "חיוב") {
+        totalExpense += amount;
+
         if (!expensesMap[description]) {
           expensesMap[description] = {
             amount: 0,
@@ -425,7 +425,15 @@ const CsvReader = ({ setDateRange }) => {
         });
         expensesByMonthMap[monthName].amount += amount;
       }
+      if (status && type === "זיכוי") {
+        totalIncome += amount; // Accumulate income amount
+      }
     }
+
+    setTotalIncomes(totalIncome);
+    setTotalExpenses(totalExpense);
+    console.log(totalIncome)
+    console.log(totalExpense)
 
     return {
       aggregatedExpenses: Object.values(expensesMap),
@@ -515,6 +523,31 @@ const CsvReader = ({ setDateRange }) => {
     };
   };
 
+  const generateExpensesVsIncomesChartData = () => {
+    // Check if total incomes or total expenses are zero, to handle cases with no data
+    if (totalIncomes === 0 && totalExpenses === 0) return {};
+  
+    // Define labels and data for incomes and expenses
+    const labels = ["הכנסות", "הוצאות"];
+    const dataValues = [totalIncomes, totalExpenses];
+  
+    // Define colors for income and expenses
+    const backgroundColors = ["#00FF00", "#FF0000"]; // Green for income, red for expenses
+    const hoverBackgroundColors = ["#00FF00", "#FF0000"];
+  
+    return {
+      labels,
+      datasets: [
+        {
+          data: dataValues,
+          backgroundColor: backgroundColors,
+          hoverBackgroundColor: hoverBackgroundColors,
+        },
+      ],
+    };
+  };
+  
+
   const handleDescriptionClick = (description) => {
     setSelectedDescription(description);
   };
@@ -557,6 +590,16 @@ const CsvReader = ({ setDateRange }) => {
           handleAnalyzeGeneric={handleAnalyzeGeneric}
         />
       </div>
+
+
+      {/* Income vs Expense Pie Chart */}
+      {parsedData.length > 0 && (
+        <div>
+          <h2 className="chart-title">הוצאות מול הכנסות</h2>
+          <PieChart data={generateExpensesVsIncomesChartData()} />
+        </div>
+      )}
+
 
       {parsedData.length > 0 && (
         <div className="table-wrapper">
