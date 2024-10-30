@@ -45,14 +45,12 @@ const CsvReader = ({ setDateRange }) => {
   };
 
   const handleAnalyzeGeneric = () => {
-    if(selectedDevice === "iPhone"){
+    if (selectedDevice === "iPhone") {
       handleAnalyzeIphone();
-    }
-    else{
+    } else {
       handleAnalyzeAndroid();
     }
-  }
-
+  };
 
   const handleAnalyzeIphone = () => {
     if (file) {
@@ -67,7 +65,7 @@ const CsvReader = ({ setDateRange }) => {
   };
 
   const handleAnalyzeAndroid = () => {
-    console.log("entered handleAnalyzeAndroid func")
+    console.log("entered handleAnalyzeAndroid func");
     if (file) {
       Papa.parse(file, {
         header: true,
@@ -82,22 +80,28 @@ const CsvReader = ({ setDateRange }) => {
   // Generate chart data for top 5 expenses
   const generateTop5ExpensesChartData = (transactions) => {
     const expenses = transactions
-      .filter(transaction => transaction["זיכוי/חיוב"] === "חיוב")
+      .filter((transaction) => transaction["זיכוי/חיוב"] === "חיוב")
       .sort((a, b) => parseFloat(b["סכום"]) - parseFloat(a["סכום"]))
       .slice(0, 5); // Get top 5 expenses
-  
-    const labels = expenses.map(expense => expense["תאור"]);
-    const dataValues = expenses.map(expense => parseFloat(expense["סכום"]));
-    const transactionInfo = expenses.map(expense => ({
+
+    const labels = expenses.map((expense) => expense["תאור"]);
+    const dataValues = expenses.map((expense) => parseFloat(expense["סכום"]));
+    const transactionInfo = expenses.map((expense) => ({
       label: expense["תאור"],
       amount: parseFloat(expense["סכום"]),
       date: expense["תאריך"],
       person: expense["מאת/ל"],
       type: expense["זיכוי/חיוב"],
     }));
-  
+
     // Array of unique colors for each bar
-    const backgroundColors = ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"];
+    const backgroundColors = [
+      "#FF6384",
+      "#36A2EB",
+      "#FFCE56",
+      "#4BC0C0",
+      "#9966FF",
+    ];
 
     return {
       labels,
@@ -111,15 +115,12 @@ const CsvReader = ({ setDateRange }) => {
       ],
     };
   };
-  
-
 
   const processCsvData = (result) => {
-    console.log(result);
+    const headers = result.meta.fields
+      .map((header) => header.trim())
+      .filter((header) => header !== "");
 
-    const headers = result.meta.fields.map(header => header.trim())
-    .filter((header) => header !== "");
-    
     const cleanedData = result.data
       .map((row) => {
         const cleanedRow = {};
@@ -134,33 +135,31 @@ const CsvReader = ({ setDateRange }) => {
         )
       );
 
-      console.log(cleanedData)
+    console.log(cleanedData);
 
     setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
+      generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
     setExpensesByMonth(expensesByMonth);
   };
 
   const processCsvData99 = (result) => {
-    // Extract headers, filtering out any empty or unnecessary header fields
-    const headers = result.meta.fields.map(header => header.trim())
-    .filter((header) => header !== "");
+    const headers = result.meta.fields
+      .map((header) => header.trim())
+      .filter((header) => header !== "");
 
     const idx = headers.indexOf("תיאור");
-    headers[idx] = "תאור"
+    headers[idx] = "תאור";
 
-    console.log(idx)
-    console.log(headers)
-  
     const cleanedData = result.data
       .map((row) => {
-        Object.keys(row).forEach(oldKey =>{
+        Object.keys(row).forEach((oldKey) => {
           const val = row[oldKey];
-          row[oldKey.trim()] = val;
+          row[oldKey.trim()] = val && typeof val === "string" ? val.trim() : val;
           row["תאור"] = row["תיאור"];
-        })
+        });
 
         const cleanedRow = {};
         headers.forEach((header) => {
@@ -170,20 +169,26 @@ const CsvReader = ({ setDateRange }) => {
       })
 
       .filter((row) =>
-        Object.values(row).some(
+        Object.values(row).every(
           (value) => value && value.toString().trim() !== ""
         )
       );
-      
-    console.log(cleanedData)
+
+    console.log("EEEEEEE");
+    console.log(cleanedData);
+    console.log("BBBB");
+
+    cleanedData.forEach((row) => {
+      row["סטטוס"] = "ההעברה בוצעה"; //put status because Android CSV doesnt contain status
+    });
 
     setParsedData(cleanedData);
-    const { aggregatedExpenses, expensesByPerson, expensesByMonth } = generateAggregatedData(cleanedData);
+    const { aggregatedExpenses, expensesByPerson, expensesByMonth } =
+      generateAggregatedData(cleanedData);
     setExpensesByDescription(aggregatedExpenses);
     setExpensesByPerson(expensesByPerson);
     setExpensesByMonth(expensesByMonth);
   };
-  
 
   const handleDeviceSelection = (event) => {
     const device = event.target.value;
@@ -385,16 +390,12 @@ const CsvReader = ({ setDateRange }) => {
     return { labels, dataValues };
   };
 
-  
-
   const generateAggregatedData = (data) => {
-    console.log(data);
-
     const expensesMap = {};
     const expensesByPersonMap = {};
     const expensesByMonthMap = {};
     let totalIncome = 0;
-    let totalExpense = 0; 
+    let totalExpense = 0;
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
@@ -468,8 +469,6 @@ const CsvReader = ({ setDateRange }) => {
 
     setTotalIncomes(totalIncome);
     setTotalExpenses(totalExpense);
-    console.log(totalIncome)
-    console.log(totalExpense)
 
     return {
       aggregatedExpenses: Object.values(expensesMap),
@@ -562,15 +561,15 @@ const CsvReader = ({ setDateRange }) => {
   const generateExpensesVsIncomesChartData = () => {
     // Check if total incomes or total expenses are zero, to handle cases with no data
     if (totalIncomes === 0 && totalExpenses === 0) return {};
-  
+
     // Define labels and data for incomes and expenses
     const labels = ["הכנסות", "הוצאות"];
     const dataValues = [totalIncomes, totalExpenses];
-  
+
     // Define colors for income and expenses
     const backgroundColors = ["#00FF00", "#FF0000"]; // Green for income, red for expenses
     const hoverBackgroundColors = ["#00FF00", "#FF0000"];
-  
+
     return {
       labels,
       datasets: [
@@ -582,7 +581,6 @@ const CsvReader = ({ setDateRange }) => {
       ],
     };
   };
-  
 
   const handleDescriptionClick = (description) => {
     setSelectedDescription(description);
@@ -627,17 +625,16 @@ const CsvReader = ({ setDateRange }) => {
         />
       </div>
 
-       {/* Top 5 Expenses Bar Chart */}
-    {parsedData.length > 0 && (
-      <div>
-        <h2>ההעברות הגדולות</h2>
-        <BarChart
-          data={generateTop5ExpensesChartData(parsedData)}
-          title="Top 5 Expenses"
-        />
-      </div>
-    )}
-
+      {/* Top 5 Expenses Bar Chart */}
+      {parsedData.length > 0 && (
+        <div>
+          <h2>ההעברות הגדולות</h2>
+          <BarChart
+            data={generateTop5ExpensesChartData(parsedData)}
+            title="Top 5 Expenses"
+          />
+        </div>
+      )}
 
       {/* Income vs Expense Pie Chart */}
       {parsedData.length > 0 && (
@@ -646,7 +643,6 @@ const CsvReader = ({ setDateRange }) => {
           <PieChart data={generateExpensesVsIncomesChartData()} />
         </div>
       )}
-
 
       {parsedData.length > 0 && (
         <div className="table-wrapper">
