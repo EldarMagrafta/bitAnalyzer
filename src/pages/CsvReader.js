@@ -242,9 +242,8 @@ const CsvReader = ({ setDateRange }) => {
           label: "הוצאות מצטברות",
           data: dataValues,
           fill: false,
-          backgroundColor: "rgba(75,192,192,1)",
-          borderColor: "rgba(75,192,192,1)",
-          tension: 0.1,
+          backgroundColor: "#000080", // Navy blue background color
+          borderColor: "#4BC0C0", // Pink border color
         },
       ],
     };
@@ -601,14 +600,17 @@ const CsvReader = ({ setDateRange }) => {
   return (
     <div className="csv-reader-container">
       <div className="header">
-        <button
-          onClick={() => setShowInstructions(true)}
-          title="?איך משתמשים"
-          className="instructions-icon"
-        >
-          <FaQuestionCircle size={24} />
-        </button>
+        {parsedData.length === 0 && ( // Show the button only when parsedData is empty
+          <button
+            onClick={() => setShowInstructions(true)}
+            title="?איך משתמשים"
+            className="instructions-icon"
+          >
+            <FaQuestionCircle size={24} />
+          </button>
+        )}
       </div>
+
       {showInstructions && (
         <InstructionsOverlay onClose={() => setShowInstructions(false)} />
       )}
