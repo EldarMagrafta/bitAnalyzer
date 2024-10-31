@@ -297,3 +297,13 @@ th {
   margin-left: auto; /* Center the image horizontally */
   margin-right: auto; /* Center the image horizontally */
 }
+
+.instructions-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 15px;
+}
+.instructions-icon svg {
+  color: #333;
+}

@@ -9,6 +9,8 @@ import LineChart from "../components/LineChart";
 import ExpensesCategorySection from "../components/ExpensesCategorySection";
 import BarChart from "../components/BarChart";
 import InstructionsOverlay from "../components/InstructionsOverlay";
+import { FaQuestionCircle } from "react-icons/fa"; // Add a question mark icon library
+import Logo from "../components/Logo";
 
 import "../assets/styles/App.css";
 
@@ -598,13 +600,16 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
-      <div className="instructions-button-wrapper">
-        <button onClick={() => setShowInstructions(!showInstructions)}>
-          Instructions
+      <div className="header">
+        <button
+          onClick={() => setShowInstructions(true)}
+          className="instructions-icon"
+        >
+          <FaQuestionCircle size={24} />
         </button>
       </div>
       {showInstructions && (
-        <InstructionsOverlay onClose={handleInstructionsOverlayClick} />
+        <InstructionsOverlay onClose={() => setShowInstructions(false)} />
       )}
 
       <div className="file-input-wrapper">
