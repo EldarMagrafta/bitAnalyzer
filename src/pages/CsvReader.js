@@ -603,6 +603,7 @@ const CsvReader = ({ setDateRange }) => {
       <div className="header">
         <button
           onClick={() => setShowInstructions(true)}
+          title="?איך משתמשים"
           className="instructions-icon"
         >
           <FaQuestionCircle size={24} />

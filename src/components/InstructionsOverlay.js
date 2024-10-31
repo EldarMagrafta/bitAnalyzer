@@ -24,11 +24,13 @@ const InstructionsOverlay = ({ onClose }) => {
         dir="rtl" // Set direction to right-to-left
       >
         {/* Instructions content */}
-        <h2 id="instructions-title">איך משתמשים?</h2>
+        <h2 id="instructions-title">ברוכים הבאים ל-bit Analyzer!</h2>
         <p>
-          ברוכים הבאים ל-bit Analyzer! כאן תוכלו לקבל מידע על כל העברות הכספים
-          שביצעתם באמצעות אפליקציית ביט. עקבו אחרי השלבים הבאים כדי להתחיל:
+          כאן תוכלו לקבל מידע על כל העברות הכספים שביצעתם באמצעות אפליקציית ביט.
+          <br />
+          עקבו אחרי השלבים הבאים כדי להתחיל:
         </p>
+
         <ol>
           <li>
             <strong>לחצו על תפריט ההמבורגר בעמוד הראשי באפליקציית ביט:</strong>
