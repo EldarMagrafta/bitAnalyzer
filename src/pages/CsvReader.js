@@ -565,7 +565,7 @@ const CsvReader = ({ setDateRange }) => {
     if (totalIncomes === 0 && totalExpenses === 0) return {};
 
     // Define labels and data for incomes and expenses
-    const labels = ["הכנסות", "הוצאות"];
+    const labels = ["כסף שקיבלתי", "כסף ששלחתי"];
     const dataValues = [totalIncomes, totalExpenses];
 
     // Define colors for income and expenses
