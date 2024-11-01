@@ -10,7 +10,8 @@ import ExpensesCategorySection from "../components/ExpensesCategorySection";
 import BarChart from "../components/BarChart";
 import InstructionsOverlay from "../components/InstructionsOverlay";
 import { FaQuestionCircle } from "react-icons/fa"; // Add a question mark icon library
-import Logo from "../components/Logo";
+import SpendingSummary from "../components/SpendingSummary"; // Import the SpendingSummary component
+
 
 import "../assets/styles/App.css";
 
@@ -599,6 +600,14 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
+
+      {/* Include SpendingSummary and pass parsedData */}
+      {parsedData.length > 0 && (
+        <SpendingSummary transactions={parsedData} />
+      )}
+
+
+
       <div className="header">
         {parsedData.length === 0 && ( // Show the button only when parsedData is empty
           <button
