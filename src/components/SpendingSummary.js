@@ -39,9 +39,11 @@ const SpendingSummary = ({ transactions }) => {
     0
   );
 
-  const avgPerExpense = (filteredTransactions.length
-  ? (filteredTotal / filteredTransactions.length)
-  : 0).toFixed(2);
+  const avgPerExpense = (
+    filteredTransactions.length
+      ? filteredTotal / filteredTransactions.length
+      : 0
+  ).toFixed(2);
   const avgPerDay = (totalDays > 0 ? filteredTotal / totalDays : 0).toFixed(2);
   const avgPerWeek = (
     totalDays > 0 ? filteredTotal / (totalDays / 7) : 0
@@ -76,7 +78,8 @@ const SpendingSummary = ({ transactions }) => {
             selectsStart
             startDate={selectedStartDate}
             endDate={selectedEndDate}
-            placeholderText="Start Date"
+            placeholderText="מ- "
+            dateFormat="dd.MM.yyyy"
           />
           <DatePicker
             selected={selectedEndDate}
@@ -85,7 +88,8 @@ const SpendingSummary = ({ transactions }) => {
             startDate={selectedStartDate}
             endDate={selectedEndDate}
             minDate={selectedStartDate}
-            placeholderText="End Date"
+            placeholderText="עד- "
+            dateFormat="dd.MM.yyyy"
           />
         </div>
         <div className="button-container">
