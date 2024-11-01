@@ -314,9 +314,8 @@ th {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  max-width: 300px;
+  max-width: 330px;
   margin: 20px auto;
-  text-align: left;
   direction: rtl; /* Set RTL direction for Hebrew text */
 }
 
@@ -345,17 +344,18 @@ th {
   text-align: right; /* Align text to the right for RTL */
 }
 
-.spending-summary li:last-child {
-  border-bottom: none;
-}
-
-.spending-summary li span[role="img"] {
-  margin-left: 10px; /* Space between icon and text for RTL */
-  font-size: 1.2em;
-}
-
 .spending-summary li .amount {
   font-weight: bold;
   color: #dd1320;
   text-align: left; /* Align amounts to the left */
+}
+
+.date-picker-container.right-aligned {
+  text-align: right;
+  width: 100%;
+}
+
+.date-pickers {
+  display: inline-flex;
+  gap: 10px; /* Space between date pickers */
 }

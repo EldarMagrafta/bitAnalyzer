@@ -13,7 +13,7 @@ const SpendingSummary = ({ transactions }) => {
   const [endDate, setEndDate] = useState(null);
 
   const expenseTransactions = transactions.filter(
-    (txn) => txn["זיכוי/חיוב"] === "חיוב"
+    (txn) => txn["זיכוי/חיוב"] === "חיוב" && txn["סטטוס"] === "ההעברה בוצעה"
   );
 
   // Default date range for "All Times" (January 1st of the last transaction's year to last transaction date)
@@ -33,16 +33,22 @@ const SpendingSummary = ({ transactions }) => {
     return txnDate >= effectiveStartDate && txnDate <= effectiveEndDate;
   });
 
-  // Calculate total, averages
+  // Calculate total and averages
   const filteredTotal = filteredTransactions.reduce(
     (acc, txn) => acc + parseFloat(txn["סכום"]),
     0
   );
 
-  const avgPerExpense = (filteredTotal / filteredTransactions.length).toFixed(2);
+  const avgPerExpense = (filteredTransactions.length
+  ? (filteredTotal / filteredTransactions.length)
+  : 0).toFixed(2);
   const avgPerDay = (totalDays > 0 ? filteredTotal / totalDays : 0).toFixed(2);
-  const avgPerWeek = (totalDays > 0 ? filteredTotal / (totalDays / 7) : 0).toFixed(2);
-  const avgPerMonth = (totalDays > 0 ? filteredTotal / (totalDays / 30) : 0).toFixed(2);
+  const avgPerWeek = (
+    totalDays > 0 ? filteredTotal / (totalDays / 7) : 0
+  ).toFixed(2);
+  const avgPerMonth = (
+    totalDays > 0 ? filteredTotal / (totalDays / 30) : 0
+  ).toFixed(2);
 
   // Clear and show button handlers
   const handleClearDates = () => {
@@ -61,35 +67,55 @@ const SpendingSummary = ({ transactions }) => {
     <div className="spending-summary">
       <h2>💰 סיכום הוצאות</h2>
 
-      <div className="date-picker-container">
-        <label>בחר טווח תאריכים:</label>
-        <DatePicker
-          selected={selectedStartDate}
-          onChange={(date) => setSelectedStartDate(date)}
-          selectsStart
-          startDate={selectedStartDate}
-          endDate={selectedEndDate}
-          placeholderText="Start Date"
-        />
-        <DatePicker
-          selected={selectedEndDate}
-          onChange={(date) => setSelectedEndDate(date)}
-          selectsEnd
-          startDate={selectedStartDate}
-          endDate={selectedEndDate}
-          minDate={selectedStartDate}
-          placeholderText="End Date"
-        />
-        <button onClick={handleClearDates}>נקה</button>
-        <button onClick={handleShowClick}>הצג</button>
+      <div className="date-picker-container right-aligned">
+        <label className="date-label">בחר טווח תאריכים:</label>
+        <div className="date-pickers">
+          <DatePicker
+            selected={selectedStartDate}
+            onChange={(date) => setSelectedStartDate(date)}
+            selectsStart
+            startDate={selectedStartDate}
+            endDate={selectedEndDate}
+            placeholderText="Start Date"
+          />
+          <DatePicker
+            selected={selectedEndDate}
+            onChange={(date) => setSelectedEndDate(date)}
+            selectsEnd
+            startDate={selectedStartDate}
+            endDate={selectedEndDate}
+            minDate={selectedStartDate}
+            placeholderText="End Date"
+          />
+        </div>
+        <div className="button-container">
+          <button onClick={handleShowClick}>הצג</button>
+          <button onClick={handleClearDates}>נקה</button>
+        </div>
       </div>
 
       <ul>
-        <li>סה"כ הוצאה בטווח: <span className="amount">₪ {filteredTotal}</span></li>
-        <li>ממוצע להוצאה: <span className="amount">₪ {avgPerExpense}</span></li>
-        <li>ממוצע יומי: <span className="amount">₪ {avgPerDay}</span></li>
-        <li>ממוצע שבועי: <span className="amount">₪ {avgPerWeek}</span></li>
-        <li>ממוצע חודשי: <span className="amount">₪ {avgPerMonth}</span></li>
+        <li
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.3em",
+            marginBottom: "10px",
+          }}
+        >
+          סה"כ הוצאה בטווח: <span className="amount">₪ {filteredTotal}</span>
+        </li>
+        <li>
+          ממוצע להוצאה: <span className="amount">₪ {avgPerExpense}</span>
+        </li>
+        <li>
+          ממוצע יומי: <span className="amount">₪ {avgPerDay}</span>
+        </li>
+        <li>
+          ממוצע שבועי: <span className="amount">₪ {avgPerWeek}</span>
+        </li>
+        <li>
+          ממוצע חודשי: <span className="amount">₪ {avgPerMonth}</span>
+        </li>
       </ul>
     </div>
   );
