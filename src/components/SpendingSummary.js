@@ -1,44 +1,91 @@
 // src/components/SpendingSummary.js
 
-import React from "react";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
 import { differenceInDays, parse, set } from "date-fns";
-import '../assets/styles/App.css';
+import "react-datepicker/dist/react-datepicker.css";
+import "../assets/styles/App.css";
 
 const SpendingSummary = ({ transactions }) => {
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
   const expenseTransactions = transactions.filter(
     (txn) => txn["זיכוי/חיוב"] === "חיוב"
   );
 
-  if (expenseTransactions.length === 0) {
-    return <p>No expense transactions available.</p>;
-  }
-
-  let totalAmount = 0;
-  expenseTransactions.forEach((txn) => {
-    totalAmount += parseFloat(txn["סכום"]) || 0;
-  });
-
-  const lastDate = parse(
+  // Default date range for "All Times" (January 1st of the last transaction's year to last transaction date)
+  const lastTransactionDate = parse(
     expenseTransactions[expenseTransactions.length - 1]["תאריך"],
     "dd.MM.yy",
     new Date()
   );
-  const firstDate = set(lastDate, { month: 0, date: 1 });
-  const totalDays = differenceInDays(lastDate, firstDate) + 1;
+  const allTimesStart = set(lastTransactionDate, { month: 0, date: 1 });
+  const effectiveStartDate = startDate || allTimesStart;
+  const effectiveEndDate = endDate || lastTransactionDate;
+  const totalDays = differenceInDays(effectiveEndDate, effectiveStartDate) + 1;
 
-  const avgPerExpense = (totalAmount / expenseTransactions.length).toFixed(2);
-  const avgPerDay = (totalDays > 0 ? totalAmount / totalDays : 0).toFixed(2);
-  const avgPerWeek = (
-    totalDays > 0 ? totalAmount / (totalDays / 7) : 0
-  ).toFixed(2);
-  const avgPerMonth = (
-    totalDays > 0 ? totalAmount / (totalDays / 30) : 0
-  ).toFixed(2);
+  // Filter transactions within the selected date range
+  const filteredTransactions = expenseTransactions.filter((txn) => {
+    const txnDate = parse(txn["תאריך"], "dd.MM.yy", new Date());
+    return txnDate >= effectiveStartDate && txnDate <= effectiveEndDate;
+  });
+
+  // Calculate total, averages
+  const filteredTotal = filteredTransactions.reduce(
+    (acc, txn) => acc + parseFloat(txn["סכום"]),
+    0
+  );
+
+  const avgPerExpense = (filteredTotal / filteredTransactions.length).toFixed(2);
+  const avgPerDay = (totalDays > 0 ? filteredTotal / totalDays : 0).toFixed(2);
+  const avgPerWeek = (totalDays > 0 ? filteredTotal / (totalDays / 7) : 0).toFixed(2);
+  const avgPerMonth = (totalDays > 0 ? filteredTotal / (totalDays / 30) : 0).toFixed(2);
+
+  // Clear and show button handlers
+  const handleClearDates = () => {
+    setStartDate(allTimesStart);
+    setEndDate(lastTransactionDate);
+    setSelectedStartDate(null);
+    setSelectedEndDate(null);
+  };
+
+  const handleShowClick = () => {
+    setStartDate(selectedStartDate);
+    setEndDate(selectedEndDate);
+  };
 
   return (
     <div className="spending-summary">
       <h2>💰 סיכום הוצאות</h2>
+
+      <div className="date-picker-container">
+        <label>בחר טווח תאריכים:</label>
+        <DatePicker
+          selected={selectedStartDate}
+          onChange={(date) => setSelectedStartDate(date)}
+          selectsStart
+          startDate={selectedStartDate}
+          endDate={selectedEndDate}
+          placeholderText="Start Date"
+        />
+        <DatePicker
+          selected={selectedEndDate}
+          onChange={(date) => setSelectedEndDate(date)}
+          selectsEnd
+          startDate={selectedStartDate}
+          endDate={selectedEndDate}
+          minDate={selectedStartDate}
+          placeholderText="End Date"
+        />
+        <button onClick={handleClearDates}>נקה</button>
+        <button onClick={handleShowClick}>הצג</button>
+      </div>
+
       <ul>
+        <li>סה"כ הוצאה בטווח: <span className="amount">₪ {filteredTotal}</span></li>
         <li>ממוצע להוצאה: <span className="amount">₪ {avgPerExpense}</span></li>
         <li>ממוצע יומי: <span className="amount">₪ {avgPerDay}</span></li>
         <li>ממוצע שבועי: <span className="amount">₪ {avgPerWeek}</span></li>
