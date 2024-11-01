@@ -307,3 +307,55 @@ th {
 .instructions-icon svg {
   color: #333;
 }
+
+/* SpendingSummary Component Styling */
+.spending-summary {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 300px;
+  margin: 20px auto;
+  text-align: left;
+  direction: rtl; /* Set RTL direction for Hebrew text */
+}
+
+.spending-summary h2 {
+  font-size: 1.5em;
+  color: #333;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.spending-summary ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.spending-summary li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 1.1em;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: right; /* Align text to the right for RTL */
+}
+
+.spending-summary li:last-child {
+  border-bottom: none;
+}
+
+.spending-summary li span[role="img"] {
+  margin-left: 10px; /* Space between icon and text for RTL */
+  font-size: 1.2em;
+}
+
+.spending-summary li .amount {
+  font-weight: bold;
+  color: #4CAF50;
+  text-align: left; /* Align amounts to the left */
+}
