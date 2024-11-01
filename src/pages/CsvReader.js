@@ -600,14 +600,6 @@ const CsvReader = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
-
-      {/* Include SpendingSummary and pass parsedData */}
-      {parsedData.length > 0 && (
-        <SpendingSummary transactions={parsedData} />
-      )}
-
-
-
       <div className="header">
         {parsedData.length === 0 && ( // Show the button only when parsedData is empty
           <button
@@ -630,6 +622,11 @@ const CsvReader = ({ setDateRange }) => {
           handleAnalyze={handleAnalyze}
         />
       </div>
+
+      {/* Include SpendingSummary and pass parsedData */}
+       {parsedData.length > 0 && (
+        <SpendingSummary transactions={parsedData} />
+      )}
 
       {/* Top 5 Expenses Bar Chart */}
       {parsedData.length > 0 && (
