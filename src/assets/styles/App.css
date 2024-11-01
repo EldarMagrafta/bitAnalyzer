@@ -323,7 +323,7 @@ th {
 .spending-summary h2 {
   font-size: 1.5em;
   color: #333;
-  border-bottom: 2px solid #4CAF50;
+  border-bottom: 2px solid #000000;
   padding-bottom: 5px;
   margin-bottom: 15px;
   text-align: center;
@@ -356,6 +356,6 @@ th {
 
 .spending-summary li .amount {
   font-weight: bold;
-  color: #4CAF50;
+  color: #dd1320;
   text-align: left; /* Align amounts to the left */
 }

@@ -39,18 +39,10 @@ const SpendingSummary = ({ transactions }) => {
     <div className="spending-summary">
       <h2>סיכום הוצאות</h2>
       <ul>
-        <li>
-          <span role="img" aria-label="money bag">💰</span> ממוצע להוצאה: <span className="amount">₪ {avgPerExpense}</span>
-        </li>
-        <li>
-          <span role="img" aria-label="money bag">💰</span> ממוצע ליום: <span className="amount">₪ {avgPerDay}</span>
-        </li>
-        <li>
-          <span role="img" aria-label="money bag">💰</span> ממוצע לשבוע: <span className="amount">₪ {avgPerWeek}</span>
-        </li>
-        <li>
-          <span role="img" aria-label="money bag">💰</span> ממוצע לחודש: <span className="amount">₪ {avgPerMonth}</span>
-        </li>
+        <li>ממוצע להוצאה: <span className="amount">₪ {avgPerExpense}</span></li>
+        <li>ממוצע ליום: <span className="amount">₪ {avgPerDay}</span></li>
+        <li>ממוצע לשבוע: <span className="amount">₪ {avgPerWeek}</span></li>
+        <li>ממוצע לחודש: <span className="amount">₪ {avgPerMonth}</span></li>
       </ul>
     </div>
   );
