@@ -63,7 +63,7 @@ export const generateMonthlyExpenseChartData = (expensesByMonth) => {
 };
 
 // Generates cumulative expenses data over time for a line chart.
-export const generateExpensesOverTimeData = (parsedData) => {
+export const generateCumulativeExpensesOverTimeData = (parsedData) => {
   if (parsedData.length === 0) return {};
 
   const expenses = filterExpenses(parsedData);
@@ -99,7 +99,7 @@ export const generateExpensesOverTimeData = (parsedData) => {
 };
 
 // Generates chart data for expenses by description/category.
-export const generateExpensesChartData = (expensesByDescription) => {
+export const generateDescriptionExpensesChartData = (expensesByDescription) => {
   if (!expensesByDescription || expensesByDescription.length === 0) return {};
 
   const labels = expensesByDescription.map((expense) => expense.description);
@@ -127,7 +127,7 @@ export const generateExpensesChartData = (expensesByDescription) => {
 };
 
 // Generates chart data for expenses by person.
-export const generatePersonExpenseChartData = (expensesByPerson) => {
+export const generateExpensesByPersonChartData = (expensesByPerson) => {
   if (!expensesByPerson || expensesByPerson.length === 0) return {};
 
   const labels = expensesByPerson.map((personData) => personData.person);

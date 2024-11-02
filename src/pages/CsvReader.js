@@ -17,9 +17,9 @@ import { processIphoneCsv, processAndroidCsv } from "../utils/parsing";
 import {
   generateTop5ExpensesChartData,
   generateMonthlyExpenseChartData,
-  generateExpensesOverTimeData,
-  generateExpensesChartData,
-  generatePersonExpenseChartData,
+  generateCumulativeExpensesOverTimeData,
+  generateDescriptionExpensesChartData,
+  generateExpensesByPersonChartData,
   generateExpensesVsIncomesChartData,
 } from "../utils/chartDataUtils";
 import "../assets/styles/App.css";
@@ -194,7 +194,7 @@ const CsvReader = ({ setDateRange }) => {
           data={expensesByDescription}
           selectedItem={selectedDescription}
           onSliceClick={handleDescriptionClick}
-          generateChartData={() => generateExpensesChartData(expensesByDescription)}
+          generateChartData={() => generateDescriptionExpensesChartData(expensesByDescription)}
           transactionFields={["date", "amount", "person"]}
           identifierKey="description"
           className="all-expenses-section"
@@ -208,7 +208,7 @@ const CsvReader = ({ setDateRange }) => {
           data={expensesByPerson}
           selectedItem={selectedPerson}
           onSliceClick={handlePersonClick}
-          generateChartData={() => generatePersonExpenseChartData(expensesByPerson)}
+          generateChartData={() => generateExpensesByPersonChartData(expensesByPerson)}
           transactionFields={["date", "amount", "description"]}
           identifierKey="person"
           className="all-expenses-section"
@@ -235,7 +235,7 @@ const CsvReader = ({ setDateRange }) => {
       {parsedData.length > 0 && (
         <div className="line-chart-wrapper">
           <h2 className="chart-title">הוצאות מצטברות לאורך זמן</h2>
-          <LineChart data={generateExpensesOverTimeData(parsedData)} />
+          <LineChart data={generateCumulativeExpensesOverTimeData(parsedData)} />
         </div>
       )}
     </div>
