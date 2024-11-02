@@ -106,10 +106,10 @@ const SpendingSummary = ({ transactions }) => {
             marginBottom: "10px",
           }}
         >
-          סה"כ הוצאה בטווח: <span className="amount">₪ {filteredTotal}</span>
+          סה"כ הוצאות: <span className="amount">₪ {filteredTotal}</span>
         </li>
         <li>
-          ממוצע להוצאה: <span className="amount">₪ {avgPerExpense}</span>
+          הוצאה ממוצעת: <span className="amount">₪ {avgPerExpense}</span>
         </li>
         <li>
           ממוצע יומי: <span className="amount">₪ {avgPerDay}</span>
