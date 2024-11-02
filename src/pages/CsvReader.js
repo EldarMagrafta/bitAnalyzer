@@ -18,8 +18,10 @@ import {
   generateTop5ExpensesChartData,
   generateMonthlyExpenseChartData,
   generateExpensesOverTimeData,
+  generateExpensesChartData,
+  generatePersonExpenseChartData,
+  generateExpensesVsIncomesChartData,
 } from "../utils/chartDataUtils";
-
 import "../assets/styles/App.css";
 
 const CsvReader = ({ setDateRange }) => {
@@ -114,84 +116,6 @@ const CsvReader = ({ setDateRange }) => {
 
   ////////////////////////////////////////
 
-  const generateExpensesChartData = () => {
-    if (expensesByDescription.length === 0) return {};
-
-    const labels = expensesByDescription.map((expense) => expense.description);
-    const dataValues = expensesByDescription.map((expense) => expense.amount);
-
-    const backgroundColors = [];
-    const hoverBackgroundColors = [];
-
-    labels.forEach((_, index) => {
-      const hue = (360 * index) / labels.length;
-      backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
-      hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
-    });
-
-    return {
-      labels,
-      datasets: [
-        {
-          data: dataValues,
-          backgroundColor: backgroundColors,
-          hoverBackgroundColor: hoverBackgroundColors,
-        },
-      ],
-    };
-  };
-
-  const generatePersonExpenseChartData = () => {
-    if (expensesByPerson.length === 0) return {};
-
-    const labels = expensesByPerson.map((personData) => personData.person);
-    const dataValues = expensesByPerson.map((personData) => personData.amount);
-
-    const backgroundColors = [];
-    const hoverBackgroundColors = [];
-
-    labels.forEach((_, index) => {
-      const hue = (360 * index) / labels.length;
-      backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
-      hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
-    });
-
-    return {
-      labels,
-      datasets: [
-        {
-          data: dataValues,
-          backgroundColor: backgroundColors,
-          hoverBackgroundColor: hoverBackgroundColors,
-        },
-      ],
-    };
-  };
-
-  const generateExpensesVsIncomesChartData = () => {
-    // Check if total incomes or total expenses are zero, to handle cases with no data
-    if (totalIncomes === 0 && totalExpenses === 0) return {};
-
-    // Define labels and data for incomes and expenses
-    const labels = ["כסף שקיבלתי", "כסף ששלחתי"];
-    const dataValues = [totalIncomes, totalExpenses];
-
-    // Define colors for income and expenses
-    const backgroundColors = ["#00FF00", "#FF0000"]; // Green for income, red for expenses
-    const hoverBackgroundColors = ["#00FF00", "#FF0000"];
-
-    return {
-      labels,
-      datasets: [
-        {
-          data: dataValues,
-          backgroundColor: backgroundColors,
-          hoverBackgroundColor: hoverBackgroundColors,
-        },
-      ],
-    };
-  };
-
   const handleDescriptionClick = (description) => {
     setSelectedDescription(description);
   };
@@ -247,7 +171,7 @@ const CsvReader = ({ setDateRange }) => {
       {parsedData.length > 0 && (
         <div>
           <h2 className="chart-title">הוצאות מול הכנסות</h2>
-          <PieChart data={generateExpensesVsIncomesChartData()} />
+          <PieChart data={generateExpensesVsIncomesChartData(totalIncomes, totalExpenses)} />
         </div>
       )}
 
@@ -270,7 +194,7 @@ const CsvReader = ({ setDateRange }) => {
           data={expensesByDescription}
           selectedItem={selectedDescription}
           onSliceClick={handleDescriptionClick}
-          generateChartData={generateExpensesChartData}
+          generateChartData={() => generateExpensesChartData(expensesByDescription)}
           transactionFields={["date", "amount", "person"]}
           identifierKey="description"
           className="all-expenses-section"
@@ -284,7 +208,7 @@ const CsvReader = ({ setDateRange }) => {
           data={expensesByPerson}
           selectedItem={selectedPerson}
           onSliceClick={handlePersonClick}
-          generateChartData={generatePersonExpenseChartData}
+          generateChartData={() => generatePersonExpenseChartData(expensesByPerson)}
           transactionFields={["date", "amount", "description"]}
           identifierKey="person"
           className="all-expenses-section"
