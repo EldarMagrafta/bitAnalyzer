@@ -6,6 +6,13 @@ import { Chart as ChartJS, BarElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(BarElement, Tooltip, Legend);
 
 const BarChart = ({ data, title }) => {
+  // Calculate the maximum value in the dataset
+  const maxExpense = Math.max(...data.datasets[0].data);
+  
+  // Set dynamic max and stepSize based on the max expense value
+  const maxScaleValue = Math.ceil(maxExpense / 100) * 100; // Round to the nearest hundred
+  const stepSize = maxScaleValue / 10;
+
   const options = {
     responsive: true,
     plugins: {
@@ -32,9 +39,9 @@ const BarChart = ({ data, title }) => {
     scales: {
       y: {
         beginAtZero: true,
-        suggestedMax: 800,
+        max: maxScaleValue, // Set max based on max expense value
         ticks: {
-          stepSize: 25,
+          stepSize: stepSize, // Set dynamic step size
         },
       },
     },
