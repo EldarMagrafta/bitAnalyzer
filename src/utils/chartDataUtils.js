@@ -1,3 +1,4 @@
+//Generates chart data for the top 5 largest expenses.
 export const generateTop5ExpensesChartData = (transactions) => {
   const top5expenses = transactions
     .filter((transaction) => transaction["זיכוי/חיוב"] === "חיוב")
@@ -33,6 +34,7 @@ export const generateTop5ExpensesChartData = (transactions) => {
   };
 };
 
+// Generates chart data to visualize monthly expenses.
 export const generateMonthlyExpenseChartData = (expensesByMonth) => {
   if (!expensesByMonth || expensesByMonth.length === 0) return {};
 
@@ -60,7 +62,7 @@ export const generateMonthlyExpenseChartData = (expensesByMonth) => {
   };
 };
 
-// Main function to generate cumulative expenses data for the line chart
+// Generates cumulative expenses data over time for a line chart.
 export const generateExpensesOverTimeData = (parsedData) => {
   if (parsedData.length === 0) return {};
 
@@ -96,7 +98,7 @@ export const generateExpensesOverTimeData = (parsedData) => {
   };
 };
 
-
+// Generates chart data for expenses by description/category.
 export const generateExpensesChartData = (expensesByDescription) => {
   if (!expensesByDescription || expensesByDescription.length === 0) return {};
 
@@ -124,6 +126,7 @@ export const generateExpensesChartData = (expensesByDescription) => {
   };
 };
 
+// Generates chart data for expenses by person.
 export const generatePersonExpenseChartData = (expensesByPerson) => {
   if (!expensesByPerson || expensesByPerson.length === 0) return {};
 
@@ -151,6 +154,7 @@ export const generatePersonExpenseChartData = (expensesByPerson) => {
   };
 };
 
+// Generates data for a comparison chart of total income vs. expenses.
 export const generateExpensesVsIncomesChartData = (
   totalIncomes,
   totalExpenses
@@ -174,6 +178,8 @@ export const generateExpensesVsIncomesChartData = (
     ],
   };
 };
+
+/************************ HELPER METHODS ************************/
 
 // Filters parsed data to include only successful debit transactions
 const filterExpenses = (data) => {
@@ -215,10 +221,7 @@ const getFirstAndLastTransactionDates = (allDates) => {
 };
 
 // Generates target dates for charting cumulative expenses
-const generateTargetDates = (
-  firstTransactionDate,
-  lastTransactionDate
-) => {
+const generateTargetDates = (firstTransactionDate, lastTransactionDate) => {
   const targetDatesSet = new Set();
   targetDatesSet.add(firstTransactionDate.getTime());
 
@@ -254,11 +257,7 @@ const generateTargetDates = (
 };
 
 // Calculates cumulative expenses up to each target date
-const calculateCumulativeExpenses = (
-  dateAmountMap,
-  allDates,
-  targetDates
-) => {
+const calculateCumulativeExpenses = (dateAmountMap, allDates, targetDates) => {
   let cumulativeAmount = 0;
   const labels = [];
   const dataValues = [];
