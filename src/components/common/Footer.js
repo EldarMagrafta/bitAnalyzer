@@ -1,6 +1,6 @@
 // src/components/Footer.js
 import React from 'react';
-import '../assets/styles/App.css'; // Adjust the path if necessary
+import '../../assets/styles/App.css'; // Adjust the path if necessary
 
 const Footer = () => {
   return (

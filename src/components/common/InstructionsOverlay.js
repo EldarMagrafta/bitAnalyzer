@@ -1,9 +1,9 @@
 // src/components/InstructionsOverlay.js
 import React from "react";
-import "../assets/styles/App.css"; // Make sure to import your styles
-import Step1Image from "../assets/images/app_screenshot1.png";
-import Step2Image from "../assets/images/app_screenshot2.png";
-import Step3Image from "../assets/images/app_screenshot3.png";
+import "../../assets/styles/App.css"; // Make sure to import your styles
+import Step1Image from "../../assets/images/app_screenshot1.png";
+import Step2Image from "../../assets/images/app_screenshot2.png";
+import Step3Image from "../../assets/images/app_screenshot3.png";
 
 const InstructionsOverlay = ({ onClose }) => {
   const handleOverlayClick = () => {
