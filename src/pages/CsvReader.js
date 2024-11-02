@@ -70,23 +70,23 @@ const CsvReader = ({ setDateRange }) => {
     if (headers.includes("תאור")) { // iPhone CSV
       const { cleanedData, aggregatedExpenses, expensesByPerson, expensesByMonth, totalIncome, totalExpense } = processIphoneCsv(result);
 
-      // Set states with returned data
       setParsedData(cleanedData);
       setExpensesByDescription(aggregatedExpenses);
       setExpensesByPerson(expensesByPerson);
       setExpensesByMonth(expensesByMonth);
       setTotalIncomes(totalIncome);
       setTotalExpenses(totalExpense);
+
     } else if (headers.includes("תיאור")) {  // Android CSV
       const { cleanedData, aggregatedExpenses, expensesByPerson, expensesByMonth, totalIncome, totalExpense } = processAndroidCsv(result);
 
-      // Set states with returned data
       setParsedData(cleanedData);
       setExpensesByDescription(aggregatedExpenses);
       setExpensesByPerson(expensesByPerson);
       setExpensesByMonth(expensesByMonth);
       setTotalIncomes(totalIncome);
       setTotalExpenses(totalExpense);
+      
     } else {
       alert("Unknown device type. Please check the file format.");
     }
