@@ -1,8 +1,8 @@
 // src/App.js
 import React, { useState } from "react";
 import CsvReader from "./pages/CsvReader";
-import Logo from "./components/Logo";
-import Footer from "./components/Footer";
+import Logo from "./components/common/Logo";
+import Footer from "./components/common/Footer";
 import "./assets/styles/App.css";
 
 function App() {

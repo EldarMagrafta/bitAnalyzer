@@ -1,7 +1,7 @@
 // src/components/ExpensesCategorySection.js
 import React from 'react';
 import TransactionList from './TransactionList';
-import PieChart from './PieChart';
+import PieChart from './charts/PieChart';
 import '../assets/styles/App.css';
 
 const ExpensesCategorySection = ({title, data, selectedItem, onSliceClick, generateChartData,

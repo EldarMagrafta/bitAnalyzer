@@ -1,14 +1,14 @@
 // src/pages/CsvReader.js
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
-import PieChart from "../components/PieChart";
-import TableComponent from "../components/TableComponent";
+import PieChart from "../components/charts/PieChart";
+import TableComponent from "../components/table/TableComponent";
 import FileInput from "../components/FileInput";
-import ToggleTableButton from "../components/ToggleTableButton";
-import LineChart from "../components/LineChart";
+import ToggleTableButton from "../components/table/ToggleTableButton";
+import LineChart from "../components/charts/LineChart";
 import ExpensesCategorySection from "../components/ExpensesCategorySection";
-import BarChart from "../components/BarChart";
-import InstructionsOverlay from "../components/InstructionsOverlay";
+import BarChart from "../components/charts/BarChart";
+import InstructionsOverlay from "../components/common/InstructionsOverlay";
 import { FaQuestionCircle } from "react-icons/fa"; // Add a question mark icon library
 import SpendingSummary from "../components/SpendingSummary"; // Import the SpendingSummary component
 
