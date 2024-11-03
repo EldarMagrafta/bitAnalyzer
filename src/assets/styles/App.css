@@ -359,3 +359,28 @@ th {
   display: inline-flex;
   gap: 10px; /* Space between date pickers */
 }
+
+.charts-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align charts to the top */
+  gap: 50px;
+  flex-wrap: wrap;
+  padding: 100px 0;
+}
+
+.chart-wrapper {
+  flex: 1 1 45%;
+  max-width: 600px;
+  height: 300px; /* Set a consistent height for both charts */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Align content to the top */
+  box-sizing: border-box;
+  padding: 10px; /* Optional padding for spacing within each chart */
+}
+
+.chart-title {
+  margin-bottom: 10px;
+}

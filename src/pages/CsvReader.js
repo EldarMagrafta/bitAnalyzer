@@ -114,8 +114,6 @@ const CsvReader = ({ setDateRange }) => {
     }
   };
 
-  ////////////////////////////////////////
-
   const handleDescriptionClick = (description) => {
     setSelectedDescription(description);
   };
@@ -156,22 +154,39 @@ const CsvReader = ({ setDateRange }) => {
       {/* Include SpendingSummary and pass parsedData */}
       {parsedData.length > 0 && <SpendingSummary transactions={parsedData} />}
 
-      {/* Top 5 Expenses Bar Chart */}
-      {parsedData.length > 0 && (
-        <div>
-          <h2>ההעברות הגדולות</h2>
-          <BarChart
-            data={generateTop5ExpensesChartData(parsedData)}
-            title="Top 5 Expenses"
-          />
-        </div>
-      )}
+      <div className="charts-container">
+        {/* Top 5 Expenses Bar Chart */}
+        {parsedData.length > 0 && (
+          <div className="chart-wrapper">
+            <h2>ההעברות הגדולות</h2>
+            <BarChart
+              data={generateTop5ExpensesChartData(parsedData)}
+              title="Top 5 Expenses"
+            />
+          </div>
+        )}
+
+        {/* הוצאות מצטברות לאורך זמן Section */}
+        {parsedData.length > 0 && (
+          <div className="chart-wrapper">
+            <h2>הוצאות מצטברות לאורך זמן</h2>
+            <LineChart
+              data={generateCumulativeExpensesOverTimeData(parsedData)}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Income vs Expense Pie Chart */}
       {parsedData.length > 0 && (
         <div>
           <h2 className="chart-title">הוצאות מול הכנסות</h2>
-          <PieChart data={generateExpensesVsIncomesChartData(totalIncomes, totalExpenses)} />
+          <PieChart
+            data={generateExpensesVsIncomesChartData(
+              totalIncomes,
+              totalExpenses
+            )}
+          />
         </div>
       )}
 
@@ -194,7 +209,9 @@ const CsvReader = ({ setDateRange }) => {
           data={expensesByDescription}
           selectedItem={selectedDescription}
           onSliceClick={handleDescriptionClick}
-          generateChartData={() => generateDescriptionExpensesChartData(expensesByDescription)}
+          generateChartData={() =>
+            generateDescriptionExpensesChartData(expensesByDescription)
+          }
           transactionFields={["date", "amount", "person"]}
           identifierKey="description"
           className="all-expenses-section"
@@ -208,7 +225,9 @@ const CsvReader = ({ setDateRange }) => {
           data={expensesByPerson}
           selectedItem={selectedPerson}
           onSliceClick={handlePersonClick}
-          generateChartData={() => generateExpensesByPersonChartData(expensesByPerson)}
+          generateChartData={() =>
+            generateExpensesByPersonChartData(expensesByPerson)
+          }
           transactionFields={["date", "amount", "description"]}
           identifierKey="person"
           className="all-expenses-section"
@@ -229,14 +248,6 @@ const CsvReader = ({ setDateRange }) => {
           identifierKey="month"
           className="all-expenses-section" // Now this will work as expected
         />
-      )}
-
-      {/* הוצאות מצטברות לאורך זמן Section */}
-      {parsedData.length > 0 && (
-        <div className="line-chart-wrapper">
-          <h2 className="chart-title">הוצאות מצטברות לאורך זמן</h2>
-          <LineChart data={generateCumulativeExpensesOverTimeData(parsedData)} />
-        </div>
       )}
     </div>
   );
