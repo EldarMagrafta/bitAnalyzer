@@ -1,13 +1,13 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, BarElement, Tooltip, Legend } from 'chart.js';
+import React from "react";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, BarElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(BarElement, Tooltip, Legend);
 
 const BarChart = ({ data, title }) => {
   // Calculate the maximum value in the dataset
   const maxExpense = Math.max(...data.datasets[0].data);
-  
+
   // Set dynamic max and stepSize based on the max expense value
   const maxScaleValue = Math.ceil(maxExpense / 100) * 100; // Round to the nearest hundred
   const stepSize = maxScaleValue / 10;
@@ -17,7 +17,6 @@ const BarChart = ({ data, title }) => {
     plugins: {
       title: {
         display: Boolean(title),
-        text: title,
       },
       legend: {
         display: false, // Disable legend interaction to prevent toggling
@@ -25,7 +24,8 @@ const BarChart = ({ data, title }) => {
       tooltip: {
         callbacks: {
           label: function (context) {
-            const transactionDetails = data.datasets[0].transactionInfo[context.dataIndex];
+            const transactionDetails =
+              data.datasets[0].transactionInfo[context.dataIndex];
             return [
               `סכום: ${transactionDetails.amount}`,
               `אל: ${transactionDetails.person}`,
