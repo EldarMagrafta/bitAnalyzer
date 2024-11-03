@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { differenceInDays, parse, set } from "date-fns";
 import "react-datepicker/dist/react-datepicker.css";
 import "../assets/styles/App.css";
+import MiniTableComponent from "./MiniTableComponent";
 
 const SpendingSummary = ({ transactions }) => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
@@ -16,7 +17,6 @@ const SpendingSummary = ({ transactions }) => {
     (txn) => txn["זיכוי/חיוב"] === "חיוב" && txn["סטטוס"] === "ההעברה בוצעה"
   );
 
-  // Default date range for "All Times" (January 1st of the last transaction's year to last transaction date)
   const lastTransactionDate = parse(
     expenseTransactions[expenseTransactions.length - 1]["תאריך"],
     "dd.MM.yy",
@@ -27,13 +27,11 @@ const SpendingSummary = ({ transactions }) => {
   const effectiveEndDate = endDate || lastTransactionDate;
   const totalDays = differenceInDays(effectiveEndDate, effectiveStartDate) + 1;
 
-  // Filter transactions within the selected date range
   const filteredTransactions = expenseTransactions.filter((txn) => {
     const txnDate = parse(txn["תאריך"], "dd.MM.yy", new Date());
     return txnDate >= effectiveStartDate && txnDate <= effectiveEndDate;
   });
 
-  // Calculate total and averages
   const filteredTotal = filteredTransactions.reduce(
     (acc, txn) => acc + parseFloat(txn["סכום"]),
     0
@@ -52,7 +50,6 @@ const SpendingSummary = ({ transactions }) => {
     totalDays > 0 ? filteredTotal / (totalDays / 30) : 0
   ).toFixed(2);
 
-  // Clear and show button handlers
   const handleClearDates = () => {
     setStartDate(allTimesStart);
     setEndDate(lastTransactionDate);
@@ -99,13 +96,7 @@ const SpendingSummary = ({ transactions }) => {
       </div>
 
       <ul>
-        <li
-          style={{
-            fontWeight: "bold",
-            fontSize: "1.3em",
-            marginBottom: "10px",
-          }}
-        >
+        <li style={{ fontWeight: "bold", fontSize: "1.3em", marginBottom: "10px" }}>
           סה"כ הוצאות: <span className="amount">₪ {filteredTotal}</span>
         </li>
         <li>
@@ -121,6 +112,9 @@ const SpendingSummary = ({ transactions }) => {
           ממוצע חודשי: <span className="amount">₪ {avgPerMonth}</span>
         </li>
       </ul>
+
+      {/* New Mini Table displaying transactions within the selected date range */}
+      <MiniTableComponent data={filteredTransactions} />
     </div>
   );
 };
