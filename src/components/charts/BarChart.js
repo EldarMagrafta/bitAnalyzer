@@ -19,13 +19,12 @@ const BarChart = ({ data, title }) => {
         display: Boolean(title),
       },
       legend: {
-        display: false, // Disable legend interaction to prevent toggling
+        display: false,
       },
       tooltip: {
         callbacks: {
           label: function (context) {
-            const transactionDetails =
-              data.datasets[0].transactionInfo[context.dataIndex];
+            const transactionDetails = data.datasets[0].transactionInfo[context.dataIndex];
             return [
               `סכום: ₪${transactionDetails.amount}`,
               `אל: ${transactionDetails.person}`,
@@ -38,15 +37,17 @@ const BarChart = ({ data, title }) => {
     scales: {
       y: {
         beginAtZero: true,
-        max: maxScaleValue, // Set max based on max expense value
+        max: maxScaleValue,
         ticks: {
-          stepSize: stepSize, // Set dynamic step size
-          
+          stepSize: stepSize,
+          callback: function (value) {
+            return `₪ ${value}`;  // Add ₪ symbol to y-axis labels
+          },
         },
       },
     },
   };
-
+  
   // Update the dataset to apply bar thickness
   const updatedData = {
     ...data,
