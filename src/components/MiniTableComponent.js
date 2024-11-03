@@ -6,10 +6,13 @@ const MiniTableComponent = ({ data }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   if (data.length === 0) {
-    return <p>No data to display</p>;
+    return <p>לא בוצעו העברות בתאריכים אלו</p>;
   }
 
-  const headers = Object.keys(data[0]);
+  // Exclude 'סטטוס' and 'זיכוי/חיוב' columns, rename 'מאת/ל' to 'אל'
+  const headers = Object.keys(data[0]).filter(
+    (header) => header !== "סטטוס" && header !== "זיכוי/חיוב"
+  ).map(header => header === "מאת/ל" ? "אל" : header);
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -20,8 +23,8 @@ const MiniTableComponent = ({ data }) => {
   };
 
   const compareValues = (a, b, key) => {
-    const aValue = a[key];
-    const bValue = b[key];
+    const aValue = a[key === "אל" ? "מאת/ל" : key];
+    const bValue = b[key === "אל" ? "מאת/ל" : key];
 
     if (key === "סכום") {
       const aNumber = parseFloat(aValue) || 0;
@@ -46,22 +49,9 @@ const MiniTableComponent = ({ data }) => {
     return sortConfig.direction === 'asc' ? comparisonResult : -comparisonResult;
   });
 
-  const getBackgroundColorStyle = (row) => {
-    const isStatusCompleted = row["סטטוס"] === "ההעברה בוצעה";
-    const type = row["זיכוי/חיוב"];
-
-    if (isStatusCompleted && type === "זיכוי") {
-      return { backgroundColor: "#d4fdd4" };
-    } else if (isStatusCompleted && type === "חיוב") {
-      return { backgroundColor: "#ffd4d4" };
-    } else {
-      return { backgroundColor: "#CF142B" };
-    }
-  };
-
   return (
-    <div style={{ overflowY: "auto", maxHeight: "200px", margin: "10px 0" }}>
-      <table style={{ border: "1px solid black", borderCollapse: "collapse", width: "100%" }}>
+    <div style={{ overflowY: "auto", maxHeight: "200px", margin: "10px" }}>
+      <table style={{borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
             {headers.map((header) => (
@@ -70,8 +60,9 @@ const MiniTableComponent = ({ data }) => {
                 style={{
                   border: "1px solid black",
                   padding: "4px",
-                  fontSize: "0.85em",
+                  fontSize: "1.00em",
                   cursor: "pointer",
+                  backgroundColor: "lightblue"
                 }}
                 onClick={() => handleSort(header)}
               >
@@ -82,7 +73,7 @@ const MiniTableComponent = ({ data }) => {
         </thead>
         <tbody>
           {sortedData.map((row, index) => (
-            <tr key={index} style={getBackgroundColorStyle(row)}>
+            <tr key={index}>
               {headers.map((header, i) => (
                 <td
                   key={i}
@@ -93,7 +84,7 @@ const MiniTableComponent = ({ data }) => {
                     textAlign: "center",
                   }}
                 >
-                  {row[header]}
+                  {row[header === "אל" ? "מאת/ל" : header]}
                 </td>
               ))}
             </tr>

@@ -27,7 +27,7 @@ const BarChart = ({ data, title }) => {
             const transactionDetails =
               data.datasets[0].transactionInfo[context.dataIndex];
             return [
-              `סכום: ${transactionDetails.amount}`,
+              `סכום: ₪${transactionDetails.amount}`,
               `אל: ${transactionDetails.person}`,
               `תאריך: ${transactionDetails.date}`,
             ];
@@ -41,6 +41,7 @@ const BarChart = ({ data, title }) => {
         max: maxScaleValue, // Set max based on max expense value
         ticks: {
           stepSize: stepSize, // Set dynamic step size
+          
         },
       },
     },
