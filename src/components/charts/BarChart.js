@@ -24,7 +24,8 @@ const BarChart = ({ data, title }) => {
       tooltip: {
         callbacks: {
           label: function (context) {
-            const transactionDetails = data.datasets[0].transactionInfo[context.dataIndex];
+            const transactionDetails =
+              data.datasets[0].transactionInfo[context.dataIndex];
             return [
               `סכום: ₪${transactionDetails.amount}`,
               `אל: ${transactionDetails.person}`,
@@ -41,13 +42,13 @@ const BarChart = ({ data, title }) => {
         ticks: {
           stepSize: stepSize,
           callback: function (value) {
-            return `₪ ${value}`;  // Add ₪ symbol to y-axis labels
+            return `₪ ${value}`;
           },
         },
       },
     },
   };
-  
+
   // Update the dataset to apply bar thickness
   const updatedData = {
     ...data,

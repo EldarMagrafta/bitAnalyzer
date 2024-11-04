@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useState } from "react";
-import CsvReader from "./pages/CsvReader";
+import Dashboard from "./pages/Dashboard";
 import Logo from "./components/common/Logo";
 import Footer from "./components/common/Footer";
 import "./assets/styles/App.css";
@@ -20,7 +20,7 @@ function App() {
       )}
       {/* Main Content */}
       <div className="content">
-        <CsvReader setDateRange={setDateRange} />
+        <Dashboard setDateRange={setDateRange} />
       </div>
 
       {/* Footer */}

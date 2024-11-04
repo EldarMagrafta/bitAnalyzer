@@ -1,4 +1,3 @@
-// src/pages/Dashboard.js
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
 import PieChart from "../components/charts/PieChart";
@@ -24,7 +23,7 @@ import {
 } from "../utils/chartDataUtils";
 import "../assets/styles/App.css";
 
-const Dashboard = ({ setDateRange }) => {
+const CsvReader = ({ setDateRange }) => {
   const [parsedData, setParsedData] = useState([]);
   const [expensesByDescription, setExpensesByDescription] = useState([]);
   const [expensesByPerson, setExpensesByPerson] = useState([]);
@@ -253,4 +252,4 @@ const Dashboard = ({ setDateRange }) => {
   );
 };
 
-export default Dashboard;
+export default CsvReader;
