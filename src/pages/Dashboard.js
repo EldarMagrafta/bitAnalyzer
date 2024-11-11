@@ -156,39 +156,41 @@ const Dashboard = ({ setDateRange }) => {
       {parsedData.length > 0 && <SpendingSummary transactions={parsedData} />}
 
       <div className="charts-container">
-        {/* Top 5 Expenses Bar Chart */}
-        {parsedData.length > 0 && (
-          <div className="chart-wrapper">
-            <h2>ההעברות הגדולות</h2>
-            <BarChart
-              data={generateTop5ExpensesChartData(parsedData)}
-              title="Top 5 Expenses"
-            />
-          </div>
-        )}
+        <div className="charts-row">
+          {/* Top 5 Expenses Bar Chart */}
+          {parsedData.length > 0 && (
+            <div className="chart-wrapper">
+              <h2>ההעברות הגדולות</h2>
+              <BarChart
+                data={generateTop5ExpensesChartData(parsedData)}
+                title="Top 5 Expenses"
+              />
+            </div>
+          )}
 
-        {/* Cumulative Expenses Over Time Line Chart */}
-        {parsedData.length > 0 && (
-          <div className="chart-wrapper">
-            <h2>הוצאות מצטברות לאורך זמן</h2>
-            <LineChart
-              data={generateCumulativeExpensesOverTimeData(parsedData)}
-            />
-          </div>
-        )}
+          {/* Income vs Expense Pie Chart */}
+          {parsedData.length > 0 && (
+            <div className="chart-wrapper pie-chart-center">
+              <h2 className="chart-title">הוצאות מול הכנסות</h2>
+              <PieChart
+                data={generateExpensesVsIncomesChartData(
+                  totalIncomes,
+                  totalExpenses
+                )}
+              />
+            </div>
+          )}
 
-        {/* Income vs Expense Pie Chart */}
-        {parsedData.length > 0 && (
-          <div className="chart-wrapper">
-            <h2 className="chart-title">הוצאות מול הכנסות</h2>
-            <PieChart
-              data={generateExpensesVsIncomesChartData(
-                totalIncomes,
-                totalExpenses
-              )}
-            />
-          </div>
-        )}
+          {/* Cumulative Expenses Over Time Line Chart */}
+          {parsedData.length > 0 && (
+            <div className="chart-wrapper">
+              <h2>הוצאות מצטברות לאורך זמן</h2>
+              <LineChart
+                data={generateCumulativeExpensesOverTimeData(parsedData)}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {parsedData.length > 0 && (

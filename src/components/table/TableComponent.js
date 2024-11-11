@@ -110,7 +110,9 @@ const TableComponent = ({ data }) => {
                   textAlign: "center",
                 }}
               >
-                {row[header]}
+                {header === "סכום"
+                  ? `${parseFloat(row[header])} ₪` // Display amount with ₪ for סכום column
+                  : row[header]}
               </td>
             ))}
           </tr>

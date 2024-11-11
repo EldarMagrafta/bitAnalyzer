@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import React from "react";
+import { Button } from "@mui/material";
 
 const ToggleTableButton = ({ showTable, onToggle }) => {
   return (
@@ -9,7 +9,7 @@ const ToggleTableButton = ({ showTable, onToggle }) => {
       onClick={onToggle}
       sx={{ marginTop: 2 }} // Styling can also be done here or via classes
     >
-      {showTable ? "הסתר היסטוריית העברות" : "הצג היסטוריית העברות"}
+      {showTable ? "הסתר היסטוריית העברות" : "הצג היסטוריית העברות מלאה"}
     </Button>
   );
 };
