@@ -3,21 +3,26 @@
 import React, { useState } from "react";
 
 const MiniTableComponent = ({ data }) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   if (data.length === 0) {
     return <p>לא בוצעו העברות בתאריכים אלו</p>;
   }
 
   // Exclude 'סטטוס' and 'זיכוי/חיוב' columns, rename 'מאת/ל' to 'אל'
-  const headers = Object.keys(data[0]).filter(
-    (header) => header !== "סטטוס" && header !== "זיכוי/חיוב"
-  ).map(header => header === "מאת/ל" ? "אל" : header);
+  const headers = Object.keys(data[0])
+    .filter(
+      (header) =>
+        header !== "סטטוס" &&
+        header !== "אמצעי תשלום" &&
+        header !== "זיכוי/חיוב"
+    )
+    .map((header) => (header === "מאת/ל" ? "אל" : header));
 
   const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   };
@@ -40,18 +45,20 @@ const MiniTableComponent = ({ data }) => {
       return dateA - dateB;
     }
 
-    return aValue.localeCompare(bValue, 'he');
+    return aValue.localeCompare(bValue, "he");
   };
 
   const sortedData = [...data].sort((a, b) => {
     if (!sortConfig.key) return 0;
     const comparisonResult = compareValues(a, b, sortConfig.key);
-    return sortConfig.direction === 'asc' ? comparisonResult : -comparisonResult;
+    return sortConfig.direction === "asc"
+      ? comparisonResult
+      : -comparisonResult;
   });
 
   return (
     <div style={{ overflowY: "auto", maxHeight: "200px", margin: "10px" }}>
-      <table style={{borderCollapse: "collapse", width: "100%" }}>
+      <table style={{ borderCollapse: "collapse", width: "100%" }}>
         <thead>
           <tr>
             {headers.map((header) => (
@@ -62,11 +69,13 @@ const MiniTableComponent = ({ data }) => {
                   padding: "4px",
                   fontSize: "1.00em",
                   cursor: "pointer",
-                  backgroundColor: "lightblue"
+                  backgroundColor: "lightblue",
                 }}
                 onClick={() => handleSort(header)}
               >
-                {header} {sortConfig.key === header && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                {header}{" "}
+                {sortConfig.key === header &&
+                  (sortConfig.direction === "asc" ? "↑" : "↓")}
               </th>
             ))}
           </tr>

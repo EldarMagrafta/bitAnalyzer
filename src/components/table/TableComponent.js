@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const TableComponent = ({ data }) => {
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   if (data.length === 0) {
     return <p>No data to display</p>;
@@ -12,9 +12,9 @@ const TableComponent = ({ data }) => {
 
   // Function to handle sorting
   const handleSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   };
@@ -43,7 +43,7 @@ const TableComponent = ({ data }) => {
     }
 
     // Default string comparison for other columns
-    return aValue.localeCompare(bValue, 'he');
+    return aValue.localeCompare(bValue, "he");
   };
 
   // Sort the data based on the selected column and direction
@@ -51,25 +51,34 @@ const TableComponent = ({ data }) => {
     if (!sortConfig.key) return 0; // If no sorting is selected, keep original order
 
     const comparisonResult = compareValues(a, b, sortConfig.key);
-    return sortConfig.direction === 'asc' ? comparisonResult : -comparisonResult;
+    return sortConfig.direction === "asc"
+      ? comparisonResult
+      : -comparisonResult;
   });
 
   // Function to determine the background color of a row
   const getBackgroundColorStyle = (row) => {
-    const isStatusCompleted = row["סטטוס"] === "ההעברה בוצעה";
+    const isStatusCompleted = row["סטטוס"] === "בוצע";
     const type = row["זיכוי/חיוב"];
 
     if (isStatusCompleted && type === "זיכוי") {
-      return { backgroundColor: "#d4fdd4" }; // Green for זיכוי if status is "ההעברה בוצעה"
+      return { backgroundColor: "#d4fdd4" }; // Green for זיכוי if status is "בוצע"
     } else if (isStatusCompleted && type === "חיוב") {
-      return { backgroundColor: "#ffd4d4" }; // Red for חיוב if status is "ההעברה בוצעה"
+      return { backgroundColor: "#ffd4d4" }; // Red for חיוב if status is "בוצע"
     } else {
       return { backgroundColor: "#CF142B" }; // No background if status is different
     }
   };
 
   return (
-    <table style={{ border: "1px solid black", borderCollapse: "collapse", width: "100%", margin: "20px 0" }}>
+    <table
+      style={{
+        border: "1px solid black",
+        borderCollapse: "collapse",
+        width: "100%",
+        margin: "20px 0",
+      }}
+    >
       <thead>
         <tr>
           {headers.map((header) => (
@@ -82,7 +91,9 @@ const TableComponent = ({ data }) => {
               }}
               onClick={() => handleSort(header)}
             >
-              {header} {sortConfig.key === header && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+              {header}{" "}
+              {sortConfig.key === header &&
+                (sortConfig.direction === "asc" ? "↑" : "↓")}
             </th>
           ))}
         </tr>

@@ -14,7 +14,7 @@ const SpendingSummary = ({ transactions }) => {
   const [endDate, setEndDate] = useState(null);
 
   const expenseTransactions = transactions.filter(
-    (txn) => txn["זיכוי/חיוב"] === "חיוב" && txn["סטטוס"] === "ההעברה בוצעה"
+    (txn) => txn["זיכוי/חיוב"] === "חיוב" && txn["סטטוס"] === "בוצע"
   );
 
   const lastTransactionDate = parse(
@@ -96,7 +96,13 @@ const SpendingSummary = ({ transactions }) => {
       </div>
 
       <ul>
-        <li style={{ fontWeight: "bold", fontSize: "1.3em", marginBottom: "10px" }}>
+        <li
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.3em",
+            marginBottom: "10px",
+          }}
+        >
           סה"כ הוצאות: <span className="amount">₪ {filteredTotal}</span>
         </li>
         <li>

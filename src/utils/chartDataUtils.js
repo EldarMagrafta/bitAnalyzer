@@ -184,7 +184,7 @@ export const generateExpensesVsIncomesChartData = (
 // Filters parsed data to include only successful debit transactions
 const filterExpenses = (data) => {
   return data.filter(
-    (row) => row["סטטוס"] === "ההעברה בוצעה" && row["זיכוי/חיוב"] === "חיוב"
+    (row) => row["סטטוס"] === "בוצע" && row["זיכוי/חיוב"] === "חיוב"
   );
 };
 

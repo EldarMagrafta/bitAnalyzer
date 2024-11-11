@@ -128,6 +128,7 @@ const Dashboard = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
+      {console.log(parsedData)}
       <div className="header">
         {parsedData.length === 0 && ( // Show the button only when parsedData is empty
           <button
