@@ -3,7 +3,6 @@ import React from "react";
 import "../../assets/styles/App.css"; // Make sure to import your styles
 import Step1Image from "../../assets/images/app_screenshot1.png";
 import Step2Image from "../../assets/images/app_screenshot2.png";
-import Step3Image from "../../assets/images/app_screenshot3.png";
 
 const InstructionsOverlay = ({ onClose }) => {
   const handleOverlayClick = () => {
@@ -33,7 +32,7 @@ const InstructionsOverlay = ({ onClose }) => {
 
         <ol>
           <li>
-            <strong>לחצו על תפריט ההמבורגר בעמוד הראשי באפליקציית ביט:</strong>
+            <strong>עברו לעמוד "פרופיל" ולחצו על "הורדת תנועות ב-CSV":</strong>
             <img
               src={Step1Image}
               alt="כפתור בחירת קובץ"
@@ -41,22 +40,10 @@ const InstructionsOverlay = ({ onClose }) => {
             />
           </li>
           <li>
-            <strong>
-              לחצו על "ייצוא הפעולות כקובץ" על מנת לייצר קובץ csv עם היסטוריית
-              ההעברות
-            </strong>
+            <strong>בחרו בשנה הרצויה והורידו את הקובץ</strong>
             <img
               src={Step2Image}
               alt="כפתור ניתוח"
-              className="instruction-image"
-            />
-          </li>
-          <li>
-            <strong>בחרו בשנה הרצויה והורידו את הקובץ</strong>
-
-            <img
-              src={Step3Image}
-              alt="ויזואליזציית נתונים"
               className="instruction-image"
             />
           </li>
