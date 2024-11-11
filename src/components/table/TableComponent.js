@@ -129,7 +129,7 @@ const TableComponent = ({ data }) => {
   return (
     <div style={{ width: "100%", maxWidth: "100%", margin: "20px auto" }}>
       {/* Column selection controls */}
-      <div style={{ marginBottom: "20px", display: "flex", flexWrap: "wrap" }}>
+      <div style={{ marginBottom: "20px", display: "flex", flexWrap: "wrap",  justifyContent: "flex-end" , gap: "30px" }}>
         {selectedColumns.map((col) => (
           <label key={col.header} style={{ marginRight: "10px" }}>
             <button
@@ -137,8 +137,7 @@ const TableComponent = ({ data }) => {
               style={{
                 width: "20px",
                 height: "20px",
-                margin: "20px",
-                textAlign: "center",
+                margin: "10px",
                 cursor: "pointer",
                 backgroundColor: col.order ? "#4CAF50" : "#ddd",
                 color: col.order ? "#fff" : "#000",
