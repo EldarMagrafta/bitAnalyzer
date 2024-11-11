@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material"; // Import MUI Button
 
 const TableComponent = ({ data }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -101,48 +102,70 @@ const TableComponent = ({ data }) => {
     }
   };
 
-  // CSV Export function based on selected order
   const handleExportCSV = () => {
-    // Sort selected columns in descending order for right-to-left (RTL) export
     const columnsInOrder = selectedColumns
       .filter((col) => col.order !== null)
-      .sort((a, b) => b.order - a.order) // Reverse order for RTL export
+      .sort((a, b) => b.order - a.order)
       .map((col) => col.header);
 
-    // Create CSV headers and rows based on reversed order for export
     const csvHeaders = columnsInOrder.join(",");
     const csvRows = sortedData.map((row) =>
       columnsInOrder.map((col) => `"${row[col] || ""}"`).join(",")
     );
     const csvContent = [csvHeaders, ...csvRows].join("\n");
 
-    // Create Blob for download
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
+
     const link = document.createElement("a");
     link.href = url;
-    link.download = "exported_data.csv";
+    link.download = "bit_transactions_filtered.csv";
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
   return (
     <div style={{ width: "100%", maxWidth: "100%", margin: "20px auto" }}>
       {/* Column selection controls */}
-      <div style={{ marginBottom: "20px", display: "flex", flexWrap: "wrap",  justifyContent: "flex-end" , gap: "30px" }}>
+      <div
+        style={{
+          width: "100%", // Match the full width of the table
+          maxWidth: "800px", // Set a max width similar to the table's min width
+          margin: "0 auto 20px", // Center the button container and add spacing below
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "flex-end",
+          gap: "10px",
+        }}
+      >
+        {/* Export Button */}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleExportCSV}
+          sx={{ marginBottom: "20px", marginRight: "20px" }}
+        >
+          Export CSV
+        </Button>
+
         {selectedColumns.map((col) => (
-          <label key={col.header} style={{ marginRight: "10px" }}>
+          <label
+            key={col.header}
+            style={{ display: "flex", alignItems: "center" }}
+          >
             <button
               onClick={() => setColumnOrder(col.header)}
               style={{
                 width: "20px",
                 height: "20px",
-                margin: "10px",
                 cursor: "pointer",
                 backgroundColor: col.order ? "#4CAF50" : "#ddd",
                 color: col.order ? "#fff" : "#000",
                 border: "1px solid #000",
                 borderRadius: "50%",
+                textAlign: "center",
               }}
             >
               {col.order || ""}
@@ -151,11 +174,6 @@ const TableComponent = ({ data }) => {
           </label>
         ))}
       </div>
-
-      {/* Export Button */}
-      <button onClick={handleExportCSV} style={{ marginBottom: "20px" }}>
-        Export CSV
-      </button>
 
       {/* Table Component */}
       <div style={{ overflowX: "auto", width: "100%" }}>
