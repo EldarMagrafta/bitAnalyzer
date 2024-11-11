@@ -47,7 +47,7 @@ export const generateMonthlyExpenseChartData = (expensesByMonth) => {
   labels.forEach((_, index) => {
     const hue = (360 * index) / labels.length;
     backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
-    hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
+    hoverBackgroundColors.push(`hsl(${hue}, 80%, 70%)`);
   });
 
   return {
@@ -111,7 +111,7 @@ export const generateDescriptionExpensesChartData = (expensesByDescription) => {
   labels.forEach((_, index) => {
     const hue = (360 * index) / labels.length;
     backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
-    hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
+    hoverBackgroundColors.push(`hsl(${hue}, 80%, 70%)`);
   });
 
   return {
@@ -139,7 +139,7 @@ export const generateExpensesByPersonChartData = (expensesByPerson) => {
   labels.forEach((_, index) => {
     const hue = (360 * index) / labels.length;
     backgroundColors.push(`hsl(${hue}, 70%, 50%)`);
-    hoverBackgroundColors.push(`hsl(${hue}, 80%, 60%)`);
+    hoverBackgroundColors.push(`hsl(${hue}, 80%, 70%)`);
   });
 
   return {
