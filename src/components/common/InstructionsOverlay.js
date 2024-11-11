@@ -22,6 +22,15 @@ const InstructionsOverlay = ({ onClose }) => {
         onClick={(e) => e.stopPropagation()}
         dir="rtl" // Set direction to right-to-left
       >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="close-button"
+          aria-label="Close overlay"
+        >
+          ×
+        </button>
+
         {/* Instructions content */}
         <h2 id="instructions-title">ברוכים הבאים ל-bit Analyzer!</h2>
         <p>
