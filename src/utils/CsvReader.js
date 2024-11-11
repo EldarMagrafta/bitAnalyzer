@@ -245,7 +245,7 @@ const CsvReader = ({ setDateRange }) => {
           }
           transactionFields={["date", "amount", "description", "person"]}
           identifierKey="month"
-          className="all-expenses-section" // Now this will work as expected
+          className="all-expenses-section"
         />
       )}
     </div>

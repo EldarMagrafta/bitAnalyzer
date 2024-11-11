@@ -167,7 +167,7 @@ const Dashboard = ({ setDateRange }) => {
           </div>
         )}
 
-        {/* הוצאות מצטברות לאורך זמן Section */}
+        {/* Cumulative Expenses Over Time Line Chart */}
         {parsedData.length > 0 && (
           <div className="chart-wrapper">
             <h2>הוצאות מצטברות לאורך זמן</h2>
@@ -176,20 +176,20 @@ const Dashboard = ({ setDateRange }) => {
             />
           </div>
         )}
-      </div>
 
-      {/* Income vs Expense Pie Chart */}
-      {parsedData.length > 0 && (
-        <div>
-          <h2 className="chart-title">הוצאות מול הכנסות</h2>
-          <PieChart
-            data={generateExpensesVsIncomesChartData(
-              totalIncomes,
-              totalExpenses
-            )}
-          />
-        </div>
-      )}
+        {/* Income vs Expense Pie Chart */}
+        {parsedData.length > 0 && (
+          <div className="chart-wrapper">
+            <h2 className="chart-title">הוצאות מול הכנסות</h2>
+            <PieChart
+              data={generateExpensesVsIncomesChartData(
+                totalIncomes,
+                totalExpenses
+              )}
+            />
+          </div>
+        )}
+      </div>
 
       {parsedData.length > 0 && (
         <div className="table-wrapper">
