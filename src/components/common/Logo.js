@@ -9,7 +9,12 @@ const Logo = () => {
     <img
       src={`${process.env.PUBLIC_URL}/logo.png`}
       alt="CSV Analyzer Logo"
-      style={{ width: "150px", height: "auto", cursor: "pointer" }} // Add cursor style for pointer
+      style={{ 
+        width: "150px", 
+        height: "auto", 
+        cursor: "pointer", // Add cursor style for pointer
+        borderRadius: "20px" // Adjust borderRadius for rounded corners
+      }}
       onClick={handleLogoClick} // Add onClick event to handle the reload
     />
   );
