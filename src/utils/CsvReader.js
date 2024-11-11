@@ -11,7 +11,7 @@ import InstructionsOverlay from "../components/common/InstructionsOverlay";
 import { FaQuestionCircle } from "react-icons/fa"; // Add a question mark icon library
 import SpendingSummary from "../components/SpendingSummary"; // Import the SpendingSummary component
 
-import { processIphoneCsv, processAndroidCsv } from "../utils/parsing";
+import { processIphoneCsv, processAndroidCsv } from "./parsing";
 
 import {
   generateTop5ExpensesChartData,
@@ -20,7 +20,7 @@ import {
   generateDescriptionExpensesChartData,
   generateExpensesByPersonChartData,
   generateExpensesVsIncomesChartData,
-} from "../utils/chartDataUtils";
+} from "./chartDataUtils";
 import "../assets/styles/App.css";
 
 const CsvReader = ({ setDateRange }) => {
