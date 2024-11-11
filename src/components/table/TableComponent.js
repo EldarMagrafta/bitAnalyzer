@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@mui/material"; // Import MUI Button
+import { Button } from "@mui/material";
+import FileDownloadIcon from "@mui/icons-material/FileDownload"; // Import FileDownload icon
 
 const TableComponent = ({ data }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -9,19 +10,16 @@ const TableComponent = ({ data }) => {
     if (data.length > 0) {
       const initialColumns = Object.keys(data[0]).map((header) => ({
         header,
-        order: null, // Initially, no columns are selected for export
+        order: null,
       }));
       setSelectedColumns(initialColumns);
     }
   }, [data]);
 
-  // Function to set order for each selected column
   const setColumnOrder = (header) => {
     setSelectedColumns((prevColumns) => {
-      // Check if the column is already selected (has an assigned order)
       const columnToToggle = prevColumns.find((col) => col.header === header);
       if (columnToToggle.order === null) {
-        // If currently unselected, assign the next available order number
         const nextOrder =
           Math.max(
             ...prevColumns.map((col) => (col.order !== null ? col.order : 0))
@@ -31,13 +29,12 @@ const TableComponent = ({ data }) => {
           col.header === header ? { ...col, order: nextOrder } : col
         );
       } else {
-        // If currently selected, remove the order and reorder remaining columns
         const removedOrder = columnToToggle.order;
         return prevColumns.map((col) =>
           col.header === header
-            ? { ...col, order: null } // Deselect the column
+            ? { ...col, order: null }
             : col.order > removedOrder
-            ? { ...col, order: col.order - 1 } // Shift order down for columns above the removed order
+            ? { ...col, order: col.order - 1 }
             : col
         );
       }
@@ -48,10 +45,8 @@ const TableComponent = ({ data }) => {
     return <p>No data to display</p>;
   }
 
-  // Extract headers
   const headers = Object.keys(data[0]);
 
-  // Sort function for data
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -126,28 +121,36 @@ const TableComponent = ({ data }) => {
     URL.revokeObjectURL(url);
   };
 
+  const isExportDisabled = !selectedColumns.some((col) => col.order !== null);
+
   return (
     <div style={{ width: "100%", maxWidth: "100%", margin: "20px auto" }}>
-      {/* Column selection controls */}
       <div
         style={{
-          width: "100%", // Match the full width of the table
-          maxWidth: "800px", // Set a max width similar to the table's min width
-          margin: "0 auto 20px", // Center the button container and add spacing below
+          width: "100%",
+          maxWidth: "800px",
+          margin: "0 auto 20px",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "flex-end",
           gap: "10px",
         }}
       >
-        {/* Export Button */}
+        {/* Export Button with download icon */}
         <Button
           variant="contained"
           color="primary"
           onClick={handleExportCSV}
-          sx={{ marginBottom: "20px", marginRight: "20px" }}
+          disabled={isExportDisabled}
+          startIcon={<FileDownloadIcon />} // Add download icon here
+          sx={{
+            marginBottom: "20px",
+            marginRight: "20px",
+            backgroundColor: isExportDisabled ? "#ddd" : undefined,
+            color: isExportDisabled ? "#888" : undefined,
+          }}
         >
-          Export CSV
+          הורד קובץ
         </Button>
 
         {selectedColumns.map((col) => (
