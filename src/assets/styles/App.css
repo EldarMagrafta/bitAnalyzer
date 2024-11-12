@@ -9,6 +9,7 @@ body {
   padding: 0;
 }
 
+
 /* Main container for the App component */
 .app-container {
   display: flex;
@@ -118,19 +119,25 @@ th {
 
 /* Styles for the TransactionList component */
 .transaction-list-container {
-  border: 2px solid #ddd;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+  max-height: 700px;
 }
 
 .transaction-list-title {
-  font-size: 1.4em;
+  font-size: 1.2em;
+  margin-bottom: 10px;
   color: #333;
 }
 
 .transaction-list {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 /* Chart container for displaying multiple charts */
@@ -140,6 +147,7 @@ th {
   justify-content: center;
   margin-top: 20px;
 }
+
 
 .medium-pie-chart {
   width: 700px;
@@ -214,8 +222,6 @@ th {
 .all-expenses-section {
   /* Apply the original styles for "כל ההוצאות" */
   width: 1400px;
-  height: 700px;
-  margin: 0 auto;
   text-align: center;
 }
 
@@ -233,6 +239,7 @@ th {
   cursor: pointer;
 }
 
+
 /* Instructions Overlay Styles */
 .instructions-overlay {
   position: fixed;
@@ -246,6 +253,7 @@ th {
   justify-content: center;
   align-items: center;
 }
+
 
 /* Style for the inner frame */
 .instructions-frame {
@@ -414,3 +422,4 @@ th {
   flex: 1 1 20%; /* Allocate 20% space for the middle pie chart */
   max-width: 300px; /* Set a smaller max-width for the pie chart */
 }
+

@@ -9,8 +9,8 @@ import LineChart from "../components/charts/LineChart";
 import ExpensesCategorySection from "../components/ExpensesCategorySection";
 import BarChart from "../components/charts/BarChart";
 import InstructionsOverlay from "../components/common/InstructionsOverlay";
-import { FaQuestionCircle } from "react-icons/fa"; // Add a question mark icon library
-import SpendingSummary from "../components/SpendingSummary"; // Import the SpendingSummary component
+import { FaQuestionCircle } from "react-icons/fa";
+import SpendingSummary from "../components/SpendingSummary";
 
 import { processIphoneCsv, processAndroidCsv } from "../utils/parsing";
 
@@ -217,7 +217,6 @@ const Dashboard = ({ setDateRange }) => {
           }
           transactionFields={["date", "amount", "person"]}
           identifierKey="description"
-          className="all-expenses-section"
         />
       )}
 
@@ -233,7 +232,6 @@ const Dashboard = ({ setDateRange }) => {
           }
           transactionFields={["date", "amount", "description"]}
           identifierKey="person"
-          className="all-expenses-section"
         />
       )}
 
@@ -249,7 +247,6 @@ const Dashboard = ({ setDateRange }) => {
           }
           transactionFields={["date", "amount", "description", "person"]}
           identifierKey="month"
-          className="all-expenses-section" // Now this will work as expected
         />
       )}
     </div>
