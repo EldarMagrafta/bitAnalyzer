@@ -9,7 +9,6 @@ body {
   padding: 0;
 }
 
-
 /* Main container for the App component */
 .app-container {
   display: flex;
@@ -119,26 +118,19 @@ th {
 
 /* Styles for the TransactionList component */
 .transaction-list-container {
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 20px;
-  background-color: #f7f7f7;
-  max-width: 600px;
-  margin: 0 auto;
-  max-height: 700px;
+  padding: 10px;
 }
 
 .transaction-list-title {
-  font-size: 1.2em;
-  margin-bottom: 10px;
+  font-size: 1.4em;
   color: #333;
 }
 
 .transaction-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
 }
 
 /* Chart container for displaying multiple charts */
@@ -241,7 +233,6 @@ th {
   cursor: pointer;
 }
 
-
 /* Instructions Overlay Styles */
 .instructions-overlay {
   position: fixed;
@@ -255,7 +246,6 @@ th {
   justify-content: center;
   align-items: center;
 }
-
 
 /* Style for the inner frame */
 .instructions-frame {
@@ -424,4 +414,3 @@ th {
   flex: 1 1 20%; /* Allocate 20% space for the middle pie chart */
   max-width: 300px; /* Set a smaller max-width for the pie chart */
 }
-
