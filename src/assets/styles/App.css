@@ -119,13 +119,11 @@ th {
 
 /* Styles for the TransactionList component */
 .transaction-list-container {
-  border: 1px solid #ddd;
+  border: 3px solid #ddd;
   border-radius: 5px;
   padding: 15px;
   margin-bottom: 20px;
-  max-width: 600px;
   margin: 0 auto;
-  max-height: 700px;
 }
 
 .transaction-list-title {
