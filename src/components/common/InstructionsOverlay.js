@@ -46,6 +46,7 @@ const InstructionsOverlay = ({ onClose }) => {
               src={Step1Image}
               alt="כפתור בחירת קובץ"
               className="instruction-image"
+              style={{ transform: "scale(0.85)" }} // Shrinks the image to 80%
             />
           </li>
           <li>
@@ -54,6 +55,7 @@ const InstructionsOverlay = ({ onClose }) => {
               src={Step2Image}
               alt="כפתור ניתוח"
               className="instruction-image"
+              style={{ transform: "scale(0.85)" }} // Shrinks the image to 80%
             />
           </li>
         </ol>
