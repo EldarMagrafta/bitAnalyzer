@@ -4,15 +4,13 @@ import '../assets/styles/App.css';
 
 const TransactionList = ({ description, amount, transactions, fields }) => {
   return (
-    <div className="transaction-list-container">
-      <h3 className="transaction-list-title">
+    <div className="transaction-list">
+      <h3 style={{fontSize: "1.2em"}}>
         {description} - {amount.toFixed(2) + "₪"}
       </h3>
-      <div className="transaction-list">
         {transactions.map((transaction, index) => (
           <Transaction key={index} transaction={transaction} fields={fields} />
         ))}
-      </div>
     </div>
   );
 };

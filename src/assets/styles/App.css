@@ -118,24 +118,12 @@ th {
 }
 
 /* Styles for the TransactionList component */
-.transaction-list-container {
+.transaction-list {
   border: 3px solid #ddd;
   border-radius: 5px;
   padding: 15px;
   margin-bottom: 20px;
   margin: 0 auto;
-}
-
-.transaction-list-title {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.transaction-list {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 }
 
 /* Chart container for displaying multiple charts */
