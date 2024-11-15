@@ -213,6 +213,36 @@ const Dashboard = ({ setDateRange }) => {
         />
       )}
 
+      {/* Updated "הוצאות לפי חבר" Section */}
+      {parsedData.length > 0 && (
+        <ExpensesCategorySection
+          title="הוצאות לפי חבר"
+          data={expensesByPerson}
+          selectedItem={selectedPerson}
+          onSliceClick={handlePersonClick}
+          generateChartData={() =>
+            generateExpensesByPersonChartData(expensesByPerson)
+          }
+          transactionFields={["date", "amount", "description"]}
+          identifierKey="person"
+        />
+      )}
+
+      {/* "הוצאות לפי חודש" Section */}
+      {parsedData.length > 0 && (
+        <ExpensesCategorySection
+          title="הוצאות לפי חודש"
+          data={expensesByMonth}
+          selectedItem={selectedMonth}
+          onSliceClick={handleMonthClick}
+          generateChartData={() =>
+            generateMonthlyExpenseChartData(expensesByMonth)
+          }
+          transactionFields={["date", "amount", "description", "person"]}
+          identifierKey="month"
+        />
+      )}
+
       {/* Centered Footer */}
       <div className="footer-container">
         <Footer />

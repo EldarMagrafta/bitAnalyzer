@@ -201,7 +201,6 @@ th {
   align-items: stretch; /* Make both items stretch to the same height */
   width: 100%; /* Wrapper takes full width */
   height: 400px; /* Fixed height */
-  margin: 20px 0; /* Optional spacing around the wrapper */
 }
 
 .pie-list-wrapper .pie-chart-container {
@@ -213,16 +212,12 @@ th {
 }
 
 .pie-list-wrapper .transaction-list-container {
-  flex: 0.4; /* Make TransactionList narrower (40% of width) */
+  flex: 0.3; /* Make TransactionList narrower (40% of width) */
   max-width: 40%; /* Ensure it doesn't exceed 40% */
   overflow: auto; /* Enable scrolling for overflow */
   padding: 10px; /* Add padding for spacing */
   box-sizing: border-box; /* Include padding in width/height */
 }
-
-
-
-
 
 .chart-title {
   margin-bottom: 10px;
@@ -237,6 +232,10 @@ th {
 }
 
 .secondaries-charts-container {
-
 }
 
+.transaction-list-title {
+  text-align: center; /* Center the text horizontally */
+  margin: 10px 0; /* Optional: Add spacing around the title */
+  font-size: 1.5em; /* Ensure the font size is consistent */
+}

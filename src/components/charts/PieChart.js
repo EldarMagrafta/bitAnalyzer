@@ -36,11 +36,15 @@ const PieChart = ({ data, onSliceClick }) => {
           onHover: handleHover,
           plugins: {
             legend: {
-              position: "right",
+              position: "top",
+              labels: {
+                padding: 5, // Reduce padding to bring labels closer to the chart
+              },
             },
             tooltip: {
               enabled: true,
             },
+
             datalabels: {
               display: false, // Ensure no data labels are displayed on the pie chart
             },
