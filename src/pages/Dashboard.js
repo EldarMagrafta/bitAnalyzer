@@ -157,7 +157,7 @@ const Dashboard = ({ setDateRange }) => {
       <div className="secondaries-charts-container">
         <div className="charts-row">
           {parsedData.length > 0 && (
-            <div className="chart-wrapper">
+            <div className="secondaries-charts-container">
               <h2>ההעברות הגדולות</h2>
               <BarChart
                 data={generateTop5ExpensesChartData(parsedData)}
@@ -166,7 +166,7 @@ const Dashboard = ({ setDateRange }) => {
             </div>
           )}
           {parsedData.length > 0 && (
-            <div className="chart-wrapper">
+            <div className="secondaries-charts-container">
               <h2 className="chart-title">הוצאות מול הכנסות</h2>
               <PieChart
                 data={generateExpensesVsIncomesChartData(
@@ -177,7 +177,7 @@ const Dashboard = ({ setDateRange }) => {
             </div>
           )}
           {parsedData.length > 0 && (
-            <div className="chart-wrapper">
+            <div className="secondaries-charts-container">
               <h2>הוצאות מצטברות לאורך זמן</h2>
               <LineChart
                 data={generateCumulativeExpensesOverTimeData(parsedData)}

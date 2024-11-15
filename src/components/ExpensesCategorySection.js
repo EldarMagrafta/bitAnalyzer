@@ -15,20 +15,24 @@ const ExpensesCategorySection = ({
 }) => {
   return (
     <div className="pie-list-wrapper">
-      <h2 className="chart-title">{title}</h2>
-      <PieChart data={generateChartData()} onSliceClick={onSliceClick} />
-      {selectedItem &&
-        data
-          .filter((item) => item[identifierKey] === selectedItem)
-          .map((itemData, index) => (
-            <TransactionList
-              key={index}
-              description={itemData[identifierKey]}
-              amount={itemData.amount}
-              transactions={itemData.transactions}
-              fields={transactionFields}
-            />
-          ))}
+      <div className="transaction-list-container">
+        {selectedItem &&
+          data
+            .filter((item) => item[identifierKey] === selectedItem)
+            .map((itemData, index) => (
+              <TransactionList
+                key={index}
+                description={itemData[identifierKey]}
+                amount={itemData.amount}
+                transactions={itemData.transactions}
+                fields={transactionFields}
+              />
+            ))}
+      </div>
+
+      <div className="pie-chart-container">
+        <PieChart data={generateChartData()} onSliceClick={onSliceClick} />
+      </div>
     </div>
   );
 };
