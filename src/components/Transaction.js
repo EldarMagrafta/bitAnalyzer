@@ -9,7 +9,7 @@ const Transaction = ({transaction, fields}) => {
                 <React.Fragment key={index}>
                     <span className="transaction-item">{transaction[field]}</span>
                     {index < fields.length - 1 && (
-                        <span className="transaction-separator">|</span>
+                        <span>|</span>
                     )}
                 </React.Fragment>
             ))}

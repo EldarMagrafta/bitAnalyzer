@@ -89,10 +89,8 @@ const SpendingSummary = ({ transactions }) => {
             dateFormat="dd.MM.yyyy"
           />
         </div>
-        <div className="button-container">
           <button onClick={handleShowClick}>הצג</button>
           <button onClick={handleClearDates}>נקה</button>
-        </div>
       </div>
 
       <ul>

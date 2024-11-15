@@ -1,4 +1,3 @@
-// src/pages/Dashboard.js
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
 import PieChart from "../components/charts/PieChart";
@@ -11,6 +10,8 @@ import BarChart from "../components/charts/BarChart";
 import InstructionsOverlay from "../components/common/InstructionsOverlay";
 import { FaQuestionCircle } from "react-icons/fa";
 import SpendingSummary from "../components/SpendingSummary";
+import Footer from "../components/common/Footer";
+import Logo from "../components/common/Logo";
 
 import { processIphoneCsv, processAndroidCsv } from "../utils/parsing";
 
@@ -70,13 +71,11 @@ const Dashboard = ({ setDateRange }) => {
   };
 
   const selectProcessingFunction = (result) => {
-    // Check the headers to determine the device type
     let headers = result.meta.fields || [];
     headers = headers.map((header) => header.trim());
     console.log(headers);
 
     if (headers.includes("תאור")) {
-      // iPhone CSV
       const {
         cleanedData,
         aggregatedExpenses,
@@ -93,7 +92,6 @@ const Dashboard = ({ setDateRange }) => {
       setTotalIncomes(totalIncome);
       setTotalExpenses(totalExpense);
     } else if (headers.includes("תיאור")) {
-      // Android CSV
       const {
         cleanedData,
         aggregatedExpenses,
@@ -128,9 +126,17 @@ const Dashboard = ({ setDateRange }) => {
 
   return (
     <div className="csv-reader-container">
-      {console.log(parsedData)}
-      <div className="header">
-        {parsedData.length === 0 && ( // Show the button only when parsedData is empty
+      {/* Centered Logo */}
+      <div className="logo-container">
+        <Logo />
+      </div>
+
+      {showInstructions && (
+        <InstructionsOverlay onClose={() => setShowInstructions(false)} />
+      )}
+
+      <div className="file-input-wrapper">
+        {parsedData.length === 0 && (
           <button
             onClick={() => setShowInstructions(true)}
             title="?איך משתמשים"
@@ -139,25 +145,17 @@ const Dashboard = ({ setDateRange }) => {
             <FaQuestionCircle size={24} />
           </button>
         )}
-      </div>
 
-      {showInstructions && (
-        <InstructionsOverlay onClose={() => setShowInstructions(false)} />
-      )}
-
-      <div className="file-input-wrapper">
         <FileInput
           handleFileChange={handleFileChange}
           handleAnalyze={handleAnalyze}
         />
       </div>
 
-      {/* Include SpendingSummary and pass parsedData */}
       {parsedData.length > 0 && <SpendingSummary transactions={parsedData} />}
 
-      <div className="charts-container">
+      <div className="secondaries-charts-container">
         <div className="charts-row">
-          {/* Top 5 Expenses Bar Chart */}
           {parsedData.length > 0 && (
             <div className="chart-wrapper">
               <h2>ההעברות הגדולות</h2>
@@ -167,10 +165,8 @@ const Dashboard = ({ setDateRange }) => {
               />
             </div>
           )}
-
-          {/* Income vs Expense Pie Chart */}
           {parsedData.length > 0 && (
-            <div className="chart-wrapper pie-chart-center">
+            <div className="chart-wrapper">
               <h2 className="chart-title">הוצאות מול הכנסות</h2>
               <PieChart
                 data={generateExpensesVsIncomesChartData(
@@ -180,8 +176,6 @@ const Dashboard = ({ setDateRange }) => {
               />
             </div>
           )}
-
-          {/* Cumulative Expenses Over Time Line Chart */}
           {parsedData.length > 0 && (
             <div className="chart-wrapper">
               <h2>הוצאות מצטברות לאורך זמן</h2>
@@ -205,7 +199,6 @@ const Dashboard = ({ setDateRange }) => {
         </div>
       )}
 
-      {/* "כל ההוצאות" Section */}
       {parsedData.length > 0 && (
         <ExpensesCategorySection
           title="כל ההוצאות"
@@ -220,35 +213,10 @@ const Dashboard = ({ setDateRange }) => {
         />
       )}
 
-      {/* Updated "הוצאות לפי חבר" Section */}
-      {parsedData.length > 0 && (
-        <ExpensesCategorySection
-          title="הוצאות לפי חבר"
-          data={expensesByPerson}
-          selectedItem={selectedPerson}
-          onSliceClick={handlePersonClick}
-          generateChartData={() =>
-            generateExpensesByPersonChartData(expensesByPerson)
-          }
-          transactionFields={["date", "amount", "description"]}
-          identifierKey="person"
-        />
-      )}
-
-      {/* "הוצאות לפי חודש" Section */}
-      {parsedData.length > 0 && (
-        <ExpensesCategorySection
-          title="הוצאות לפי חודש"
-          data={expensesByMonth}
-          selectedItem={selectedMonth}
-          onSliceClick={handleMonthClick}
-          generateChartData={() =>
-            generateMonthlyExpenseChartData(expensesByMonth)
-          }
-          transactionFields={["date", "amount", "description", "person"]}
-          identifierKey="month"
-        />
-      )}
+      {/* Centered Footer */}
+      <div className="footer-container">
+        <Footer />
+      </div>
     </div>
   );
 };
