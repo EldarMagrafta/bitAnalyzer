@@ -233,10 +233,52 @@ th {
 }
 
 .secondaries-charts-container {
+  display: flex; /* Use Flexbox to align children in a row */
+  justify-content: space-between; /* Distribute space between items */
+  width: 100%; /* Full width of the container */
+}
+
+.secondary-chart {
+  flex: 1; /* Each chart takes equal space */
+  box-sizing: border-box; /* Include padding and border in width calculations */
 }
 
 .transaction-list-title {
   text-align: center; /* Center the text horizontally */
   margin: 10px 0; /* Optional: Add spacing around the title */
   font-size: 1.5em; /* Ensure the font size is consistent */
+}
+
+.secondaries-charts-container {
+  display: flex;
+  flex-direction: column; /* Stack titles and charts vertically */
+  width: 100%; /* Full width of the container */
+  margin: 20px auto; /* Center the container and add space around */
+  gap: 10px; /* Space between the titles and charts rows */
+}
+
+.charts-row {
+  display: flex; /* Align charts in a row */
+  justify-content: space-between; /* Distribute space between items */
+  align-items: flex-start; /* Align items to the top of the row */
+  width: 100%; /* Full width of the container */
+  gap: 20px; /* Space between each chart */
+}
+
+.secondary-chart {
+  flex: 1; /* Each chart takes equal space */
+  box-sizing: border-box; /* Include padding in width calculations */
+  display: flex;
+  flex-direction: column; /* Ensure the title and chart stack vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+.secondary-chart h2 {
+  margin: 0 0 10px 0; /* Add spacing below the title */
+  text-align: center; /* Center the title */
+}
+
+.secondary-chart > *:last-child {
+  flex: 1; /* Ensure the chart takes up the remaining space */
+  width: 100%; /* Ensure charts are full width within their column */
 }
